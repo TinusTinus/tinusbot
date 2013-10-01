@@ -16,11 +16,13 @@
 		<!-- Version numbers. Please keep these sorted in alphabetical order. -->
 		<cobertura-maven-plugin.version>2.6</cobertura-maven-plugin.version>
 		<devnobot-client.version>1.0.2-SNAPSHOT</devnobot-client.version>
+		<gson.version>2.2.4</gson.version>
 		<junit.version>4.11</junit.version>
 		<lombok.version>0.12.0</lombok.version>
 		<maven-compiler-plugin.version>2.5.1</maven-compiler-plugin.version>
 		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
 		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
+		<resteasy.version>3.0.3.Final</resteasy.version>
 		<slf4j.version>1.7.5</slf4j.version>
 	</properties>
 
@@ -33,6 +35,23 @@
 				<groupId>com.cgi.devnobot</groupId>
 				<artifactId>devnobot-api</artifactId>
 				<version>${devnobot-client.version}</version>
+			</dependency>
+
+			<!-- Server-client communication -->
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>${gson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-client</artifactId>
+				<version>${resteasy.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-jettison-provider</artifactId>
+				<version>${resteasy.version}</version>
 			</dependency>
 
 			<!-- Compile-time assistance -->
