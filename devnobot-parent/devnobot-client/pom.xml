@@ -73,7 +73,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.cgi.devnobot.client.TEster</mainClass>
+							<mainClass>com.cgi.devnobot.client.Tester</mainClass>
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
 						</manifest>
