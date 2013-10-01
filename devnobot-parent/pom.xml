@@ -22,7 +22,7 @@
 		<maven-compiler-plugin.version>2.5.1</maven-compiler-plugin.version>
 		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
 		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
-		<resteasy.version>3.0.3.Final</resteasy.version>
+		<resteasy.version>3.0.4.Final</resteasy.version>
 		<slf4j.version>1.7.5</slf4j.version>
 	</properties>
 
