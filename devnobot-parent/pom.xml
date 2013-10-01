@@ -15,6 +15,7 @@
 	<properties>
 		<!-- Version numbers. Please keep these sorted in alphabetical order. -->
 		<cobertura-maven-plugin.version>2.6</cobertura-maven-plugin.version>
+		<devnobot-client.version>1.0.2-SNAPSHOT</devnobot-client.version>
 		<junit.version>4.11</junit.version>
 		<lombok.version>0.12.0</lombok.version>
 		<maven-compiler-plugin.version>2.5.1</maven-compiler-plugin.version>
@@ -27,6 +28,13 @@
 		refer to the properties instead! -->
 	<dependencyManagement>
 		<dependencies>
+			<!-- Client API -->
+			<dependency>
+				<groupId>com.cgi.devnobot</groupId>
+				<artifactId>devnobot-api</artifactId>
+				<version>${devnobot-client.version}</version>
+			</dependency>
+
 			<!-- Compile-time assistance -->
 			<dependency>
 				<groupId>org.projectlombok</groupId>

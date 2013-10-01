@@ -11,7 +11,7 @@
 	<artifactId>devnobot</artifactId>
 	<packaging>jar</packaging>
 	<name>Devnobot dummy client</name>
-    <description>The Devnobot dummy client as provided by CGI.</description>
+	<description>The Devnobot dummy client as provided by CGI.</description>
 
 	<properties>
 		<!-- Version numbers. Please keep these sorted in alphabetical order. -->
@@ -21,28 +21,34 @@
 	<!-- Dependencies. Please do not specify version numbers here; refer to 
 		dependency management in the parent pom instead! -->
 	<dependencies>
-		<!-- Compile-time assistance -->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-		</dependency>
+        <!-- Client API -->
+        <dependency>
+            <groupId>com.cgi.devnobot</groupId>
+            <artifactId>devnobot-api</artifactId>
+        </dependency>
 
-		<!-- Logging -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-		</dependency>
+        <!-- Compile-time assistance -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
 
-		<!-- Testing -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 
 	<build>
