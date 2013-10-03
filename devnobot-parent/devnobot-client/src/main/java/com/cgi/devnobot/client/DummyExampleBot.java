@@ -15,16 +15,20 @@
  */
 package com.cgi.devnobot.client;
 
+import java.awt.Color;
+import java.util.List;
+import java.util.Random;
+
+import lombok.extern.slf4j.Slf4j;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.cgi.devnobot.api.Action;
 import com.cgi.devnobot.api.GameBot;
 import com.cgi.devnobot.api.GameObstacle;
 import com.cgi.devnobot.api.GamePlayer;
 import com.cgi.devnobot.api.World;
-
-import java.awt.Color;
-import java.util.List;
-import java.util.Random;
-import java.util.logging.Logger;
 
 /**
  * DummyExampleBot.
@@ -35,9 +39,8 @@ import java.util.logging.Logger;
  *
  *
  */
+@Slf4j
 public class DummyExampleBot implements Runnable {
-
-    private static final Logger LOGGER = Logger.getLogger(DummyExampleBot.class.getName());
     public static final int THREAD_SLEEP_DURATION = 1000;
     private final ClientApi api;
     private final String name;
@@ -56,7 +59,7 @@ public class DummyExampleBot implements Runnable {
         this.api = new ClientApi(host);
         this.name = name;
         this.color = color;
-        LOGGER.info("Name: " + name + " Colour: " + color + " (" + Color.decode(color).toString() + ")");
+        log.info("Name: " + name + " Colour: " + color + " (" + Color.decode(color).toString() + ")");
     }
 
     @Override
@@ -67,7 +70,7 @@ public class DummyExampleBot implements Runnable {
     	 */
         List<GameObstacle> obstacles = api.readLevel();
         for (GameObstacle gameObstacle: obstacles) {
-            LOGGER.info("Found obstacle :" + gameObstacle.toString() );
+            log.info("Found obstacle :" + gameObstacle.toString() );
         }
 
         /**
@@ -84,7 +87,7 @@ public class DummyExampleBot implements Runnable {
          */
         List<GamePlayer> players = api.readPlayers();
         for (GamePlayer gamePlayer: players) {
-            LOGGER.info("Found player :" + gamePlayer.toString());
+            log.info("Found player :" + gamePlayer.toString());
         }
 
         /** GAME LOOP **/
@@ -94,10 +97,10 @@ public class DummyExampleBot implements Runnable {
             World world = api.readWorldStatus();
             if (world != null) {
                 for(GameBot bot: world.getBots()){
-                    LOGGER.info(bot.getPlayer()+" "+bot.getLastKnownOrientation());
+                    log.info(bot.getPlayer()+" "+bot.getLastKnownOrientation());
                 }
             } else {
-                LOGGER.info("No World information available");
+                log.info("No World information available");
             }
 
             /**
@@ -127,7 +130,7 @@ public class DummyExampleBot implements Runnable {
             try {
                 Thread.sleep(THREAD_SLEEP_DURATION);
             } catch (InterruptedException iex) {
-                LOGGER.warning("INTERRUPTED");
+                log.warn("INTERRUPTED");
             }
         }
     }

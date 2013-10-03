@@ -15,30 +15,33 @@
  */
 package com.cgi.devnobot.client;
 
+import java.lang.reflect.Type;
+import java.util.List;
+
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import lombok.extern.slf4j.Slf4j;
+
+import org.jboss.resteasy.client.jaxrs.ResteasyClient;
+import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
+import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
+
 import com.cgi.devnobot.api.Action;
 import com.cgi.devnobot.api.GameObstacle;
 import com.cgi.devnobot.api.GamePlayer;
 import com.cgi.devnobot.api.World;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import org.jboss.resteasy.client.jaxrs.ResteasyClient;
-import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
-import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
-
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.lang.reflect.Type;
-import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * Implements the REST/JSON Api of the server
  */
+@Slf4j
 public class ClientApi {
 
     public static final int HTTP_NO_CONTENT = 204;
-    private static final Logger LOGGER = Logger.getLogger(ClientApi.class.getName());
     private final String baseURL;
 
     /**
@@ -134,7 +137,7 @@ public class ClientApi {
     public boolean addAction(final Action action, final String playerId) {
 
         boolean result = true;
-        LOGGER.info("Making a REST call to add action " + action.toString() + " to player " + playerId);
+        log.info("Making a REST call to add action " + action.toString() + " to player " + playerId);
         ResteasyClient resteasyClient = new ResteasyClientBuilder().build();
         ResteasyWebTarget resteasyWebTarget = resteasyClient.target(this.baseURL + "/devnobot/rest/player/" + playerId);
         Response response = resteasyWebTarget.request().put(Entity.entity(action, MediaType.APPLICATION_JSON));

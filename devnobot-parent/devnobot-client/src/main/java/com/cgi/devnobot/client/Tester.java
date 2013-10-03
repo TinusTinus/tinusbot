@@ -18,15 +18,17 @@ package com.cgi.devnobot.client;
 import java.awt.Color;
 import java.util.logging.Logger;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * This class fires up some dummy bots.
  * It could be changed to also start your own bot and host your own local match.
  *
  * The real match will contain 8 bots, 4 of the dummy type, 4 made by participants of the JFall.
  */
+@Slf4j
 public final class Tester {
 
-    private static final Logger LOG = Logger.getLogger(Tester.class.getName());
     private static final Color[] COLOURS = new Color[]{Color.MAGENTA, Color.RED, Color.BLACK, Color.ORANGE, Color.DARK_GRAY, Color.CYAN, Color.ORANGE};
 
     private static final String USAGE = "Tester [-Ddevnobot.server.baseURL=<baseURL>]";
@@ -49,7 +51,7 @@ public final class Tester {
         String serverBaseURL = System.getProperty("devnobot.server.baseURL", "http://localhost:7080");
 
         if (serverBaseURL == null) {
-            LOG.severe("Usage: " + USAGE);
+            log.warn("Usage: " + USAGE);
         } else {
             for (int i = 0; i < 7; i++) {
                 new Thread(new DummyExampleBot(serverBaseURL, "Dummy"+i, colour(i))).start();
