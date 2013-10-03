@@ -35,7 +35,7 @@ import com.cgi.devnobot.client.ClientApi;
 abstract class Bot implements Runnable {
 
     public static final int THREAD_SLEEP_DURATION = 1000;
-    
+
     /** Client API, used to make backend calls. */
     @NonNull
     private final ClientApi api;
@@ -46,7 +46,7 @@ abstract class Bot implements Runnable {
     /** Colour. */
     @NonNull
     private final String color;
-    
+
     /** {@inheritDoc} */
     @Override
     public void run() {
@@ -56,25 +56,25 @@ abstract class Bot implements Runnable {
 
         // Generate pseudorandom id string.
         String id = name + '-' + UUID.randomUUID().toString();
-        
+
         // Register at the server.
         api.createPlayer(name, color, id);
 
-        // Retrievee and log a list of all players.
+        // Retrieve and log a list of all players.
         List<GamePlayer> players = api.readPlayers();
-        for (GamePlayer gamePlayer: players) {
-            log.info("Found player :" + gamePlayer.toString());
+        for (GamePlayer gamePlayer : players) {
+            log.info("Found player: " + gamePlayer.toString());
         }
 
         // Main game loop.
         while (true) {
-        	// Retrieve a current view of the world
+            // Retrieve a current view of the world
             World world = api.readWorldStatus();
             if (world != null) {
                 log.info(world.toString());
-                
+
                 Action action = determineNextAction(obstacles, world);
-                
+
                 api.addAction(action, id);
             } else {
                 log.info("No World information available.");
@@ -97,8 +97,10 @@ abstract class Bot implements Runnable {
      * 
      * TODO change the return type somehow to support suicide as a valid action
      * 
-     * @param obstacles obstacles
-     * @param world game state
+     * @param obstacles
+     *            obstacles
+     * @param world
+     *            game state
      * @return action to be taken
      */
     protected abstract Action determineNextAction(List<GameObstacle> obstacles, World world);

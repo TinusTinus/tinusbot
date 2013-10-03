@@ -16,19 +16,22 @@ import com.cgi.devnobot.client.ClientApi;
 public class DummyBot extends Bot {
     /** Random generator. */
     private final Random randomGenerator;
-    
+
     /**
      * Constructor.
      * 
-     * @param api api
-     * @param name name
-     * @param color color
+     * @param api
+     *            api
+     * @param name
+     *            name
+     * @param color
+     *            color
      */
     public DummyBot(ClientApi api, String name, String color) {
         super(api, name, color);
         this.randomGenerator = new Random();
     }
-    
+
     /** {@inheritDoc} */
     @Override
     protected Action determineNextAction(List<GameObstacle> obstacles, World world) {

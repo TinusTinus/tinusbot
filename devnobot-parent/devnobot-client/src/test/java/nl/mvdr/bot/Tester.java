@@ -14,7 +14,7 @@ import com.cgi.devnobot.client.ClientApi;
 public class Tester {
     /** Number of dummies. */
     private static final int NUM_DUMMIES = 7;
-    
+
     /**
      * Main method.
      * 
@@ -24,13 +24,13 @@ public class Tester {
     public static void main(final String[] args) {
         String serverBaseURL = System.getProperty("devnobot.server.baseURL", "http://localhost:7080");
         ClientApi api = new ClientApi(serverBaseURL);
-        
+
         List<Bot> bots = new ArrayList<>();
         for (int i = 0; i < NUM_DUMMIES; i++) {
             bots.add(new DummyBot(api, "Dummy" + i, toHexString(Color.ORANGE)));
         }
-        
-        for (Bot bot: bots) {
+
+        for (Bot bot : bots) {
             new Thread(bot, bot.getName()).start();
         }
     }
@@ -38,7 +38,8 @@ public class Tester {
     /**
      * Return the given colour as a hex String.
      * 
-     * @param color color
+     * @param color
+     *            color
      * @return String representation of the color as accepted by the client API
      */
     public static String toHexString(Color color) {
