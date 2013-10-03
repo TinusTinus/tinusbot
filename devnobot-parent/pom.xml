@@ -48,10 +48,10 @@
 				<artifactId>resteasy-client</artifactId>
 				<version>${resteasy.version}</version>
 				<exclusions>
-				    <exclusion>
-				        <groupId>org.slf4j</groupId>
-				        <artifactId>slf4j-simple</artifactId>
-				    </exclusion>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-simple</artifactId>
+					</exclusion>
 				</exclusions>
 			</dependency>
 			<dependency>
