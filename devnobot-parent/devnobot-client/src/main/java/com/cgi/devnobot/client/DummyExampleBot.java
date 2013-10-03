@@ -21,9 +21,6 @@ import java.util.Random;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.cgi.devnobot.api.Action;
 import com.cgi.devnobot.api.GameBot;
 import com.cgi.devnobot.api.GameObstacle;

@@ -16,7 +16,6 @@
 package com.cgi.devnobot.client;
 
 import java.awt.Color;
-import java.util.logging.Logger;
 
 import lombok.extern.slf4j.Slf4j;
 
