@@ -55,7 +55,7 @@ abstract class Bot implements Runnable {
         List<GameObstacle> obstacles = this.api.readLevel();
 
         // Generate pseudorandom id string.
-        String id = name + UUID.randomUUID().toString();
+        String id = name + '-' + UUID.randomUUID().toString();
         
         // Register at the server.
         api.createPlayer(name, color, id);
@@ -94,7 +94,6 @@ abstract class Bot implements Runnable {
 
     /**
      * Determines the next action to take.
-     * 
      * 
      * TODO change the return type somehow to support suicide as a valid action
      * 
