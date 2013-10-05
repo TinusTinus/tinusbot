@@ -67,7 +67,7 @@ abstract class BotArtificialIntelligence implements Runnable {
 
         // Log the leaderboard
         Player.logLeaderboard(api.readPlayers());
-        
+
         // Main game loop.
         gameLoop(walls, id);
     }
@@ -83,7 +83,10 @@ abstract class BotArtificialIntelligence implements Runnable {
     private void gameLoop(Collection<Wall> walls, String id) {
         long leaderboardTimestamp = 0L;
         while (true) {
+            long startTimestamp = System.currentTimeMillis();
+            long nextTimestamp = startTimestamp + THREAD_SLEEP_DURATION;
             try {
+
                 // Retrieve a current view of the world
                 GameState state = api.readWorldStatus();
                 if (state != null) {
@@ -91,25 +94,38 @@ abstract class BotArtificialIntelligence implements Runnable {
 
                     Action action = determineNextAction(walls, state);
 
-                    perform(id, action);
+                    boolean success = perform(id, action);
+                    
+                    if (!success) {
+                        // retry immediately
+                        nextTimestamp = System.currentTimeMillis();
+                    }
                 } else {
                     log.info("No World information available.");
+                    // retry immediately
+                    nextTimestamp = System.currentTimeMillis();
                 }
-                
+
                 // Optionally log the leaderboard.
-                if (leaderboardTimestamp + LEADERBOARD_INTERVAL < System.currentTimeMillis()) {
+                long now = System.currentTimeMillis();
+                if (now < nextTimestamp && leaderboardTimestamp + LEADERBOARD_INTERVAL < System.currentTimeMillis()) {
                     Player.logLeaderboard(api.readPlayers());
                     leaderboardTimestamp = System.currentTimeMillis();
                 }
-
-                // Actions take multiple seconds to perform (see GameBot) and the readWorldStatus is only updated every
-                // half a second. Therefore it is best to sleep for a short time.
-                // TODO adjust sleep time?
-                Thread.sleep(THREAD_SLEEP_DURATION);
             } catch (Exception e) {
                 // Log the exception, but don't crash the thread; try to keep going.
                 log.error("Unexpected exception!", e);
             }
+            
+            long waitTime = nextTimestamp - System.currentTimeMillis();
+            if (0 < waitTime) {
+                try {
+                    Thread.sleep(waitTime);
+                } catch (InterruptedException e) {
+                    log.error("Unexpected InterruptedException; game loop will continue.", e);
+                }
+            }
+
         }
     }
 
@@ -122,7 +138,8 @@ abstract class BotArtificialIntelligence implements Runnable {
      *            player id
      * @param action
      *            action to be performed
-     * @param whether the operation was succesful
+     * @param whether
+     *            the operation was succesful
      */
     private boolean perform(String id, Action action) {
         boolean result;
