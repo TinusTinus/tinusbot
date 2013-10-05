@@ -75,14 +75,13 @@ abstract class Bot implements Runnable {
 
                 Action action = determineNextAction(obstacles, world);
 
-                api.addAction(action, id);
+                perform(id, action);
             } else {
                 log.info("No World information available.");
             }
 
-            // Actions take multiple seconds to perform {@Link GameBot} and the readWorldStatus is only update every
-            // half a second.
-            // Therefore it is best to sleep for a short time.
+            // Actions take multiple seconds to perform (see GameBot) and the readWorldStatus is only updated every
+            // half a second. Therefore it is best to sleep for a short time.
             // TODO adjust sleep time?
             try {
                 Thread.sleep(THREAD_SLEEP_DURATION);
@@ -90,6 +89,16 @@ abstract class Bot implements Runnable {
                 log.warn("INTERRUPTED");
             }
         }
+    }
+
+    /** 
+     * Performs the given action, that is, adds it to the action queue.
+     * 
+     * @param id player id
+     * @param action action to be performed
+     */
+    private void perform(String id, Action action) {
+        api.addAction(action, id);
     }
 
     /**
