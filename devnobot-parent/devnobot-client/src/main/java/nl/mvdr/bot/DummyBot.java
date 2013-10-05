@@ -15,6 +15,9 @@ import com.cgi.devnobot.client.ClientApi;
  * @author Martijn van de Rijdt
  */
 public class DummyBot extends BotArtificialIntelligence {
+    /** Default name for bots of this type. */
+    public static final String DEFAULT_NAME = "Dummy";
+    
     /** Random generator. */
     private final Random randomGenerator;
     /** Actions that this bot can perform. */
@@ -35,6 +38,18 @@ public class DummyBot extends BotArtificialIntelligence {
     public DummyBot(ClientApi api, String name, String color) {
         super(api, name, color);
         this.randomGenerator = new Random();
+    }
+    
+    /**
+     * Constructor.
+     * 
+     * @param api
+     *            api
+     * @param color
+     *            color
+     */
+    public DummyBot(ClientApi api, String color) {
+        this(api, DEFAULT_NAME, color);
     }
 
     /** {@inheritDoc} */

@@ -27,7 +27,7 @@ public class Tester {
 
         List<BotArtificialIntelligence> bots = new ArrayList<>();
         for (int i = 0; i < NUM_DUMMIES; i++) {
-            bots.add(new DummyBot(api, "Dummy" + i, toHexString(Color.ORANGE)));
+            bots.add(new DummyBot(api, DummyBot.DEFAULT_NAME + i, toHexString(Color.ORANGE)));
         }
 
         for (BotArtificialIntelligence bot : bots) {
