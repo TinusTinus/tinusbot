@@ -15,19 +15,18 @@
  */
 package nl.mvdr.devnobot.bot;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.UUID;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nl.mvdr.devnobot.clientapi.ClientApi;
 import nl.mvdr.devnobot.model.Action;
-
-import com.cgi.devnobot.api.GameObstacle;
-import com.cgi.devnobot.api.GamePlayer;
-import com.cgi.devnobot.api.World;
-import com.cgi.devnobot.client.ClientApi;
+import nl.mvdr.devnobot.model.GameState;
+import nl.mvdr.devnobot.model.Player;
+import nl.mvdr.devnobot.model.Wall;
 
 /** Abstract superclass for bot implementations. */
 @Slf4j
@@ -52,7 +51,7 @@ abstract class BotArtificialIntelligence implements Runnable {
     public void run() {
         // First we read the level contents to get a view of the positions of the walls on this map.
         // Maps are static, so we only read this at startup
-        List<GameObstacle> obstacles = this.api.readLevel();
+        Collection<Wall> walls = this.api.readLevel();
 
         // Generate pseudorandom id string.
         String id = name + '-' + UUID.randomUUID().toString();
@@ -61,19 +60,19 @@ abstract class BotArtificialIntelligence implements Runnable {
         api.createPlayer(name, color, id);
 
         // Retrieve and log a list of all players.
-        List<GamePlayer> players = api.readPlayers();
-        for (GamePlayer gamePlayer : players) {
-            log.info("Found player: " + gamePlayer.toString());
+        Collection<Player> players = api.readPlayers();
+        for (Player player : players) {
+            log.info("Found player: " + player.toString());
         }
 
         // Main game loop.
         while (true) {
             // Retrieve a current view of the world
-            World world = api.readWorldStatus();
-            if (world != null) {
-                log.info(world.toString());
+            GameState state = api.readWorldStatus();
+            if (state != null) {
+                log.info(state.toString());
 
-                Action action = determineNextAction(obstacles, world);
+                Action action = determineNextAction(walls, state);
 
                 perform(id, action);
             } else {
@@ -101,9 +100,9 @@ abstract class BotArtificialIntelligence implements Runnable {
      */
     private void perform(String id, Action action) {
         if (action == Action.SUICIDE) {
-            api.killYourOwnBot(id);
+            api.suicide(id);
         } else {
-            api.addAction(action.toCGIAction(), id);
+            api.addAction(action, id);
         }
     }
 
@@ -112,11 +111,11 @@ abstract class BotArtificialIntelligence implements Runnable {
      * 
      * @param obstacles
      *            obstacles
-     * @param world
+     * @param state
      *            game state
      * @return action to be taken
      */
-    protected abstract Action determineNextAction(List<GameObstacle> obstacles, World world);
+    protected abstract Action determineNextAction(Collection<Wall> obstacles, GameState state);
     
     /** {@inheritDoc} */
     @Override

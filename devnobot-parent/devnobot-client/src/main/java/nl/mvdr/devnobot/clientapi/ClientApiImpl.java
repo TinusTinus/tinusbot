@@ -13,80 +13,73 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.cgi.devnobot.client;
+package nl.mvdr.devnobot.clientapi;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nl.mvdr.devnobot.model.Action;
+import nl.mvdr.devnobot.model.GameState;
+import nl.mvdr.devnobot.model.Player;
+import nl.mvdr.devnobot.model.Wall;
 
+import org.apache.http.HttpStatus;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 
-import com.cgi.devnobot.api.Action;
 import com.cgi.devnobot.api.GameObstacle;
 import com.cgi.devnobot.api.GamePlayer;
 import com.cgi.devnobot.api.World;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-/**
- * Implements the REST/JSON Api of the server
- */
+/** Implements the REST/JSON Api of the server. Based on the contest's example implementation. */
 @Slf4j
-public class ClientApi {
-
-    public static final int HTTP_NO_CONTENT = 204;
+@RequiredArgsConstructor
+public class ClientApiImpl implements ClientApi {
+    /** Base URL. */
     private final String baseURL;
 
-    /**
-     * Specialized constructor.
-     *
-     * @param newBaseURL -
-     */
-    public ClientApi(String newBaseURL) {
-
-        super();
-        this.baseURL = newBaseURL;
-    }
-
-    /**
-     * Read this once for each level at startup of the game
-     *
-     * @return List<GameObstacle>
-     */
-    public List<GameObstacle> readLevel() {
-
+    /** {@inheritDoc} */
+    @Override
+    public Collection<Wall> readLevel() {
+        // Call REST service
         ResteasyClient resteasyClient = new ResteasyClientBuilder().build();
         ResteasyWebTarget resteasyWebTarget = resteasyClient.target(this.baseURL + "/devnobot/rest/level");
         Response response = resteasyWebTarget.request().get();
         String levelAsString = response.readEntity(String.class);
         response.close();
         resteasyClient.close();
+
+        // Convert result from JSON to API object
         Gson gson = new Gson();
         Type collectionType = new TypeToken<List<GameObstacle>>() {
+            // anonymous inner class to create type token
         }.getType();
+        List<GameObstacle> obstacles = gson.fromJson(levelAsString, collectionType);
 
-        return gson.fromJson(levelAsString, collectionType);
+        // Convert to data model
+        List<Wall> result = new ArrayList<>(obstacles.size());
+        for (GameObstacle obstacle : obstacles) {
+            result.add(new Wall(obstacle));
+        }
+
+        return Collections.unmodifiableCollection(result);
     }
 
-    /**
-     * Request the game engine to create a new {@link GamePlayer} object.
-     *
-     * @param name     -
-     * @param webColor - Web Hex Format
-     * @param id       - unique Id of the player,to prevent others from accidentally stealing your bot
-     * @return boolean (success)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean createPlayer(String name, String webColor, String id) {
-
-        boolean result = true;
-
         GamePlayer player = new GamePlayer();
         player.setColor(webColor);
         player.setName(name);
@@ -95,93 +88,80 @@ public class ClientApi {
         ResteasyClient resteasyClient = new ResteasyClientBuilder().build();
         ResteasyWebTarget resteasyWebTarget = resteasyClient.target(this.baseURL + "/devnobot/rest/player");
         Response response = resteasyWebTarget.request().post(Entity.entity(player, MediaType.APPLICATION_JSON));
-        result = (response.getStatus() == HTTP_NO_CONTENT);
+        boolean result = (response.getStatus() == HttpStatus.SC_NO_CONTENT);
         response.close();
         resteasyClient.close();
 
         return result;
     }
 
-    /**
-     * Read this every now and then if you want to know the player status updates.
-     * <p/>
-     * Don't call this more then once a second (the results are cached at the server)
-     *
-     * @return List<GamePlayer>
-     */
-    public List<GamePlayer> readPlayers() {
-
+    /** {@inheritDoc} */
+    @Override
+    public Collection<Player> readPlayers() {
+        // Call REST service
         ResteasyClient resteasyClient = new ResteasyClientBuilder().build();
         ResteasyWebTarget resteasyWebTarget = resteasyClient.target(this.baseURL + "/devnobot/rest/players");
         Response response = resteasyWebTarget.request().get();
         String playersAsString = response.readEntity(String.class);
         response.close();
         resteasyClient.close();
+        
+        // Convert from JSON to API objects
         Gson gson = new Gson();
         Type collectionType = new TypeToken<List<GamePlayer>>() {
+            // anonymous inner class to create type token
         }.getType();
         List<GamePlayer> players = gson.fromJson(playersAsString, collectionType);
+        
+        // Convert to model
+        Collection<Player> result = new ArrayList<>(players.size());
+        for (GamePlayer player: players) {
+            result.add(new Player(player));
+        }
 
-        return players;
+        return Collections.unmodifiableCollection(result);
     }
 
-    /**
-     * Add the given {@link Action} for {@link GamePlayer} with the given id to its queue.
-     * Keep in mind that you should not add actions too fast to prevent creating a large action queue
-     * {@link com.cgi.devnobot.api.GameBot}.
-     *
-     * @param action   -
-     * @param playerId -
-     * @return (success)
-     */
+    /** {@inheritDoc} */
+    @Override
     public boolean addAction(final Action action, final String playerId) {
-
-        boolean result = true;
-        log.info("Making a REST call to add action " + action.toString() + " to player " + playerId);
+        log.info("Making a REST call to add action " + action + " to player " + playerId);
         ResteasyClient resteasyClient = new ResteasyClientBuilder().build();
         ResteasyWebTarget resteasyWebTarget = resteasyClient.target(this.baseURL + "/devnobot/rest/player/" + playerId);
-        Response response = resteasyWebTarget.request().put(Entity.entity(action, MediaType.APPLICATION_JSON));
-        result = (response.getStatus() == HTTP_NO_CONTENT);
+        Response response = resteasyWebTarget.request().put(Entity.entity(action.toCGIAction(), MediaType.APPLICATION_JSON));
+        boolean result = (response.getStatus() == HttpStatus.SC_NO_CONTENT);
         response.close();
         resteasyClient.close();
-
         return result;
     }
 
-    /**
-     * Read this in your game loop to see what's going on.
-     * <p/>
-     * Don't call this more then twice a second (the results are cached at the server)
-     *
-     * @return {@link World}
-     */
-    public World readWorldStatus() {
-
+    /** {@inheritDoc} */
+    @Override
+    public GameState readWorldStatus() {
+        // Call REST service
         ResteasyClient resteasyClient = new ResteasyClientBuilder().build();
         ResteasyWebTarget resteasyWebTarget = resteasyClient.target(this.baseURL + "/devnobot/rest/world");
         Response response = resteasyWebTarget.request().get();
         String worldStatusAsString = response.readEntity(String.class);
         response.close();
         resteasyClient.close();
+        
+        // Convert from JSON to API object
         Gson gson = new Gson();
         World world = gson.fromJson(worldStatusAsString, World.class);
-
-        return world;
+        
+        // Convert to data model
+        return new GameState(world);
     }
 
-    /**
-     * Kill your bot. Useful when you think that you are trapped somewhere.
-     *
-     * @param playerId -
-     * @return boolean (success)
-     */
-    public boolean killYourOwnBot(String playerId) {
-
+    /** {@inheritDoc} */
+    @Override
+    public boolean suicide(String playerId) {
         ResteasyClient resteasyClient = new ResteasyClientBuilder().build();
         ResteasyWebTarget resteasyWebTarget = resteasyClient.target(this.baseURL + "/devnobot/rest/player/" + playerId);
         Response response = resteasyWebTarget.request().delete();
         resteasyClient.close();
 
-        return response.getStatus() == HTTP_NO_CONTENT;
+        return response.getStatus() == HttpStatus.SC_NO_CONTENT;
     }
 }

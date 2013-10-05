@@ -1,13 +1,12 @@
 package nl.mvdr.devnobot.bot;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Random;
 
+import nl.mvdr.devnobot.clientapi.ClientApi;
 import nl.mvdr.devnobot.model.Action;
-
-import com.cgi.devnobot.api.GameObstacle;
-import com.cgi.devnobot.api.World;
-import com.cgi.devnobot.client.ClientApi;
+import nl.mvdr.devnobot.model.GameState;
+import nl.mvdr.devnobot.model.Wall;
 
 /**
  * Dummy bot that just takes random actions.
@@ -54,7 +53,7 @@ public class DummyBot extends BotArtificialIntelligence {
 
     /** {@inheritDoc} */
     @Override
-    protected Action determineNextAction(List<GameObstacle> obstacles, World world) {
+    protected Action determineNextAction(Collection<Wall> walls, GameState state) {
         return ACTIONS[randomGenerator.nextInt(ACTIONS.length)];
     }
 }

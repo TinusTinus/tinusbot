@@ -4,10 +4,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.mvdr.devnobot.bot.BotArtificialIntelligence;
-import nl.mvdr.devnobot.bot.DummyBot;
-
-import com.cgi.devnobot.client.ClientApi;
+import nl.mvdr.devnobot.clientapi.ClientApi;
+import nl.mvdr.devnobot.clientapi.ClientApiImpl;
 
 /**
  * Main class. Spawns a bunch of bots.
@@ -26,7 +24,7 @@ public class Tester {
      */
     public static void main(final String[] args) {
         String serverBaseURL = System.getProperty("devnobot.server.baseURL", "http://localhost:7080");
-        ClientApi api = new ClientApi(serverBaseURL);
+        ClientApi api = new ClientApiImpl(serverBaseURL);
 
         List<BotArtificialIntelligence> bots = new ArrayList<>();
         for (int i = 0; i < NUM_DUMMIES; i++) {
