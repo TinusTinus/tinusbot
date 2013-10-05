@@ -35,7 +35,7 @@ abstract class BotArtificialIntelligence implements Runnable {
     /** Sleep duration after every execution of the main game loop in milliseconds. */
     private static final int THREAD_SLEEP_DURATION = 1000;
     /**
-     * The approximate number of milliseconds between logging the leaderboard. 
+     * The approximate number of milliseconds between logging the leaderboard.
      * 
      * The bot periodically logs the leaderboards but not in every iteration of the game loop.
      */
@@ -80,31 +80,32 @@ abstract class BotArtificialIntelligence implements Runnable {
     private void gameLoop(Collection<Wall> walls, String id) {
         long leaderboardTimestamp = 0L;
         while (true) {
-            // Optionally log the leaderboard.
-            if (leaderboardTimestamp + LEADERBOARD_INTERVAL < System.currentTimeMillis()) {
-                Player.logLeaderboard(api.readPlayers());
-                leaderboardTimestamp = System.currentTimeMillis();
-            }
-            
-            // Retrieve a current view of the world
-            GameState state = api.readWorldStatus();
-            if (state != null) {
-                log.info(state.toString());
-
-                Action action = determineNextAction(walls, state);
-
-                perform(id, action);
-            } else {
-                log.info("No World information available.");
-            }
-            
-            // Actions take multiple seconds to perform (see GameBot) and the readWorldStatus is only updated every
-            // half a second. Therefore it is best to sleep for a short time.
-            // TODO adjust sleep time?
             try {
+                // Optionally log the leaderboard.
+                if (leaderboardTimestamp + LEADERBOARD_INTERVAL < System.currentTimeMillis()) {
+                    Player.logLeaderboard(api.readPlayers());
+                    leaderboardTimestamp = System.currentTimeMillis();
+                }
+
+                // Retrieve a current view of the world
+                GameState state = api.readWorldStatus();
+                if (state != null) {
+                    log.info(state.toString());
+
+                    Action action = determineNextAction(walls, state);
+
+                    perform(id, action);
+                } else {
+                    log.info("No World information available.");
+                }
+
+                // Actions take multiple seconds to perform (see GameBot) and the readWorldStatus is only updated every
+                // half a second. Therefore it is best to sleep for a short time.
+                // TODO adjust sleep time?
                 Thread.sleep(THREAD_SLEEP_DURATION);
-            } catch (InterruptedException iex) {
-                log.warn("INTERRUPTED");
+            } catch (Exception e) {
+                // Log the exception, but don't crash the thread; try to keep going.
+                log.error("Unexpected exception!", e);
             }
         }
     }
