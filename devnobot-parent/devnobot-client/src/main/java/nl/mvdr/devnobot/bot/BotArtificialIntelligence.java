@@ -103,7 +103,7 @@ abstract class BotArtificialIntelligence implements Runnable {
         if (action == Action.SUICIDE) {
             api.killYourOwnBot(id);
         } else {
-            api.addAction(action.getCGIAction(), id);
+            api.addAction(action.toCGIAction(), id);
         }
     }
 

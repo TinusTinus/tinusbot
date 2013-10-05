@@ -11,44 +11,44 @@ import org.junit.Test;
  * @author Martijn van de Rijdt
  */
 public class ActionTest {
-    /** Tests {@link Action#getCGIAction()}. */
+    /** Tests {@link Action#toCGIAction()}. */
     @Test
     public void testGetCGIActionForward() {
-        Assert.assertEquals(com.cgi.devnobot.api.Action.FORWARD, Action.FORWARD.getCGIAction());
+        Assert.assertEquals(com.cgi.devnobot.api.Action.FORWARD, Action.FORWARD.toCGIAction());
     }
     
-    /** Tests {@link Action#getCGIAction()}. */
+    /** Tests {@link Action#toCGIAction()}. */
     @Test
     public void testGetCGIActionBackward() {
-        Assert.assertEquals(com.cgi.devnobot.api.Action.BACKWARD, Action.BACKWARD.getCGIAction());
+        Assert.assertEquals(com.cgi.devnobot.api.Action.BACKWARD, Action.BACKWARD.toCGIAction());
     }
 
     
-    /** Tests {@link Action#getCGIAction()}. */
+    /** Tests {@link Action#toCGIAction()}. */
     @Test
     public void testGetCGIActionTurnLeft() {
-        Assert.assertEquals(com.cgi.devnobot.api.Action.TURN_LEFT, Action.TURN_LEFT.getCGIAction());
+        Assert.assertEquals(com.cgi.devnobot.api.Action.TURN_LEFT, Action.TURN_LEFT.toCGIAction());
     }
 
     
-    /** Tests {@link Action#getCGIAction()}. */
+    /** Tests {@link Action#toCGIAction()}. */
     @Test
     public void testGetCGIActionTurnRight() {
-        Assert.assertEquals(com.cgi.devnobot.api.Action.TURN_RIGHT, Action.TURN_RIGHT.getCGIAction());
+        Assert.assertEquals(com.cgi.devnobot.api.Action.TURN_RIGHT, Action.TURN_RIGHT.toCGIAction());
     }
 
     
-    /** Tests {@link Action#getCGIAction()}. */
+    /** Tests {@link Action#toCGIAction()}. */
     @Test
     public void testGetCGIActionFire() {
-        Assert.assertEquals(com.cgi.devnobot.api.Action.FIRE, Action.FIRE.getCGIAction());
+        Assert.assertEquals(com.cgi.devnobot.api.Action.FIRE, Action.FIRE.toCGIAction());
     }
 
     
-    /** Tests {@link Action#getCGIAction()}. */
+    /** Tests {@link Action#toCGIAction()}. */
     @Test(expected = UnsupportedOperationException.class)
     public void testGetCGIActionSuicide() {
-        Action.SUICIDE.getCGIAction();
+        Action.SUICIDE.toCGIAction();
     }
 
 }

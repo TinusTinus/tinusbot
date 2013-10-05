@@ -29,7 +29,7 @@ public enum Action {
      * @throws UnsupportedOperationException
      *             if invoked on SUICIDE
      */
-    public com.cgi.devnobot.api.Action getCGIAction() {
+    public com.cgi.devnobot.api.Action toCGIAction() {
         com.cgi.devnobot.api.Action result;
         if (this == FORWARD) {
             result = com.cgi.devnobot.api.Action.FORWARD;
