@@ -6,7 +6,6 @@ import lombok.ToString;
 import nl.mvdr.bot.DummyBot;
 
 import com.cgi.devnobot.api.GameBot;
-import com.cgi.devnobot.api.Orientation;
 
 /**
  * Represents a tank in the game world.
@@ -18,7 +17,6 @@ import com.cgi.devnobot.api.Orientation;
 @EqualsAndHashCode(callSuper = true)
 public class Tank extends GameObject {
     /** Indicates which direction the tank is facing. This is also the direction it will fire bullets. */
-    // TODO use custom Orientation type
     private final Orientation lastKnownOrientation;
     /**
      * The time it takes to move forward/backward/turn left/turn right in milliseconds. Shooting is more time consuming.
@@ -39,7 +37,7 @@ public class Tank extends GameObject {
      */
     public Tank(GameBot gameBot) {
         super(gameBot);
-        this.lastKnownOrientation = gameBot.getLastKnownOrientation();
+        this.lastKnownOrientation = Orientation.fromCGIOrientation(gameBot.getLastKnownOrientation());
         this.actionDuration = gameBot.getActionDurationInMs();
         this.distancePerStep = gameBot.getDistancePerStep();
         this.player = gameBot.getPlayer();

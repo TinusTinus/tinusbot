@@ -5,8 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.cgi.devnobot.api.Orientation;
-
 /**
  * Test class for {@link Tank}.
  * 
@@ -65,6 +63,6 @@ public class TankTest {
      * @return tank
      */
     private Tank createNamedTank(String name) {
-        return new Tank(0, 1, 2, 3, Orientation.UP, 4, 5, name, 6);
+        return new Tank(0, 1, 2, 3, Orientation.NORTH, 4, 5, name, 6);
     }
 }
