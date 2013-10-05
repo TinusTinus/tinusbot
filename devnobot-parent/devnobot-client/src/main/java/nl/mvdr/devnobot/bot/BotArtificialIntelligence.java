@@ -32,8 +32,14 @@ import nl.mvdr.devnobot.model.Wall;
 @Slf4j
 @RequiredArgsConstructor
 abstract class BotArtificialIntelligence implements Runnable {
-
-    public static final int THREAD_SLEEP_DURATION = 1000;
+    /** Sleep duration after every execution of the main game loop in milliseconds. */
+    private static final int THREAD_SLEEP_DURATION = 1000;
+    /**
+     * The approximate number of milliseconds between logging the leaderboard. 
+     * 
+     * The bot periodically logs the leaderboards but not in every iteration of the game loop.
+     */
+    private static final int LEADERBOARD_INTERVAL = 5000;
 
     /** Client API, used to make backend calls. */
     @NonNull
@@ -59,12 +65,27 @@ abstract class BotArtificialIntelligence implements Runnable {
         // Register at the server.
         api.createPlayer(name, color, id);
 
-        // Retrieve and log a list of all players.
-        Collection<Player> players = api.readPlayers();
-        Player.logLeaderboard(players);
-
         // Main game loop.
+        gameLoop(walls, id);
+    }
+
+    /**
+     * The main game loop.
+     * 
+     * @param walls
+     *            obstacles in the level
+     * @param id
+     *            current player's id
+     */
+    private void gameLoop(Collection<Wall> walls, String id) {
+        long leaderboardTimestamp = 0L;
         while (true) {
+            // Optionally log the leaderboard.
+            if (leaderboardTimestamp + LEADERBOARD_INTERVAL < System.currentTimeMillis()) {
+                Player.logLeaderboard(api.readPlayers());
+                leaderboardTimestamp = System.currentTimeMillis();
+            }
+            
             // Retrieve a current view of the world
             GameState state = api.readWorldStatus();
             if (state != null) {
@@ -76,7 +97,7 @@ abstract class BotArtificialIntelligence implements Runnable {
             } else {
                 log.info("No World information available.");
             }
-
+            
             // Actions take multiple seconds to perform (see GameBot) and the readWorldStatus is only updated every
             // half a second. Therefore it is best to sleep for a short time.
             // TODO adjust sleep time?
@@ -88,13 +109,15 @@ abstract class BotArtificialIntelligence implements Runnable {
         }
     }
 
-    /** 
+    /**
      * Performs the given action.
      * 
      * Actions are added to the action queue, except for {@link Action#SUICIDE}, which is executed immediately,
      * 
-     * @param id player id
-     * @param action action to be performed
+     * @param id
+     *            player id
+     * @param action
+     *            action to be performed
      */
     private void perform(String id, Action action) {
         if (action == Action.SUICIDE) {
@@ -114,7 +137,7 @@ abstract class BotArtificialIntelligence implements Runnable {
      * @return action to be taken
      */
     protected abstract Action determineNextAction(Collection<Wall> obstacles, GameState state);
-    
+
     /** {@inheritDoc} */
     @Override
     public String toString() {

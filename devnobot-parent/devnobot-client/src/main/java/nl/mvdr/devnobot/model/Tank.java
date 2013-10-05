@@ -14,7 +14,10 @@ import com.cgi.devnobot.api.GameBot;
 @Getter
 @ToString(callSuper = true)
 public class Tank extends GameObject {
-    /** Indicates which direction the tank is facing. This is also the direction it will fire bullets. */
+    /**
+     * Indicates the last known direction the tank was facing. This is also the direction it will fire bullets. Note
+     * that this field may be null (at the start of the game).
+     */
     private final Orientation lastKnownOrientation;
     /**
      * The time it takes to move forward/backward/turn left/turn right in milliseconds. Shooting is more time consuming.

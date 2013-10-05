@@ -151,7 +151,14 @@ public class ClientApiImpl implements ClientApi {
         World world = gson.fromJson(worldStatusAsString, World.class);
         
         // Convert to data model
-        return new GameState(world);
+        GameState result;
+        if (world != null) {
+            result = new GameState(world);
+        } else {
+            result = null;
+        }
+        
+        return result;
     }
 
     /** {@inheritDoc} */

@@ -35,6 +35,8 @@ public enum Orientation {
             result = SOUTH;
         } else if (orientation == com.cgi.devnobot.api.Orientation.LEFT) {
             result = WEST;
+        } else if (orientation == null) {
+            result = null;
         } else {
             throw new IllegalArgumentException("Unexpected orientation: " + orientation);
         }
