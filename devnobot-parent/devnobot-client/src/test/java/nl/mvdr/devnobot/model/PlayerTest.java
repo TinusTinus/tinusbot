@@ -1,6 +1,8 @@
 package nl.mvdr.devnobot.model;
 
-import nl.mvdr.devnobot.model.Player;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -61,6 +63,36 @@ public class PlayerTest {
      * @return player
      */
     private Player createPlayer(int kills, int deaths) {
-        return new Player("name", "id", kills, deaths, "color");
+        return new Player("name", kills, deaths, "color");
+    }
+
+    /** Test method for {@link Player#logLeaderboard(Collection)} in case of an empty collection of players. */
+    @Test
+    public void testLogLeaderboardEmptyCollection() {
+        Player.logLeaderboard(Collections.<Player>emptySet());
+    }
+
+    /** Test method for {@link Player#logLeaderboard(Collection)}. */
+    @Test
+    public void testLogLeaderboard() {
+        Collection<Player> players = new HashSet<>();
+        players.add(new Player("Jan", 38, 0, "color"));
+        players.add(new Player("Piet", 0, 324, "color"));
+        players.add(new Player("Ton", 10, 8, "color"));
+        players.add(new Player("Kees", 20, 50, "color"));
+        players.add(new Player("Aad", 3, 2, "color"));
+        players.add(new Player("Wim", 3, 2, "color"));
+        players.add(new Player("Herp", 2, 0, "color"));
+        players.add(new Player("Derp", 6, 8, "color"));
+        Player.logLeaderboard(players);
+    }
+    
+    /** Test method for {@link Player#logLeaderboard(Collection)}. */
+    @Test
+    public void testLogLeaderboardLongStrings() {
+        Collection<Player> players = new HashSet<>();
+        players.add(new Player("Player with a really long name", 6, 2, "color"));
+        players.add(new Player("Many kills/deaths", 33276973, 73283729, "color"));
+        Player.logLeaderboard(players);
     }
 }
