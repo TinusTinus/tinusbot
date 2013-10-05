@@ -10,6 +10,7 @@ import lombok.ToString;
 
 import com.cgi.devnobot.api.GameBot;
 import com.cgi.devnobot.api.GameBullet;
+import com.cgi.devnobot.api.World;
 
 /**
  * Representation of the current game state.
@@ -22,7 +23,7 @@ import com.cgi.devnobot.api.GameBullet;
 @ToString
 @Getter
 @EqualsAndHashCode
-public class World {
+public class GameState {
     /** Tanks in the game world. */
     private final Collection<Tank> tanks;
     /** Bullets. */
@@ -33,7 +34,7 @@ public class World {
      * 
      * @param world world as received from the client api
      */
-    public World(com.cgi.devnobot.api.World world) {
+    public GameState(World world) {
         super();
         
         Collection<Tank> tempTanks = new ArrayList<>(world.getBots().size());
