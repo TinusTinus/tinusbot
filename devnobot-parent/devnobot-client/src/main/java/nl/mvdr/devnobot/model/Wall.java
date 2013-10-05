@@ -1,6 +1,5 @@
 package nl.mvdr.devnobot.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import com.cgi.devnobot.api.GameObstacle;
@@ -11,7 +10,6 @@ import com.cgi.devnobot.api.GameObstacle;
  * @author Martijn van de Rijdt
  */
 @ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 public class Wall extends GameObject {
     /**
      * Constructor.

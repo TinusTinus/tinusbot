@@ -1,7 +1,6 @@
 package nl.mvdr.devnobot.model;
 
 import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -13,7 +12,6 @@ import lombok.ToString;
  */
 @Getter
 @ToString
-@EqualsAndHashCode
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class GameObject {
     /** X coordinate (increases left-to-right). */

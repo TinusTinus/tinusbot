@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -22,7 +21,6 @@ import com.cgi.devnobot.api.World;
  */
 @ToString
 @Getter
-@EqualsAndHashCode
 public class GameState {
     /** Tanks in the game world. */
     private final Collection<Tank> tanks;

@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -24,7 +23,6 @@ import com.cgi.devnobot.api.GamePlayer;
  */
 @ToString
 @Getter
-@EqualsAndHashCode
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 @Slf4j
 public class Player {

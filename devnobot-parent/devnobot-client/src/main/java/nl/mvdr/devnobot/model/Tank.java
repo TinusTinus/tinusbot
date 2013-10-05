@@ -1,6 +1,5 @@
 package nl.mvdr.devnobot.model;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import nl.mvdr.devnobot.bot.DummyBot;
@@ -14,7 +13,6 @@ import com.cgi.devnobot.api.GameBot;
  */
 @Getter
 @ToString(callSuper = true)
-@EqualsAndHashCode(callSuper = true)
 public class Tank extends GameObject {
     /** Indicates which direction the tank is facing. This is also the direction it will fire bullets. */
     private final Orientation lastKnownOrientation;
