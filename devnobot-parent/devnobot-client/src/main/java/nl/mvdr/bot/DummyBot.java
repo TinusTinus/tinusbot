@@ -3,7 +3,8 @@ package nl.mvdr.bot;
 import java.util.List;
 import java.util.Random;
 
-import com.cgi.devnobot.api.Action;
+import nl.mvdr.model.Action;
+
 import com.cgi.devnobot.api.GameObstacle;
 import com.cgi.devnobot.api.World;
 import com.cgi.devnobot.client.ClientApi;
@@ -16,6 +17,10 @@ import com.cgi.devnobot.client.ClientApi;
 public class DummyBot extends Bot {
     /** Random generator. */
     private final Random randomGenerator;
+    /** Actions that this bot can perform. */
+    // all except suicide
+    private Action[] ACTIONS = new Action[] { Action.FORWARD, Action.BACKWARD, Action.TURN_LEFT, Action.TURN_RIGHT,
+            Action.FIRE };
 
     /**
      * Constructor.
@@ -35,6 +40,6 @@ public class DummyBot extends Bot {
     /** {@inheritDoc} */
     @Override
     protected Action determineNextAction(List<GameObstacle> obstacles, World world) {
-        return Action.values()[randomGenerator.nextInt(Action.values().length)];
+        return ACTIONS[randomGenerator.nextInt(ACTIONS.length)];
     }
 }

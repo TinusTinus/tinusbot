@@ -22,8 +22,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nl.mvdr.model.Action;
 
-import com.cgi.devnobot.api.Action;
 import com.cgi.devnobot.api.GameObstacle;
 import com.cgi.devnobot.api.GamePlayer;
 import com.cgi.devnobot.api.World;
@@ -92,19 +92,23 @@ abstract class Bot implements Runnable {
     }
 
     /** 
-     * Performs the given action, that is, adds it to the action queue.
+     * Performs the given action.
+     * 
+     * Actions are added to the action queue, except for {@link Action#SUICIDE}, which is executed immediately,
      * 
      * @param id player id
      * @param action action to be performed
      */
     private void perform(String id, Action action) {
-        api.addAction(action, id);
+        if (action == Action.SUICIDE) {
+            api.killYourOwnBot(id);
+        } else {
+            api.addAction(action.getCGIAction(), id);
+        }
     }
 
     /**
      * Determines the next action to take.
-     * 
-     * TODO change the return type somehow to support suicide as a valid action
      * 
      * @param obstacles
      *            obstacles
