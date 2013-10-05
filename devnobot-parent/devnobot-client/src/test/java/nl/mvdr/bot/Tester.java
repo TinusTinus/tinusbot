@@ -25,12 +25,12 @@ public class Tester {
         String serverBaseURL = System.getProperty("devnobot.server.baseURL", "http://localhost:7080");
         ClientApi api = new ClientApi(serverBaseURL);
 
-        List<Bot> bots = new ArrayList<>();
+        List<BotArtificialIntelligence> bots = new ArrayList<>();
         for (int i = 0; i < NUM_DUMMIES; i++) {
             bots.add(new DummyBot(api, "Dummy" + i, toHexString(Color.ORANGE)));
         }
 
-        for (Bot bot : bots) {
+        for (BotArtificialIntelligence bot : bots) {
             new Thread(bot, bot.getName()).start();
         }
     }

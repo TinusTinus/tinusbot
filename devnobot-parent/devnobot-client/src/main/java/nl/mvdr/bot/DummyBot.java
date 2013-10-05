@@ -14,7 +14,7 @@ import com.cgi.devnobot.client.ClientApi;
  * 
  * @author Martijn van de Rijdt
  */
-public class DummyBot extends Bot {
+public class DummyBot extends BotArtificialIntelligence {
     /** Random generator. */
     private final Random randomGenerator;
     /** Actions that this bot can perform. */

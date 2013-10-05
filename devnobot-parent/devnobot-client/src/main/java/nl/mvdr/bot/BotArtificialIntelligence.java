@@ -32,7 +32,7 @@ import com.cgi.devnobot.client.ClientApi;
 /** Abstract superclass for bot implementations. */
 @Slf4j
 @RequiredArgsConstructor
-abstract class Bot implements Runnable {
+abstract class BotArtificialIntelligence implements Runnable {
 
     public static final int THREAD_SLEEP_DURATION = 1000;
 
