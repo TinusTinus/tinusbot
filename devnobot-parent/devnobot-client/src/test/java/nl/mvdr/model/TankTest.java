@@ -18,7 +18,7 @@ public class TankTest {
     /** Tests {@link Tank#toString()}. */
     @Test
     public void testToString() {
-        Tank tank = new Tank(0, 1, 2, 3, Orientation.UP, 4, 5, "name", 6);
+        Tank tank = createNamedTank("name");
         
         String string = tank.toString();
         
@@ -30,15 +30,15 @@ public class TankTest {
     /** Tests {@link Tank#isProbablyADummy()}. */
     @Test
     public void testNotADummy() {
-        Tank tank = new Tank(0, 1, 2, 3, Orientation.UP, 4, 5, "name", 6);
+        Tank tank = createNamedTank("name");
         
         Assert.assertFalse(tank.isProbablyADummy());
     }
-    
+
     /** Tests {@link Tank#isProbablyADummy()}. */
     @Test
     public void testDummy() {
-        Tank tank = new Tank(0, 1, 2, 3, Orientation.UP, 4, 5, "Dummy", 6);
+        Tank tank = createNamedTank("Dummy");
         
         Assert.assertTrue(tank.isProbablyADummy());
     }
@@ -46,7 +46,7 @@ public class TankTest {
     /** Tests {@link Tank#isProbablyADummy()}. */
     @Test
     public void testNumberedDummy() {
-        Tank tank = new Tank(0, 1, 2, 3, Orientation.UP, 4, 5, "Dummy2", 6);
+        Tank tank = createNamedTank("Dummy2");
         
         Assert.assertTrue(tank.isProbablyADummy());
     }
@@ -55,8 +55,18 @@ public class TankTest {
     @Test
     @Ignore // TODO fix!
     public void testDummyCaseSensitive() {
-        Tank tank = new Tank(0, 1, 2, 3, Orientation.UP, 4, 5, "dummy0", 6);
+        Tank tank = createNamedTank("dummy0");
         
         Assert.assertTrue(tank.isProbablyADummy());
+    }
+    
+    /**
+     * Creates a tank with the given name and dummy values for all other fields. 
+     * 
+     * @param name name
+     * @return tank
+     */
+    private Tank createNamedTank(String name) {
+        return new Tank(0, 1, 2, 3, Orientation.UP, 4, 5, name, 6);
     }
 }
