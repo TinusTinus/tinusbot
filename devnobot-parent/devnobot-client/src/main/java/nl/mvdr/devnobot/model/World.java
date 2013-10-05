@@ -1,4 +1,4 @@
-package nl.mvdr.model;
+package nl.mvdr.devnobot.model;
 
 import java.util.ArrayList;
 import java.util.Collection;

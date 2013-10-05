@@ -1,6 +1,8 @@
-package nl.mvdr.model;
+package nl.mvdr.devnobot.model;
 
 import lombok.extern.slf4j.Slf4j;
+import nl.mvdr.devnobot.model.Orientation;
+import nl.mvdr.devnobot.model.Tank;
 
 import org.junit.Assert;
 import org.junit.Test;

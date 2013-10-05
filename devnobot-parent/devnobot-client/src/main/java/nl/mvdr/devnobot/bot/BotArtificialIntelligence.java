@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package nl.mvdr.bot;
+package nl.mvdr.devnobot.bot;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,7 +22,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import nl.mvdr.model.Action;
+import nl.mvdr.devnobot.model.Action;
 
 import com.cgi.devnobot.api.GameObstacle;
 import com.cgi.devnobot.api.GamePlayer;

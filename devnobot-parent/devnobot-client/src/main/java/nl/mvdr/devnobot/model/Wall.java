@@ -1,26 +1,26 @@
-package nl.mvdr.model;
+package nl.mvdr.devnobot.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import com.cgi.devnobot.api.GameBullet;
+import com.cgi.devnobot.api.GameObstacle;
 
 /**
- * Representation of a bullet. Bullets are spawned by firing, disappear when they hit a wall or a tank.
+ * Representation of a wall / obstacle.
  * 
  * @author Martijn van de Rijdt
  */
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class Bullet extends GameObject {
+public class Wall extends GameObject {
     /**
      * Constructor.
      * 
-     * @param bullet
+     * @param obstacle
      *            game object as received from the client api
      */
-    public Bullet(GameBullet bullet) {
-        super(bullet);
+    public Wall(GameObstacle obstacle) {
+        super(obstacle);
     }
     
     /**
@@ -31,7 +31,7 @@ public class Bullet extends GameObject {
      * @param width width
      * @param height height
      */
-    Bullet(int x, int y, int width, int height) {
+    Wall(int x, int y, int width, int height) {
         super(x, y, width, height);
     }
 }

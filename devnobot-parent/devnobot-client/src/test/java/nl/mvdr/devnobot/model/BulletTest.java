@@ -1,6 +1,7 @@
-package nl.mvdr.model;
+package nl.mvdr.devnobot.model;
 
 import lombok.extern.slf4j.Slf4j;
+import nl.mvdr.devnobot.model.Bullet;
 
 import org.junit.Assert;
 import org.junit.Test;

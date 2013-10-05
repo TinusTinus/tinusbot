@@ -1,4 +1,4 @@
-package nl.mvdr.model;
+package nl.mvdr.devnobot.model;
 
 /**
  * Possible actions which a robot can take in the game.

@@ -3,4 +3,4 @@
  *  
  * @author Martijn van de Rijdt
  */
-package nl.mvdr.bot;
+package nl.mvdr.devnobot.bot;

@@ -1,4 +1,4 @@
-package nl.mvdr.model;
+package nl.mvdr.devnobot.model;
 
 /**
  * Representation of the direction a tank is facing.

@@ -1,8 +1,11 @@
-package nl.mvdr.bot;
+package nl.mvdr.devnobot.bot;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+
+import nl.mvdr.devnobot.bot.BotArtificialIntelligence;
+import nl.mvdr.devnobot.bot.DummyBot;
 
 import com.cgi.devnobot.client.ClientApi;
 

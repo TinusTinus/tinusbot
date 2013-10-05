@@ -6,4 +6,4 @@
  * 
  * @author Martijn van de Rijdt
  */
-package nl.mvdr.model;
+package nl.mvdr.devnobot.model;

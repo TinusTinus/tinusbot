@@ -1,9 +1,9 @@
-package nl.mvdr.bot;
+package nl.mvdr.devnobot.bot;
 
 import java.util.List;
 import java.util.Random;
 
-import nl.mvdr.model.Action;
+import nl.mvdr.devnobot.model.Action;
 
 import com.cgi.devnobot.api.GameObstacle;
 import com.cgi.devnobot.api.World;

@@ -1,9 +1,9 @@
-package nl.mvdr.model;
+package nl.mvdr.devnobot.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-import nl.mvdr.bot.DummyBot;
+import nl.mvdr.devnobot.bot.DummyBot;
 
 import com.cgi.devnobot.api.GameBot;
 

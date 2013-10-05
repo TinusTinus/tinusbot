@@ -1,4 +1,6 @@
-package nl.mvdr.model;
+package nl.mvdr.devnobot.model;
+
+import nl.mvdr.devnobot.model.Action;
 
 import org.junit.Assert;
 import org.junit.Test;
