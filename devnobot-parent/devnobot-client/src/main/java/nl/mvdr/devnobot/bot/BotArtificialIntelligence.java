@@ -61,9 +61,7 @@ abstract class BotArtificialIntelligence implements Runnable {
 
         // Retrieve and log a list of all players.
         Collection<Player> players = api.readPlayers();
-        for (Player player : players) {
-            log.info("Found player: " + player.toString());
-        }
+        Player.logLeaderboard(players);
 
         // Main game loop.
         while (true) {
