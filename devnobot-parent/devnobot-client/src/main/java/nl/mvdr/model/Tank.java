@@ -100,7 +100,11 @@ public class Tank extends GameObject {
      * In the provided example code, dummies are named "Dummy0", "Dummy1", ..., "Dummy7". In the final competition, four
      * players and four dummies will compete at once. Assuming the dummies are started using the same code as in the
      * example code, they can be recognised based on their player names. So this method returns true if and only if the
-     * dummy's name starts with "Dummy".
+     * dummy's name starts with "Dummy" (case-insensitive).
+     * 
+     * Of course other players are free to name their bots something that starts with "Dummy" and CGI is free to name
+     * their dummy bots something else on the day of the competition. Therefore the result of this method is not 100%
+     * reliable. Hence the "probably" in the method name.
      * 
      * @return whether this tank is likely a dummy
      */
