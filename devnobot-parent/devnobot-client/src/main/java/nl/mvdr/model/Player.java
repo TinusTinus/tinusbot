@@ -42,4 +42,14 @@ public class Player {
         this.deaths = gamePlayer.getDeads();
         this.color = gamePlayer.getColor();
     }
+    
+    /**
+     * Computes the score for this player based on the kills and deaths. According to the rules, a kill is worth two
+     * points whereas a death costs one.
+     * 
+     * @return score
+     */
+    public int computeScore() {
+        return kills * 2 - deaths;
+    }
 }
