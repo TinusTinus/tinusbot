@@ -97,6 +97,7 @@ abstract class BotArtificialIntelligence implements Runnable {
                     boolean success = perform(id, action);
                     
                     if (!success) {
+                        log.warn("Action failed: " + action);
                         // retry immediately
                         nextTimestamp = System.currentTimeMillis();
                     }
