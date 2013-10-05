@@ -3,7 +3,6 @@ package nl.mvdr.model;
 import lombok.extern.slf4j.Slf4j;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.cgi.devnobot.api.Orientation;
@@ -53,7 +52,6 @@ public class TankTest {
     
     /** Tests {@link Tank#isProbablyADummy()}. */
     @Test
-    @Ignore // TODO fix!
     public void testDummyCaseSensitive() {
         Tank tank = createNamedTank("dummy0");
         

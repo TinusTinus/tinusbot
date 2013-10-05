@@ -105,6 +105,6 @@ public class Tank extends GameObject {
      * @return whether this tank is likely a dummy
      */
     public boolean isProbablyADummy() {
-        return this.player != null && this.player.startsWith(DummyBot.DEFAULT_NAME);
+        return this.player != null && this.player.toLowerCase().startsWith(DummyBot.DEFAULT_NAME.toLowerCase());
     }
 }
