@@ -117,4 +117,10 @@ abstract class BotArtificialIntelligence implements Runnable {
      * @return action to be taken
      */
     protected abstract Action determineNextAction(List<GameObstacle> obstacles, World world);
+    
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return name;
+    }
 }
