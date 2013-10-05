@@ -65,6 +65,9 @@ abstract class BotArtificialIntelligence implements Runnable {
         // Register at the server.
         api.createPlayer(name, color, id);
 
+        // Log the leaderboard
+        Player.logLeaderboard(api.readPlayers());
+        
         // Main game loop.
         gameLoop(walls, id);
     }
@@ -81,12 +84,6 @@ abstract class BotArtificialIntelligence implements Runnable {
         long leaderboardTimestamp = 0L;
         while (true) {
             try {
-                // Optionally log the leaderboard.
-                if (leaderboardTimestamp + LEADERBOARD_INTERVAL < System.currentTimeMillis()) {
-                    Player.logLeaderboard(api.readPlayers());
-                    leaderboardTimestamp = System.currentTimeMillis();
-                }
-
                 // Retrieve a current view of the world
                 GameState state = api.readWorldStatus();
                 if (state != null) {
@@ -97,6 +94,12 @@ abstract class BotArtificialIntelligence implements Runnable {
                     perform(id, action);
                 } else {
                     log.info("No World information available.");
+                }
+                
+                // Optionally log the leaderboard.
+                if (leaderboardTimestamp + LEADERBOARD_INTERVAL < System.currentTimeMillis()) {
+                    Player.logLeaderboard(api.readPlayers());
+                    leaderboardTimestamp = System.currentTimeMillis();
                 }
 
                 // Actions take multiple seconds to perform (see GameBot) and the readWorldStatus is only updated every
@@ -119,13 +122,19 @@ abstract class BotArtificialIntelligence implements Runnable {
      *            player id
      * @param action
      *            action to be performed
+     * @param whether the operation was succesful
      */
-    private void perform(String id, Action action) {
+    private boolean perform(String id, Action action) {
+        boolean result;
         if (action == Action.SUICIDE) {
-            api.suicide(id);
+            result = api.suicide(id);
+        } else if (action != null) {
+            result = api.addAction(action, id);
         } else {
-            api.addAction(action, id);
+            // do nothing
+            result = true;
         }
+        return result;
     }
 
     /**
@@ -135,7 +144,7 @@ abstract class BotArtificialIntelligence implements Runnable {
      *            obstacles
      * @param state
      *            game state
-     * @return action to be taken
+     * @return action to be taken, or null for no action at all
      */
     protected abstract Action determineNextAction(Collection<Wall> obstacles, GameState state);
 
