@@ -86,7 +86,7 @@ public class Player {
             int maxScoreLength = SCORE_HEADER.length();
             int maxKillsLength = KILLS_HEADER.length();
             int maxDeathsLength = DEATHS_HEADER.length();
-            int maxPositionLength = ("" + players.size()).length();
+            int maxPositionLength = Math.max(("" + players.size()).length(), 3);
             for (Player player : players) {
                 int score = player.computeScore();
                 if (!playersByScores.containsKey(Integer.valueOf(score))) {
@@ -103,25 +103,29 @@ public class Player {
             List<Integer> scores = new ArrayList<>(playersByScores.keySet());
             Collections.sort(scores, Collections.reverseOrder());
 
-            // Log the leaderboard table header
-            log.info("Current leaderboard:");
-            log.info("{} {} {} {} {}", padRight(" ", maxPositionLength), padRight(NAME_HEADER, maxNameLength),
-                    padRight(SCORE_HEADER, maxScoreLength), padRight(KILLS_HEADER, maxKillsLength),
-                    padRight(DEATHS_HEADER, maxDeathsLength));
+            // Table header
+            StringBuffer logMessage = new StringBuffer("Current leaderboard:\n\n");
+            logMessage.append(String.format("%s %s %S %s %s\n",
+                    padRight(" ", maxPositionLength),
+                    padRight(NAME_HEADER, maxNameLength),
+                    padRight(SCORE_HEADER, maxScoreLength),
+                    padRight(KILLS_HEADER, maxKillsLength),
+                    padRight(DEATHS_HEADER, maxDeathsLength)));
 
             int position = 1;
             for (Integer score : scores) {
                 Collection<Player> playersForScore = playersByScores.get(score);
                 for (Player player : playersForScore) {
-                    log.info("{} {} {} {} {}", 
+                    logMessage.append(String.format("%s %s %S %s %s\n", 
                             padLeft(position, maxPositionLength),
                             padRight(player.getName(), maxNameLength),
                             padLeft(score.intValue(), maxScoreLength),
                             padLeft(player.getKills(), maxKillsLength),
-                            padLeft(player.getDeaths(), maxDeathsLength));
+                            padLeft(player.getDeaths(), maxDeathsLength)));
                 }
                 position = position + playersForScore.size();
             }
+            log.info(logMessage.toString());
         }
     }
 
