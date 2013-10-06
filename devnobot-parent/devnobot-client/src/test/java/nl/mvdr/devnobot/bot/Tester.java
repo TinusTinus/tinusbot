@@ -30,6 +30,7 @@ public class Tester {
         for (int i = 0; i < NUM_DUMMIES; i++) {
             bots.add(new DummyBot(api, DummyBot.DEFAULT_NAME + i, Color.ORANGE));
         }
+        bots.add(new InteractiveBot(api));
 
         for (BotArtificialIntelligence bot : bots) {
             new Thread(bot, bot.getName()).start();
