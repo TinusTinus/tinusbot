@@ -25,41 +25,10 @@ import com.cgi.devnobot.api.World;
 @Getter
 @Slf4j
 public class GameState {
-    /**
-     * Width of a bullet.
-     * 
-     * Seems to be 4 in all of my tests so that is the initial value. Updated whenever a bullet is found.
-     */
-    @Getter
-    private static int bulletWidth = 4;
-    /**
-     * Width of a bullet.
-     * 
-     * Seems to be 4 in all of my tests so that is the initial value. Updated whenever a bullet is found.
-     */
-    @Getter
-    private static int bulletHeight = 4;
-
     /** Tanks in the game world. */
     private final Collection<Tank> tanks;
     /** Bullets. */
     private final Collection<Bullet> bullets;
-
-    /**
-     * Updates the bullet size based on the first bullet in the given collection. If the collection is empty this method
-     * does nothing.
-     * 
-     * @param bullets
-     *            collection of bullets
-     */
-    private static void updateBulletSize(Collection<Bullet> bullets) {
-        Iterator<Bullet> iterator = bullets.iterator();
-        if (iterator.hasNext()) {
-            Bullet bullet = iterator.next();
-            bulletWidth = bullet.getWidth();
-            bulletHeight = bullet.getHeight();
-        }
-    }
 
     /**
      * Constructor.
@@ -81,8 +50,6 @@ public class GameState {
             tempBullets.add(new Bullet(gameBullet));
         }
         this.bullets = Collections.unmodifiableCollection(tempBullets);
-
-        updateBulletSize(bullets);
     }
 
     /**
@@ -97,8 +64,6 @@ public class GameState {
         super();
         this.tanks = Collections.unmodifiableCollection(tanks);
         this.bullets = Collections.unmodifiableCollection(bullets);
-
-        updateBulletSize(bullets);
     }
 
     /**
