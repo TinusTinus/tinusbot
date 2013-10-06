@@ -41,6 +41,9 @@ abstract class BotArtificialIntelligence implements Runnable {
      */
     private static final int LEADERBOARD_INTERVAL = 5000;
 
+    /** Maximum number of failed actions in a row. */
+    private static final int MAX_FAILED_ACTIONS = 10;
+
     /** Client API, used to make backend calls. */
     @NonNull
     private final ClientApi api;
@@ -63,13 +66,24 @@ abstract class BotArtificialIntelligence implements Runnable {
         String id = name + '-' + UUID.randomUUID().toString();
 
         // Register at the server.
-        api.createPlayer(name, color, id);
+        connect(id);
 
         // Log the leaderboard
         Player.logLeaderboard(api.readPlayers());
 
         // Main game loop.
         gameLoop(walls, id);
+    }
+
+    /**
+     * Connects to the server.
+     * 
+     * @param id
+     *            id to be used
+     */
+    private void connect(String id) {
+        log.info("Connecting for player {}, color: {}, id: {}", name, color, id);
+        api.createPlayer(name, color, id);
     }
 
     /**
@@ -82,11 +96,14 @@ abstract class BotArtificialIntelligence implements Runnable {
      */
     private void gameLoop(Collection<Wall> walls, String id) {
         long leaderboardTimestamp = 0L;
+        int failedActionCount = 0;
         while (true) {
+            // timestamp at the start of this iteration
             long startTimestamp = System.currentTimeMillis();
+            // timestamp when the next iteration should take place
             long nextTimestamp = startTimestamp + THREAD_SLEEP_DURATION;
+            // number of failed actions in a row
             try {
-
                 // Retrieve a current view of the world
                 GameState state = api.readWorldStatus();
                 if (state != null) {
@@ -95,11 +112,20 @@ abstract class BotArtificialIntelligence implements Runnable {
                     Action action = determineNextAction(walls, state);
 
                     boolean success = perform(id, action);
-                    
-                    if (!success) {
-                        log.warn("Action failed: " + action);
+
+                    if (success) {
+                        failedActionCount = 0;
+                    } else {
+                        log.warn("Action failed: " + action + "failedActionCount: " + failedActionCount);
                         // retry immediately
                         nextTimestamp = System.currentTimeMillis();
+                        if (failedActionCount == MAX_FAILED_ACTIONS) {
+                            failedActionCount = 0;
+                            log.warn("Attempting to reconnect.");
+                            connect(id);
+                        } else {
+                            failedActionCount++;
+                        }
                     }
                 } else {
                     log.info("No World information available.");
@@ -117,7 +143,7 @@ abstract class BotArtificialIntelligence implements Runnable {
                 // Log the exception, but don't crash the thread; try to keep going.
                 log.error("Unexpected exception!", e);
             }
-            
+
             long waitTime = nextTimestamp - System.currentTimeMillis();
             if (0 < waitTime) {
                 try {
