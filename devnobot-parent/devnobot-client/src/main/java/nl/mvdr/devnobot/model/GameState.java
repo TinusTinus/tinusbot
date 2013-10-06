@@ -138,19 +138,20 @@ public class GameState {
 
         return result;
     }
-
+    
     /**
      * Determines which, if any, game object the given tank would hit if it fired right now.
      * 
      * @param tank
      *            tank which would fire
+     * @param enemies
+     *            tank's enemies
      * @param walls
      *            walls / obstacles in the level
      * @return game object which would be hit, or null if there is none
      */
-    public GameObject wouldHit(Tank tank, Collection<Wall> walls) {
+    public GameObject wouldHit(Tank tank, Collection<Tank> enemies, Collection<Wall> walls) {
         // Build a collection of objects that the bullet cannot pass through. That is, all enemy tanks and walls.
-        Collection<Tank> enemies = retrieveEnemies(tank.getPlayer());
         Collection<GameObject> objects = new ArrayList<>(tanks.size() - 1 + walls.size());
         objects.addAll(enemies);
         objects.addAll(walls);
@@ -183,6 +184,20 @@ public class GameState {
         }
         
         return result;
+    }
+
+    /**
+     * Determines which, if any, game object the given tank would hit if it fired right now.
+     * 
+     * @param tank
+     *            tank which would fire
+     * @param walls
+     *            walls / obstacles in the level
+     * @return game object which would be hit, or null if there is none
+     */
+    public GameObject wouldHit(Tank tank, Collection<Wall> walls) {
+        Collection<Tank> enemies = retrieveEnemies(tank.getPlayer());
+        return wouldHit(tank, enemies, walls);
     }
 
     /**
@@ -232,5 +247,20 @@ public class GameState {
      */
     public boolean wouldHitEnemy(Tank tank, Collection<Wall> walls) {
         return wouldHit(tank, walls) instanceof Tank;
+    }
+    
+    /**
+     * Determines whether the given tank would hit an enemy if it fired right now.
+     * 
+     * @param tank
+     *            tank
+     * @param walls
+     *            walls / obstacles in the level
+     * @return game object which would be hit, or null if there is none
+     * @throws IllegalArgumentException
+     *             if there is no matching tank for the given player name
+     */
+    public boolean wouldHitEnemy(Tank tank, Collection<Tank> enemies, Collection<Wall> walls) {
+        return wouldHit(tank, enemies, walls) instanceof Tank;
     }
 }

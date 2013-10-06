@@ -44,23 +44,34 @@ public class Tinusbot extends BotArtificialIntelligence {
     @Override
     protected Action determineNextAction(Collection<Wall> obstacles, GameState state) {
         Action result;
-        if (state.wouldHitEnemy(getName(), obstacles)) {
-            // FIRE!
-            // Even if they fire back and we die, it still nets us a point (2 for the kill minus 1 for the death).
-            // TODO prevent firing multiple bullets at far-away enemies?
-            result = Action.FIRE;
-        } else if (nonDummyEnemyHasAShot(obstacles, state)) {
-            // EVASIVE MANEUVERS!
-            // Suicide to prevent the enemy from getting the kill.
-            // TODO test if this actually helps!
-            result = Action.SUICIDE;
+
+        Tank ownTank = state.retrieveTankForPlayerName(getName());
+        Collection<Tank> enemies = state.retrieveEnemies(getName());
+
+        if (!enemies.isEmpty()) {
+            if (state.wouldHitEnemy(ownTank, enemies, obstacles)) {
+                // FIRE!
+                // Even if they fire back and we die, it still nets us a point (2 for the kill minus 1 for the death).
+                // TODO prevent firing multiple bullets at far-away enemies?
+                result = Action.FIRE;
+            } else if (nonDummyEnemyHasAShot(obstacles, state, ownTank, enemies)) {
+                // EVASIVE MANEUVERS!
+                // Our tank is most likely too slow to get out of the way.
+                // Suicide to prevent the enemy from getting the kill.
+                // TODO test if this actually helps!
+                result = Action.SUICIDE;
+            } else {
+                // Move toward a position where we can fire.
+                result = computeActionToMoveIntoFiringPosition(obstacles, state, ownTank, enemies);
+            }
         } else {
-            // TODO move to a position where we can fire?
+            // There are no enemies in the level (yet).
+            // TODO move towards the center of the map?
             result = null;
         }
         return result;
     }
-    
+
     /**
      * Determines whether a non-dummy enemy is aiming at our tank.
      * 
@@ -72,12 +83,16 @@ public class Tinusbot extends BotArtificialIntelligence {
      *            walls
      * @param state
      *            game state
+     * @param ownTank
+     *            own tank
+     * @param enemies
+     *            all enemy tanks
      * @return whether a bot is aiming at us
      */
-    private boolean nonDummyEnemyHasAShot(Collection<Wall> obstacles, GameState state) {
+    private boolean nonDummyEnemyHasAShot(Collection<Wall> obstacles, GameState state, Tank ownTank,
+            Collection<Tank> enemies) {
         boolean result = false;
-        Tank ownTank = state.retrieveTankForPlayerName(getName());
-        Iterator<Tank> enemyIterator = state.retrieveEnemies(getName()).iterator();
+        Iterator<Tank> enemyIterator = enemies.iterator();
         while (!result && enemyIterator.hasNext()) {
             Tank enemy = enemyIterator.next();
             result = !enemy.isProbablyADummy() && state.wouldHit(enemy.getPlayer(), obstacles) == ownTank;
@@ -85,4 +100,21 @@ public class Tinusbot extends BotArtificialIntelligence {
         return result;
     }
 
+    /**
+     * Determines the first move of a shortest path to a firing position.
+     * 
+     * @param obstacles
+     *            walls
+     * @param state
+     *            game state
+     * @param ownTank
+     *            own tank
+     * @param enemies
+     *            all enemy tanks
+     * @return action
+     */
+    private Action computeActionToMoveIntoFiringPosition(Collection<Wall> obstacles, GameState state, Tank ownTank,
+            Collection<Tank> enemies) {
+        return null; // TODO implement
+    }
 }
