@@ -123,18 +123,20 @@ abstract class BotArtificialIntelligence implements Runnable {
 
             try {
                 if (MAX_FAILED_ACTIONS <= failedActionCount) {
-                    log.warn("Attempting to reconnect.");
+                    log.warn("Attempting to reconnect after {} failed actions.", "" + failedActionCount);
                     connect(id);
                     failedActionCount = 0;
                 }
 
                 // Retrieve a current view of the world
                 GameState state = api.readWorldStatus();
+                
                 if (state != null) {
                     if (log.isDebugEnabled()) {
                         log.debug(state.toString());
                     }
 
+                    // Determine what to do!
                     Action action;
                     if (state.retrieveTankForPlayerName(name).getQueueLength() < 1) {
                         action = determineNextAction(walls, state);
