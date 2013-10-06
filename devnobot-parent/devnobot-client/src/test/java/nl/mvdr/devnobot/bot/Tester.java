@@ -15,6 +15,9 @@ import nl.mvdr.devnobot.clientapi.ClientApiImpl;
 public class Tester {
     /** Number of dummies. */
     private static final int NUM_DUMMIES = 7;
+    /** Colours for dummy bots. There should be at least NUM_DUMMIES colours in here. */
+    private static final Color[] COLOURS = new Color[] { Color.MAGENTA, Color.RED, Color.BLACK, Color.ORANGE,
+            Color.DARK_GRAY, Color.CYAN, Color.ORANGE };
 
     /**
      * Main method.
@@ -28,7 +31,7 @@ public class Tester {
 
         List<BotArtificialIntelligence> bots = new ArrayList<>();
         for (int i = 0; i < NUM_DUMMIES; i++) {
-            bots.add(new DummyBot(api, DummyBot.DEFAULT_NAME + i, Color.ORANGE));
+            bots.add(new DummyBot(api, DummyBot.DEFAULT_NAME + i, COLOURS[i]));
         }
         bots.add(new InteractiveBot(api));
 
