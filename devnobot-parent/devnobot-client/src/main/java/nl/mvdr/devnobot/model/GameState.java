@@ -138,7 +138,7 @@ public class GameState {
 
         return result;
     }
-    
+
     /**
      * Determines which, if any, game object the given tank would hit if it fired right now.
      * 
@@ -155,7 +155,7 @@ public class GameState {
         Collection<GameObject> objects = new ArrayList<>(tanks.size() - 1 + walls.size());
         objects.addAll(enemies);
         objects.addAll(walls);
-        
+
         // In the sample code the playing field is surrounded by walls, but we won't make the assumption that that will
         // be the case in every level and risk getting stuck in an infinite loop.
         // Since we don't know the size of the screen, compute the minimum and maximum coordinates of the objects.
@@ -169,20 +169,20 @@ public class GameState {
             minY = Math.min(minY, object.getY());
             maxY = Math.max(maxY, object.getY() + object.getHeight());
         }
-        
+
         // Follow the trajectory of the bullet until it hits an object or goes flying out of bounds.
         GameObject result = null;
         Bullet bullet = tank.computeBulletSpawnLocation();
         while (result == null && minX < bullet.getX() + bullet.getWidth() && bullet.getX() < maxX
                 && minY < bullet.getY() + bullet.getWidth() && bullet.getY() < maxY) {
-            for (GameObject object: objects) {
+            for (GameObject object : objects) {
                 if (bullet.overlaps(object)) {
                     result = object;
                 }
             }
             bullet = bullet.moveBulletLength(tank.getLastKnownOrientation());
         }
-        
+
         return result;
     }
 
@@ -203,7 +203,7 @@ public class GameState {
     /**
      * Determines which, if any, game object the given player's tank would hit if it fired right now.
      * 
-     * @param playerName      
+     * @param playerName
      *            player name; should be non-null and unique; if not unique, the first tank matching the player name is
      *            returned
      * @param walls
@@ -216,39 +216,7 @@ public class GameState {
         Tank tank = retrieveTankForPlayerName(playerName);
         return wouldHit(tank, walls);
     }
-    
-    /**
-     * Determines whether the given player's tank would hit an enemy if it fired right now.
-     * 
-     * @param playerName
-     *            player name; should be non-null and unique; if not unique, the first tank matching the player name is
-     *            returned
-     * @param walls
-     *            walls / obstacles in the level
-     * @return game object which would be hit, or null if there is none
-     * @throws IllegalArgumentException
-     *             if there is no matching tank for the given player name
-     */
-    public boolean wouldHitEnemy(String playerName, Collection<Wall> walls) {
-        Tank tank = retrieveTankForPlayerName(playerName);
-        return wouldHitEnemy(tank, walls);
-    }
-    
-    /**
-     * Determines whether the given tank would hit an enemy if it fired right now.
-     * 
-     * @param tank
-     *            tank
-     * @param walls
-     *            walls / obstacles in the level
-     * @return game object which would be hit, or null if there is none
-     * @throws IllegalArgumentException
-     *             if there is no matching tank for the given player name
-     */
-    public boolean wouldHitEnemy(Tank tank, Collection<Wall> walls) {
-        return wouldHit(tank, walls) instanceof Tank;
-    }
-    
+
     /**
      * Determines whether the given tank would hit an enemy if it fired right now.
      * 
