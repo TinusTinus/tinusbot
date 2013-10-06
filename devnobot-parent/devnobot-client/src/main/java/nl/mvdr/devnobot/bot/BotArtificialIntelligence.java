@@ -131,7 +131,9 @@ abstract class BotArtificialIntelligence implements Runnable {
                 // Retrieve a current view of the world
                 GameState state = api.readWorldStatus();
                 if (state != null) {
-                    log.info(state.toString());
+                    if (log.isDebugEnabled()) {
+                        log.debug(state.toString());
+                    }
 
                     Action action;
                     if (state.retrieveTankForPlayerName(name).getQueueLength() < 1) {
