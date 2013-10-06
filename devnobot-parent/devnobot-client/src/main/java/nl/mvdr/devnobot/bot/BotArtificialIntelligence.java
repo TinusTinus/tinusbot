@@ -82,13 +82,10 @@ abstract class BotArtificialIntelligence implements Runnable {
         // Generate pseudorandom id string.
         String id = name + '-' + UUID.randomUUID().toString();
 
-        // Register at the server.
         connect(id);
-
-        // Log the leaderboard
-        Player.logLeaderboard(api.readPlayers());
-
-        // Main game loop.
+        
+        logLeaderboard();
+        
         gameLoop(walls, id);
     }
 
@@ -194,18 +191,29 @@ abstract class BotArtificialIntelligence implements Runnable {
      */
     private long logLeaderboard(long leaderboardTimestamp, long nextTimestamp) {
         long result;
+        long now = System.currentTimeMillis();
+        if (now < nextTimestamp && leaderboardTimestamp + LEADERBOARD_INTERVAL < now) {
+            result = logLeaderboard();
+        } else {
+            result = leaderboardTimestamp;
+        }
+        return result;
+    }
+
+    /**
+     * Logs the leaderboard. Any exceptions are caught and logged.
+     * 
+     * @return when the leaderboard was logged; a timestamp far in the past if logging failed.
+     */
+    private long logLeaderboard() {
+        long result;
         try {
-            long now = System.currentTimeMillis();
-            if (now < nextTimestamp && leaderboardTimestamp + LEADERBOARD_INTERVAL < now) {
-                Player.logLeaderboard(api.readPlayers());
-                result = System.currentTimeMillis();
-            } else {
-                result = leaderboardTimestamp;
-            }
+            Player.logLeaderboard(api.readPlayers());
+            result = System.currentTimeMillis();
         } catch (Exception e) {
             // Whatever, logging the leaderboard is not very important.
             log.info("Logging the leaderboard failed.", e);
-            result = leaderboardTimestamp;
+            result = 0L;
         }
         return result;
     }
