@@ -105,6 +105,12 @@ abstract class BotArtificialIntelligence implements Runnable {
             long nextTimestamp = startTimestamp + THREAD_SLEEP_DURATION;
             
             try {
+                if (MAX_FAILED_ACTIONS <= failedActionCount) {
+                    log.warn("Attempting to reconnect.");
+                    connect(id);
+                    failedActionCount = 0;
+                }
+                
                 // Retrieve a current view of the world
                 GameState state = api.readWorldStatus();
                 if (state != null) {
@@ -117,16 +123,10 @@ abstract class BotArtificialIntelligence implements Runnable {
                     if (success) {
                         failedActionCount = 0;
                     } else {
-                        log.warn("Action failed: " + action + "failedActionCount: " + failedActionCount);
+                        failedActionCount++;
+                        log.warn("Action failed: {}, number of failures in a row: {}", action, "" + failedActionCount);
                         // retry immediately
                         nextTimestamp = System.currentTimeMillis();
-                        if (failedActionCount == MAX_FAILED_ACTIONS) {
-                            failedActionCount = 0;
-                            log.warn("Attempting to reconnect.");
-                            connect(id);
-                        } else {
-                            failedActionCount++;
-                        }
                     }
                 } else {
                     log.info("No World information available.");
@@ -134,13 +134,15 @@ abstract class BotArtificialIntelligence implements Runnable {
                     nextTimestamp = System.currentTimeMillis();
                 }
 
-                // Optionally log the leaderboard.
+                // Optionally log the leaderboard. No need to do this every iteration.
+                // Only if we have time, and it has been long enough since the last time we logged the leaderboard.
                 long now = System.currentTimeMillis();
-                if (now < nextTimestamp && leaderboardTimestamp + LEADERBOARD_INTERVAL < System.currentTimeMillis()) {
+                if (now < nextTimestamp && leaderboardTimestamp + LEADERBOARD_INTERVAL < now) {
                     Player.logLeaderboard(api.readPlayers());
                     leaderboardTimestamp = System.currentTimeMillis();
                 }
             } catch (Exception e) {
+                failedActionCount++;
                 // Log the exception, but don't crash the thread; try to keep going.
                 log.error("Unexpected exception!", e);
             }
