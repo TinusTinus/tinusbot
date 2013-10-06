@@ -1,5 +1,9 @@
 package nl.mvdr.devnobot.model;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 /**
  * Representation of the direction a tank is facing.
  * 
@@ -8,15 +12,22 @@ package nl.mvdr.devnobot.model;
  * 
  * @author Martijn van de Rijdt
  */
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
 public enum Orientation {
     /** North (up). */
-    NORTH,
+    NORTH(0, -1),
     /** East (right). */
-    EAST,
+    EAST(1, 0),
     /** South (down). */
-    SOUTH,
+    SOUTH(0, 1),
     /** West (left). */
-    WEST;
+    WEST(-1, 0);
+    
+    /** Multiplier for moving forward along this direction. */
+    private final int xMultiplier;
+    /** Multiplier for moving forward along this direction. */
+    private final int yMultiplier;
 
     /**
      * Converts a CGI orientation to an instance of this enum.
@@ -39,6 +50,67 @@ public enum Orientation {
             result = null;
         } else {
             throw new IllegalArgumentException("Unexpected orientation: " + orientation);
+        }
+        return result;
+    }
+
+    /**
+     * Determines the next orientation when turning right.
+     * 
+     * @return next orientation
+     */
+    public Orientation turnRight() {
+        Orientation result;
+        if (this == NORTH) {
+            result = EAST;
+        } else if (this == EAST) {
+            result = SOUTH;
+        } else if (this == SOUTH) {
+            result = WEST;
+        } else if (this == WEST) {
+            result = NORTH;
+        } else {
+            throw new IllegalStateException("Unexpected orientation: " + this);
+        }
+        return result;
+    }
+
+    /**
+     * Determines the next orientation when turning left.
+     * 
+     * @return next orientation
+     */
+    public Orientation turnLeft() {
+        Orientation result;
+        if (this == NORTH) {
+            result = WEST;
+        } else if (this == EAST) {
+            result = NORTH;
+        } else if (this == SOUTH) {
+            result = EAST;
+        } else if (this == WEST) {
+            result = SOUTH;
+        } else {
+            throw new IllegalStateException("Unexpected orientation: " + this);
+        }
+        return result;
+    }
+
+    /**
+     * Determines the orientation after executing the given action.
+     * 
+     * @param action
+     *            action
+     * @return new orientation
+     */
+    public Orientation newOrientation(Action action) {
+        Orientation result;
+        if (action == Action.TURN_RIGHT) {
+            result = turnRight();
+        } else if (action == Action.TURN_LEFT) {
+            result = turnLeft();
+        } else {
+            result = this;
         }
         return result;
     }

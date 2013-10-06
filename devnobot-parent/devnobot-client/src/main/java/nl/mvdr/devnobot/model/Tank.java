@@ -95,17 +95,18 @@ public class Tank extends GameObject {
     public boolean isProbablyADummy() {
         return this.player != null && this.player.toLowerCase().startsWith(DummyBot.DEFAULT_NAME.toLowerCase());
     }
-    
+
     /**
      * Determines whether this tank belongs to the player with the given name.
      * 
-     * @param playerName player name
+     * @param playerName
+     *            player name
      * @return whether this tank belongs to the player
      */
     public boolean belongsToPlayer(String playerName) {
         return player.equals(playerName);
     }
-    
+
     /**
      * Computes the location of a bullet if this tank were to fire right now.
      * 
@@ -117,5 +118,44 @@ public class Tank extends GameObject {
         int x = getX() + getWidth() / 2 - bulletWidth / 2;
         int y = getY() + getHeight() / 2 - bulletHeight / 2;
         return new Bullet(x, y, bulletWidth, bulletHeight);
+    }
+
+    /**
+     * Determines the next location of the tank when executing the given action.
+     * 
+     * @param action
+     *            action; may not be SUICIDE
+     * @return hypothetical tank
+     */
+    public Tank computeNextPosition(Action action) {
+        int newX;
+        int newY;
+        int newWidth;
+        int newHeight;
+        if (action == Action.TURN_LEFT || action == Action.TURN_RIGHT) {
+            newX = getX() + getWidth() / 2 - getHeight() / 2;
+            newY = getY() + getHeight() / 2 - getWidth() / 2;
+            newWidth = getHeight();
+            newHeight = getWidth();
+        } else if (action == Action.FORWARD || action == Action.BACKWARD) {
+            newX = getX() + distancePerStep * lastKnownOrientation.getXMultiplier() * action.getDirection();
+            newY = getY() + distancePerStep * lastKnownOrientation.getYMultiplier() * action.getDirection();
+            newWidth = getWidth();
+            newHeight = getHeight();
+        } else if (action == null || action == Action.FIRE) {
+            newX = getX();
+            newY = getY();
+            newWidth = getWidth();
+            newHeight = getHeight();
+        } else if (action == Action.SUICIDE) {
+            throw new IllegalArgumentException("Unable to determine new location. "
+                    + "Suicide leads to the tank being respawned in a random location.");
+        } else {
+            throw new IllegalArgumentException("Unexpected action: " + action);
+        }
+        Orientation newOrientation = getLastKnownOrientation().newOrientation(action);
+
+        return new Tank(newX, newY, newWidth, newHeight, newOrientation, actionDuration, distancePerStep, player,
+                queueLength);
     }
 }

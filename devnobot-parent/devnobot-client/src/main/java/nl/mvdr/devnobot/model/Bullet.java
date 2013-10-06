@@ -65,24 +65,8 @@ public class Bullet extends GameObject {
      * @return hypothetical new bullet location
      */
     public Bullet move(int distance, Orientation direction) {
-        int deltaX;
-        int deltaY;
-        if (direction == Orientation.NORTH) {
-            deltaX = 0;
-            deltaY = -distance;
-        } else if (direction == Orientation.EAST) {
-            deltaX = distance;
-            deltaY = 0;
-        } else if (direction == Orientation.SOUTH) {
-            deltaX = 0;
-            deltaY = distance;
-        } else if (direction == Orientation.WEST) {
-            deltaX = -distance;
-            deltaY = 0;
-        } else {
-            throw new IllegalArgumentException("Unexpected direction: " + direction);
-        }
-        
+        int deltaX = direction.getXMultiplier() * distance;
+        int deltaY = direction.getYMultiplier() * distance;
         return new Bullet(getX() + deltaX, getY() + deltaY, getWidth(), getHeight());
     }
     

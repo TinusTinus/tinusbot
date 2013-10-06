@@ -1,23 +1,32 @@
 package nl.mvdr.devnobot.model;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 /**
  * Possible actions which a robot can take in the game.
  * 
  * @author Martijn van de Rijdt
  */
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@Getter
 public enum Action {
     /** Moves the bot forward. */
-    FORWARD,
+    FORWARD(1),
     /** Moves the bot backward. */
-    BACKWARD,
+    BACKWARD(-1),
     /** Turns the bot clockwise. */
-    TURN_RIGHT,
+    TURN_RIGHT(0),
     /** Turns the bot counterclockwise. */
-    TURN_LEFT,
+    TURN_LEFT(0),
     /** Fires a bullet. */
-    FIRE,
+    FIRE(0),
     /** Destroys the bot, causing it to respawn in a random location. */
-    SUICIDE;
+    SUICIDE(0);
+    
+    /** Direction in which the tank should move when executing this action. */
+    final int direction;
 
     /**
      * Returns the corresponding {@link com.cgi.devnobot.api.Action}.
