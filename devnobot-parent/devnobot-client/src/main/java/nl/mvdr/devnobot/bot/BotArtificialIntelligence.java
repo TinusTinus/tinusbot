@@ -162,7 +162,6 @@ abstract class BotArtificialIntelligence implements Runnable {
                     log.error("Unexpected InterruptedException; game loop will continue.", e);
                 }
             }
-
         }
     }
 
