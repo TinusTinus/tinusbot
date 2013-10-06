@@ -33,8 +33,8 @@ import nl.mvdr.devnobot.model.Wall;
 @Slf4j
 @RequiredArgsConstructor
 abstract class BotArtificialIntelligence implements Runnable {
-    /** Sleep duration after every execution of the main game loop in milliseconds. */
-    private static final int THREAD_SLEEP_DURATION = 1000;
+    /** Default value for sleep duration. */
+    private static final int DEFAULT_THREAD_SLEEP_DURATION = 500;
     /**
      * The approximate number of milliseconds between logging the leaderboard.
      * 
@@ -52,9 +52,25 @@ abstract class BotArtificialIntelligence implements Runnable {
     @NonNull
     @Getter(value = AccessLevel.PACKAGE)
     private final String name;
-    /** Colour. */
+    /** Tank colour. */
     @NonNull
     private final String color;
+    /** Sleep duration after every execution of the main game loop in milliseconds. */
+    private final int threadSleepDuration;
+
+    /**
+     * Constructor.
+     * 
+     * @param clientApi
+     *            client API, used to make backend calls
+     * @param name
+     *            player name
+     * @param color
+     *            tank colour
+     */
+    public BotArtificialIntelligence(ClientApi clientApi, String name, String color) {
+        this(clientApi, name, color, DEFAULT_THREAD_SLEEP_DURATION);
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -103,15 +119,15 @@ abstract class BotArtificialIntelligence implements Runnable {
             // timestamp at the start of this iteration
             long startTimestamp = System.currentTimeMillis();
             // timestamp when the next iteration should take place
-            long nextTimestamp = startTimestamp + THREAD_SLEEP_DURATION;
-            
+            long nextTimestamp = startTimestamp + threadSleepDuration;
+
             try {
                 if (MAX_FAILED_ACTIONS <= failedActionCount) {
                     log.warn("Attempting to reconnect.");
                     connect(id);
                     failedActionCount = 0;
                 }
-                
+
                 // Retrieve a current view of the world
                 GameState state = api.readWorldStatus();
                 if (state != null) {

@@ -16,6 +16,8 @@ import nl.mvdr.devnobot.model.Wall;
 public class DummyBot extends BotArtificialIntelligence {
     /** Default name for bots of this type. */
     public static final String DEFAULT_NAME = "Dummy";
+    /** Sleep duration after every execution of the main game loop in milliseconds. */
+    private static final int THREAD_SLEEP_DURATION = 1000;
     
     /** Random generator. */
     private final Random randomGenerator;
@@ -35,7 +37,7 @@ public class DummyBot extends BotArtificialIntelligence {
      *            color
      */
     public DummyBot(ClientApi api, String name, String color) {
-        super(api, name, color);
+        super(api, name, color, THREAD_SLEEP_DURATION);
         this.randomGenerator = new Random();
     }
     
