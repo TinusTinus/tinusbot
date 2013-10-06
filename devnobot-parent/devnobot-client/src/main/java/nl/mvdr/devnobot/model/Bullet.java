@@ -45,7 +45,7 @@ public class Bullet extends GameObject {
     }
     
     /**
-     * Constructor. Intended for use in unit tests.
+     * Constructor.
      * 
      * @param x x coordinate
      * @param y y coordinate

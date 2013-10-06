@@ -105,4 +105,17 @@ public class Tank extends GameObject {
     public boolean belongsToPlayer(String playerName) {
         return player.equals(playerName);
     }
+    
+    /**
+     * Computes the location of a bullet if this tank were to fire right now.
+     * 
+     * @return hypothetical bullet
+     */
+    public Bullet computeBulletSpawnLocation() {
+        int bulletWidth = Bullet.getBulletWidth();
+        int bulletHeight = Bullet.getBulletHeight();
+        int x = getX() + getWidth() / 2 - bulletWidth / 2;
+        int y = getY() + getHeight() / 2 - bulletHeight / 2;
+        return new Bullet(x, y, bulletWidth, bulletHeight);
+    }
 }
