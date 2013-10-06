@@ -41,8 +41,14 @@ public class Tinusbot extends BotArtificialIntelligence {
     /** {@inheritDoc} */
     @Override
     protected Action determineNextAction(Collection<Wall> obstacles, GameState state) {
-        // TODO Auto-generated method stub
-        return null;
+        Action result;
+        if (state.wouldHitEnemy(getName(), obstacles)) {
+            result = Action.FIRE;
+        } else {
+            // TODO move to a position where we can fire?
+            result = null;
+        }
+        return result;
     }
 
 }
