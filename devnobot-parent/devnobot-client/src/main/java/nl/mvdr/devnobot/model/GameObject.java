@@ -36,4 +36,20 @@ public abstract class GameObject {
         this.width = object.getWidth();
         this.height = object.getHeight();
     }
+
+    /**
+     * Determines whether this game object and the given other game object overlap.
+     * 
+     * @param other
+     *            other object
+     */
+    public boolean overlaps(GameObject other) {
+        // horizontal overlap
+        boolean result = this.getX() < other.getX() + other.getWidth();
+        result = result && other.getX() < this.getX() + this.getWidth();
+        // vertical overlap
+        result = result && this.getY() < other.getY() + other.getHeight();
+        result = result && other.getY() < this.getY() + this.getHeight();
+        return result;
+    }
 }
