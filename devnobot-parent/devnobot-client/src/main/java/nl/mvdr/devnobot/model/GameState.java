@@ -150,10 +150,10 @@ public class GameState {
      * @return game object which would be hit, or null if there is none
      */
     private GameObject wouldHit(Tank tank, Collection<GameObject> objects) {
-        int minX = Integer.MAX_VALUE;
-        int maxX = Integer.MIN_VALUE;
-        int minY = Integer.MAX_VALUE;
-        int maxY = Integer.MAX_VALUE;
+        int minX = tank.getX();
+        int maxX = tank.getX() + tank.getWidth();
+        int minY = tank.getY();
+        int maxY = tank.getY() + tank.getHeight();
         for (GameObject object : objects) {
             minX = Math.min(minX, object.getX());
             maxX = Math.max(maxX, object.getX() + object.getWidth());
@@ -163,8 +163,8 @@ public class GameState {
         
         GameObject result = null;
         Bullet bullet = tank.computeBulletSpawnLocation();
-        while (result == null && minX < bullet.getX() && bullet.getX() + bullet.getWidth() < maxX
-                && minY < bullet.getY() && bullet.getY() + bullet.getWidth() < maxY) {
+        while (result == null && minX < bullet.getX() + bullet.getWidth() && bullet.getX() < maxX
+                && minY < bullet.getY() + bullet.getWidth() && bullet.getY() < maxY) {
             for (GameObject object: objects) {
                 if (bullet.overlaps(object)) {
                     result = object;

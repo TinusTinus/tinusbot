@@ -139,4 +139,26 @@ public class GameStateTest {
         
         Assert.assertNull(gameObject);
     }
+    
+    /** Test method for {@link GameState#wouldHit(String, Collection)} in case the tank would hit a wall. */
+    @Test
+    public void testWouldHitWall() {
+        GameState gameState = new GameState(Arrays.asList(new Tank(0, 0, 10, 10, Orientation.EAST, 0, 0, "Aad", 0)));
+        Wall wall = new Wall(20, 0, 1, 10);
+        
+        GameObject gameObject = gameState.wouldHit("Aad", Arrays.asList(wall));
+        
+        Assert.assertSame(wall, gameObject);
+    }
+    
+    /** Test method for {@link GameState#wouldHit(String, Collection)} in case the tank would miss a wall. */
+    @Test
+    public void testWouldMissWall() {
+        GameState gameState = new GameState(Arrays.asList(new Tank(0, 0, 10, 10, Orientation.EAST, 0, 0, "Aad", 0)));
+        Wall wall = new Wall(20, 20, 1, 10);
+        
+        GameObject gameObject = gameState.wouldHit("Aad", Arrays.asList(wall));
+        
+        Assert.assertNull(gameObject);
+    }
 }
