@@ -161,13 +161,7 @@ abstract class BotArtificialIntelligence implements Runnable {
                     nextTimestamp = System.currentTimeMillis();
                 }
 
-                // Optionally log the leaderboard. No need to do this every iteration.
-                // Only if we have time, and it has been long enough since the last time we logged the leaderboard.
-                long now = System.currentTimeMillis();
-                if (now < nextTimestamp && leaderboardTimestamp + LEADERBOARD_INTERVAL < now) {
-                    Player.logLeaderboard(api.readPlayers());
-                    leaderboardTimestamp = System.currentTimeMillis();
-                }
+                leaderboardTimestamp = logLeaderboard(leaderboardTimestamp, nextTimestamp);
             } catch (Exception e) {
                 failedActionCount++;
                 // Log the exception, but don't crash the thread; try to keep going.
@@ -183,6 +177,37 @@ abstract class BotArtificialIntelligence implements Runnable {
                 }
             }
         }
+    }
+
+    /**
+     * Optionally logs the leaderboard.
+     * 
+     * There is no need to log the leaderboard every single iteration of the game loop. This method only does so if
+     * there is time to, and if it has been a while since the last time the leaderboard has been logged.
+     * 
+     * @param leaderboardTimestamp
+     *            last time the leaderboard was logged
+     * @param nextTimestamp
+     *            when the next action is supposed to be taken in the game; if this is too soon, logging the leaderboard
+     *            is skipped
+     * @return last time the leaderboard was logged; updated if necessary
+     */
+    private long logLeaderboard(long leaderboardTimestamp, long nextTimestamp) {
+        long result;
+        try {
+            long now = System.currentTimeMillis();
+            if (now < nextTimestamp && leaderboardTimestamp + LEADERBOARD_INTERVAL < now) {
+                Player.logLeaderboard(api.readPlayers());
+                result = System.currentTimeMillis();
+            } else {
+                result = leaderboardTimestamp;
+            }
+        } catch (Exception e) {
+            // Whatever, logging the leaderboard is not very important.
+            log.info("Logging the leaderboard failed.", e);
+            result = leaderboardTimestamp;
+        }
+        return result;
     }
 
     /**
