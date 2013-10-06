@@ -96,13 +96,14 @@ abstract class BotArtificialIntelligence implements Runnable {
      */
     private void gameLoop(Collection<Wall> walls, String id) {
         long leaderboardTimestamp = 0L;
+        // number of failed actions in a row
         int failedActionCount = 0;
         while (true) {
             // timestamp at the start of this iteration
             long startTimestamp = System.currentTimeMillis();
             // timestamp when the next iteration should take place
             long nextTimestamp = startTimestamp + THREAD_SLEEP_DURATION;
-            // number of failed actions in a row
+            
             try {
                 // Retrieve a current view of the world
                 GameState state = api.readWorldStatus();
