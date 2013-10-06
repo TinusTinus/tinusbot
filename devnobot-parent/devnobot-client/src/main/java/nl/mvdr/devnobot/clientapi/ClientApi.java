@@ -19,7 +19,7 @@ public interface ClientApi {
      * 
      * @return collection of obstacles
      */
-    public abstract Collection<Wall> readLevel();
+    Collection<Wall> readLevel();
 
     /**
      * Registers a new player for the game.
@@ -32,7 +32,7 @@ public interface ClientApi {
      *            unique Id of the player, to prevent others from accidentally stealing your bot
      * @return whether creation was succesful
      */
-    public abstract boolean createPlayer(String name, String webColor, String id);
+    boolean createPlayer(String name, String webColor, String id);
 
     /**
      * Retrieves a list of players, including their kill/death ratios.
@@ -41,7 +41,7 @@ public interface ClientApi {
      * 
      * @return players
      */
-    public abstract Collection<Player> readPlayers();
+    abstract Collection<Player> readPlayers();
 
     /**
      * Add the given {@link Action} for the player with the given id to its queue.
@@ -54,7 +54,7 @@ public interface ClientApi {
      *            player id, as passed in via the {@link #createPlayer(String, String, String)} method call
      * @return whether the action was succesfully added to the queue
      */
-    public abstract boolean addAction(Action action, String playerId);
+    boolean addAction(Action action, String playerId);
 
     /**
      * Read this in your game loop to see what's going on.
@@ -63,7 +63,7 @@ public interface ClientApi {
      * 
      * @return {@link World}
      */
-    public abstract GameState readWorldStatus();
+    GameState readWorldStatus();
 
     /**
      * Kill your bot.
@@ -74,6 +74,5 @@ public interface ClientApi {
      *            player id, as passed in via the {@link #createPlayer(String, String, String)} method call
      * @return whether your tank was suicided succesfully
      */
-    public abstract boolean suicide(String playerId);
-
+    boolean suicide(String playerId);
 }
