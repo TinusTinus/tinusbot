@@ -151,6 +151,18 @@ public class GameStateTest {
         Assert.assertSame(wall, gameObject);
     }
     
+    /** Test method for {@link GameState#wouldHit(String, Collection)} in case the tank would hit an enemy. */
+    @Test
+    public void testWouldHitEnemyTank() {
+        Tank enemy = new Tank(20, 0, 10, 10, Orientation.EAST, 0, 0, "Wim", 0);
+        GameState gameState = new GameState(Arrays.asList(new Tank(0, 0, 10, 10, Orientation.EAST, 0, 0, "Aad", 0),
+                enemy));
+
+        GameObject gameObject = gameState.wouldHit("Aad", Collections.<Wall>emptyList());
+
+        Assert.assertSame(enemy, gameObject);
+    }
+    
     /** Test method for {@link GameState#wouldHit(String, Collection)} in case the tank would miss a wall. */
     @Test
     public void testWouldMissWall() {
@@ -160,5 +172,32 @@ public class GameStateTest {
         GameObject gameObject = gameState.wouldHit("Aad", Arrays.asList(wall));
         
         Assert.assertNull(gameObject);
+    }
+    
+    /** Test method for {@link GameState#wouldHitEnemy(String, Collection)} in case the tank would hit a wall. */
+    @Test
+    public void testWouldHitEnemyWall() {
+        GameState gameState = new GameState(Arrays.asList(new Tank(0, 0, 10, 10, Orientation.EAST, 0, 0, "Aad", 0)));
+        Wall wall = new Wall(20, 0, 1, 10);
+        
+        Assert.assertFalse(gameState.wouldHitEnemy("Aad", Arrays.asList(wall)));
+    }
+    
+    /** Test method for {@link GameState#wouldHitEnemy(String, Collection)} in case the tank would miss. */
+    @Test
+    public void testWouldHitEnemyMiss() {
+        GameState gameState = new GameState(Arrays.asList(new Tank(0, 0, 10, 10, Orientation.EAST, 0, 0, "Aad", 0)));
+        Wall wall = new Wall(20, 20, 1, 10);
+        
+        Assert.assertFalse(gameState.wouldHitEnemy("Aad", Arrays.asList(wall)));
+    }
+    
+    /** Test method for {@link GameState#wouldHitEnemy(String, Collection)} in case the tank would hit an enemy. */
+    @Test
+    public void testWouldHitEnemy() {
+        GameState gameState = new GameState(Arrays.asList(new Tank(0, 0, 10, 10, Orientation.EAST, 0, 0, "Aad", 0),
+                new Tank(20, 0, 10, 10, Orientation.EAST, 0, 0, "Wim", 0)));
+
+        Assert.assertTrue(gameState.wouldHitEnemy("Aad", Collections.<Wall>emptyList()));
     }
 }

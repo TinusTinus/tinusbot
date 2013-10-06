@@ -150,6 +150,9 @@ public class GameState {
      * @return game object which would be hit, or null if there is none
      */
     private GameObject wouldHit(Tank tank, Collection<GameObject> objects) {
+        // In the sample code the playing field is surrounded by walls, but we won't make the assumption that that will
+        // be the case in every level and risk getting stuck in an infinite loop.
+        // Since we don't know the size of the screen, compute the minimum and maximum coordinates of the given objects.
         int minX = tank.getX();
         int maxX = tank.getX() + tank.getWidth();
         int minY = tank.getY();
@@ -161,6 +164,7 @@ public class GameState {
             maxY = Math.max(maxY, object.getY() + object.getHeight());
         }
         
+        // Follow the trajectory of the bullet until it hits an object or goes flying out of bounds.
         GameObject result = null;
         Bullet bullet = tank.computeBulletSpawnLocation();
         while (result == null && minX < bullet.getX() + bullet.getWidth() && bullet.getX() < maxX
@@ -172,6 +176,7 @@ public class GameState {
             }
             bullet = bullet.moveBulletLength(tank.getLastKnownOrientation());
         }
+        
         return result;
     }
 
@@ -194,5 +199,21 @@ public class GameState {
         objects.addAll(enemies);
         objects.addAll(walls);
         return wouldHit(tank, objects);
+    }
+    
+    /**
+     * Determines whether the given player's tank would hit an enemy if it fired right now.
+     * 
+     * @param playerName
+     *            player name; should be non-null and unique; if not unique, the first tank matching the player name is
+     *            returned
+     * @param walls
+     *            walls / obstacles in the level
+     * @return game object which would be hit, or null if there is none
+     * @throws IllegalArgumentException
+     *             if there is no matching tank for the given player name
+     */
+    public boolean wouldHitEnemy(String playerName, Collection<Wall> walls) {
+        return wouldHit(playerName, walls) instanceof Tank;
     }
 }
