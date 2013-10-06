@@ -116,8 +116,14 @@ abstract class BotArtificialIntelligence implements Runnable {
                 if (state != null) {
                     log.info(state.toString());
 
-                    Action action = determineNextAction(walls, state);
-
+                    Action action;
+                    if (state.retrieveTankForPlayerName(name).getQueueLength() < 1) {
+                        action = determineNextAction(walls, state);
+                    } else {
+                        // Already enqueued actions, no point in determining a new one.
+                        // Do nothing.
+                        action = null;
+                    }
                     boolean success = perform(id, action);
 
                     if (success) {
