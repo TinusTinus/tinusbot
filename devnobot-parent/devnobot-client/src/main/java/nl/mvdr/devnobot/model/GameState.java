@@ -215,6 +215,22 @@ public class GameState {
      *             if there is no matching tank for the given player name
      */
     public boolean wouldHitEnemy(String playerName, Collection<Wall> walls) {
-        return wouldHit(playerName, walls) instanceof Tank;
+        Tank tank = retrieveTankForPlayerName(playerName);
+        return wouldHitEnemy(tank, walls);
+    }
+    
+    /**
+     * Determines whether the given tank would hit an enemy if it fired right now.
+     * 
+     * @param tank
+     *            tank
+     * @param walls
+     *            walls / obstacles in the level
+     * @return game object which would be hit, or null if there is none
+     * @throws IllegalArgumentException
+     *             if there is no matching tank for the given player name
+     */
+    public boolean wouldHitEnemy(Tank tank, Collection<Wall> walls) {
+        return wouldHit(tank, walls) instanceof Tank;
     }
 }
