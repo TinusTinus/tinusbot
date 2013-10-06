@@ -45,7 +45,8 @@ public class Tinusbot extends BotArtificialIntelligence {
     protected Action determineNextAction(Collection<Wall> obstacles, GameState state) {
         Action result;
         if (state.wouldHitEnemy(getName(), obstacles)) {
-            // FIRE! Even if they fire back and we die, it still nets us a point (2 for the kill minus 1 for the death).
+            // FIRE!
+            // Even if they fire back and we die, it still nets us a point (2 for the kill minus 1 for the death).
             // TODO prevent firing multiple bullets at far-away enemies?
             result = Action.FIRE;
         } else if (nonDummyEnemyHasAShot(obstacles, state)) {
