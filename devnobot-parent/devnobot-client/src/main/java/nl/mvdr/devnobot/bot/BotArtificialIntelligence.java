@@ -15,6 +15,7 @@
  */
 package nl.mvdr.devnobot.bot;
 
+import java.awt.Color;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -54,7 +55,7 @@ abstract class BotArtificialIntelligence implements Runnable {
     private final String name;
     /** Tank colour. */
     @NonNull
-    private final String color;
+    private final Color color;
     /** Sleep duration between executions of the main game loop in milliseconds. */
     private final int threadSleepDuration;
 
@@ -68,7 +69,7 @@ abstract class BotArtificialIntelligence implements Runnable {
      * @param color
      *            tank colour
      */
-    public BotArtificialIntelligence(ClientApi clientApi, String name, String color) {
+    public BotArtificialIntelligence(ClientApi clientApi, String name, Color color) {
         this(clientApi, name, color, DEFAULT_THREAD_SLEEP_DURATION);
     }
 
@@ -125,13 +126,22 @@ abstract class BotArtificialIntelligence implements Runnable {
         while (!success) {
             try {
                 log.info("Connecting for player {}, color: {}, id: {}", name, color, id);
-                api.createPlayer(name, color, id);
+                api.createPlayer(name, convertColorToString(), id);
                 success = true;
             } catch (Exception e) {
                 log.error("Failed to connect.", e);
                 sleep(threadSleepDuration);
             }
         }
+    }
+    
+    /**
+     * Return the colour as a hex String.
+     * 
+     * @return String representation of the color as accepted by the client API
+     */
+    private String convertColorToString() {
+        return "#" + Integer.toHexString((color.getRGB() & 0xffffff) | 0x1000000).substring(1);
     }
 
     /**

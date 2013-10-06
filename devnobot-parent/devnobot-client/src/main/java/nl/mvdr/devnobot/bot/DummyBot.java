@@ -1,5 +1,6 @@
 package nl.mvdr.devnobot.bot;
 
+import java.awt.Color;
 import java.util.Collection;
 import java.util.Random;
 
@@ -36,7 +37,7 @@ public class DummyBot extends BotArtificialIntelligence {
      * @param color
      *            color
      */
-    public DummyBot(ClientApi api, String name, String color) {
+    public DummyBot(ClientApi api, String name, Color color) {
         super(api, name, color, THREAD_SLEEP_DURATION);
         this.randomGenerator = new Random();
     }
@@ -49,7 +50,7 @@ public class DummyBot extends BotArtificialIntelligence {
      * @param color
      *            color
      */
-    public DummyBot(ClientApi api, String color) {
+    public DummyBot(ClientApi api, Color color) {
         this(api, DEFAULT_NAME, color);
     }
 

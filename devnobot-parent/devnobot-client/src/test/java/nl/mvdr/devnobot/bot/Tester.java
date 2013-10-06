@@ -28,22 +28,11 @@ public class Tester {
 
         List<BotArtificialIntelligence> bots = new ArrayList<>();
         for (int i = 0; i < NUM_DUMMIES; i++) {
-            bots.add(new DummyBot(api, DummyBot.DEFAULT_NAME + i, toHexString(Color.ORANGE)));
+            bots.add(new DummyBot(api, DummyBot.DEFAULT_NAME + i, Color.ORANGE));
         }
 
         for (BotArtificialIntelligence bot : bots) {
             new Thread(bot, bot.getName()).start();
         }
-    }
-
-    /**
-     * Return the given colour as a hex String.
-     * 
-     * @param color
-     *            color
-     * @return String representation of the color as accepted by the client API
-     */
-    public static String toHexString(Color color) {
-        return "#" + Integer.toHexString((color.getRGB() & 0xffffff) | 0x1000000).substring(1);
     }
 }
