@@ -76,17 +76,42 @@ abstract class BotArtificialIntelligence implements Runnable {
     @Override
     public void run() {
         // First we read the level contents to get a view of the positions of the walls on this map.
-        // Maps are static, so we only read this at startup
-        Collection<Wall> walls = this.api.readLevel();
-
-        // Generate pseudorandom id string.
-        String id = name + '-' + UUID.randomUUID().toString();
-
+        // Maps are static, so we only read this once, at startup.
+        Collection<Wall> walls = readLevel();
+        String id = generateId();
         connect(id);
-        
         logLeaderboard();
-        
         gameLoop(walls, id);
+    }
+
+    /**
+     * Reads the level.
+     * 
+     * @return level
+     */
+    private Collection<Wall> readLevel() {
+        Collection<Wall> result = null;
+        
+        while (result == null) {
+            try {
+                log.info("Reading level");
+                result = this.api.readLevel();
+            } catch (Exception e) {
+                log.error("Failed to read level.", e);
+                sleep(threadSleepDuration);
+            }
+        }
+        
+        return result;
+    }
+
+    /**
+     * Generates a pseudorandom id string.
+     * 
+     * @return id
+     */
+    private String generateId() {
+        return name + '-' + UUID.randomUUID().toString();
     }
 
     /**
@@ -96,8 +121,17 @@ abstract class BotArtificialIntelligence implements Runnable {
      *            id to be used
      */
     private void connect(String id) {
-        log.info("Connecting for player {}, color: {}, id: {}", name, color, id);
-        api.createPlayer(name, color, id);
+        boolean success = false;
+        while (!success) {
+            try {
+                log.info("Connecting for player {}, color: {}, id: {}", name, color, id);
+                api.createPlayer(name, color, id);
+                success = true;
+            } catch (Exception e) {
+                log.error("Failed to connect.", e);
+                sleep(threadSleepDuration);
+            }
+        }
     }
 
     /**
@@ -127,7 +161,7 @@ abstract class BotArtificialIntelligence implements Runnable {
 
                 // Retrieve a current view of the world
                 GameState state = api.readWorldStatus();
-                
+
                 if (state != null) {
                     if (log.isDebugEnabled()) {
                         log.debug(state.toString());
@@ -165,13 +199,22 @@ abstract class BotArtificialIntelligence implements Runnable {
                 log.error("Unexpected exception!", e);
             }
 
-            long waitTime = nextTimestamp - System.currentTimeMillis();
-            if (0 < waitTime) {
-                try {
-                    Thread.sleep(waitTime);
-                } catch (InterruptedException e) {
-                    log.error("Unexpected InterruptedException; game loop will continue.", e);
-                }
+            sleep(nextTimestamp - System.currentTimeMillis());
+        }
+    }
+
+    /**
+     * Sleeps for the given amount of time, if positive. Otherwise this method does nothing.
+     * 
+     * @param waitTime
+     *            wait time in milliseconds
+     */
+    private void sleep(long waitTime) {
+        if (0 < waitTime) {
+            try {
+                Thread.sleep(waitTime);
+            } catch (InterruptedException e) {
+                log.error("Unexpected InterruptedException; program will continue.", e);
             }
         }
     }
