@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -12,7 +14,22 @@ import org.junit.Test;
  * 
  * @author Martijn van de Rijdt
  */
+@Slf4j
 public class GameStateTest {
+    /** Test method for {@link GameState#toString()}. */
+    @Test
+    public void testToString() {
+        GameState gameState = new GameState(
+                Arrays.asList(TankTest.createNamedTank("Aad"), TankTest.createNamedTank("Sjaak")),
+                Arrays.asList(new Bullet(0, 0, 4, 4), new Bullet(34, 12, 4, 4)));
+        
+        String string = gameState.toString();
+        
+        log.info(string);
+        Assert.assertNotNull(string);
+        Assert.assertNotEquals("", string);
+    }
+    
     /** Test method for {@link GameState#retrieveTankForPlayerName(String)}. */
     @Test(expected = IllegalArgumentException.class)
     public void testRetrieveTankNoTanks() {
@@ -104,6 +121,4 @@ public class GameStateTest {
         Assert.assertTrue(result.contains(tank0));
         Assert.assertTrue(result.contains(tank1));
     }
-
-    
 }
