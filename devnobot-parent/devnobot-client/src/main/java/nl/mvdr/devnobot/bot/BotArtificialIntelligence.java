@@ -55,7 +55,7 @@ abstract class BotArtificialIntelligence implements Runnable {
     /** Tank colour. */
     @NonNull
     private final String color;
-    /** Sleep duration after every execution of the main game loop in milliseconds. */
+    /** Sleep duration between executions of the main game loop in milliseconds. */
     private final int threadSleepDuration;
 
     /**
@@ -206,13 +206,16 @@ abstract class BotArtificialIntelligence implements Runnable {
     /**
      * Sleeps for the given amount of time, if positive. Otherwise this method does nothing.
      * 
-     * @param waitTime
+     * @param sleepTime
      *            wait time in milliseconds
      */
-    private void sleep(long waitTime) {
-        if (0 < waitTime) {
+    private void sleep(long sleepTime) {
+        if (0 < sleepTime) {
+            if (log.isDebugEnabled()) {
+                log.debug("Sleeping for {} milliseconds.", "" + sleepTime);
+            }
             try {
-                Thread.sleep(waitTime);
+                Thread.sleep(sleepTime);
             } catch (InterruptedException e) {
                 log.error("Unexpected InterruptedException; program will continue.", e);
             }
