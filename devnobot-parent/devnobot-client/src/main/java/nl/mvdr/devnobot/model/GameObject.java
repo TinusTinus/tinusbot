@@ -1,5 +1,8 @@
 package nl.mvdr.devnobot.model;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +53,22 @@ public abstract class GameObject {
         // vertical overlap
         result = result && this.getY() < other.getY() + other.getHeight();
         result = result && other.getY() < this.getY() + this.getHeight();
+        return result;
+    }
+    
+    /**
+     * Checks whether this object overlaps with any of the game objects in the given collection.
+     * 
+     * @param objects objects
+     * @return true if and only if object overlaps with one or more objects in the given collection 
+     */
+    public boolean overlaps(Collection<? extends GameObject> objects) {
+        boolean result = false;
+        Iterator<? extends GameObject> iterator = objects.iterator();
+        while (!result && iterator.hasNext()) {
+            GameObject other = iterator.next();
+            result = overlaps(other);
+        }
         return result;
     }
 }
