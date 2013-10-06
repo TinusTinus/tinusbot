@@ -121,4 +121,22 @@ public class GameStateTest {
         Assert.assertTrue(result.contains(tank0));
         Assert.assertTrue(result.contains(tank1));
     }
+    
+    /** Test method for {@link GameState#wouldHit(String, Collection)} in case of a player that does not exist. */
+    @Test(expected = IllegalArgumentException.class)
+    public void testWouldHitNonexistentPlayer() {
+        GameState gameState = new GameState(Collections.<Tank>emptyList());
+        
+        gameState.wouldHit("Aad", Collections.<Wall>emptyList());
+    }
+    
+    /** Test method for {@link GameState#wouldHit(String, Collection)} in case of only one tank and no walls. */
+    @Test
+    public void testWouldHitNoWallsNoTanks() {
+        GameState gameState = new GameState(Arrays.asList(TankTest.createNamedTank("Aad")));
+        
+        GameObject gameObject = gameState.wouldHit("Aad", Collections.<Wall>emptyList());
+        
+        Assert.assertNull(gameObject);
+    }
 }

@@ -138,4 +138,61 @@ public class GameState {
 
         return result;
     }
+
+    /**
+     * Determines which, if any, game object the given tank would hit if it fired right now.
+     * 
+     * @param tank
+     *            tank which would fire
+     * @param objects
+     *            collection of game objects that a bullet would collide with, that is, walls and tanks (since bullets
+     *            pass through each other); this collection should not include the value of the tank parameter
+     * @return game object which would be hit, or null if there is none
+     */
+    private GameObject wouldHit(Tank tank, Collection<GameObject> objects) {
+        int minX = Integer.MAX_VALUE;
+        int maxX = Integer.MIN_VALUE;
+        int minY = Integer.MAX_VALUE;
+        int maxY = Integer.MAX_VALUE;
+        for (GameObject object : objects) {
+            minX = Math.min(minX, object.getX());
+            maxX = Math.max(maxX, object.getX() + object.getWidth());
+            minY = Math.min(minY, object.getY());
+            maxY = Math.max(maxY, object.getY() + object.getHeight());
+        }
+        
+        GameObject result = null;
+        Bullet bullet = tank.computeBulletSpawnLocation();
+        while (result == null && minX < bullet.getX() && bullet.getX() + bullet.getWidth() < maxX
+                && minY < bullet.getY() && bullet.getY() + bullet.getWidth() < maxY) {
+            for (GameObject object: objects) {
+                if (bullet.overlaps(object)) {
+                    result = object;
+                }
+            }
+            bullet = bullet.moveBulletLength(tank.getLastKnownOrientation());
+        }
+        return result;
+    }
+
+    /**
+     * Determines which, if any, game object the given player's tank would hit if it fired right now.
+     * 
+     * @param playerName      
+     *            player name; should be non-null and unique; if not unique, the first tank matching the player name is
+     *            returned
+     * @param walls
+     *            walls / obstacles in the level
+     * @return game object which would be hit, or null if there is none
+     * @throws IllegalArgumentException
+     *             if there is no matching tank for the given player name
+     */
+    public GameObject wouldHit(String playerName, Collection<Wall> walls) {
+        Tank tank = retrieveTankForPlayerName(playerName);
+        Collection<Tank> enemies = retrieveEnemies(playerName);
+        Collection<GameObject> objects = new ArrayList<>(tanks.size() - 1 + walls.size());
+        objects.addAll(enemies);
+        objects.addAll(walls);
+        return wouldHit(tank, objects);
+    }
 }
