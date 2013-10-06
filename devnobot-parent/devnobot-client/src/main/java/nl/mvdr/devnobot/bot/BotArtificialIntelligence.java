@@ -35,6 +35,7 @@ import nl.mvdr.devnobot.model.Wall;
 @RequiredArgsConstructor
 abstract class BotArtificialIntelligence implements Runnable {
     /** Default value for sleep duration. */
+    // TODO have this depend on the action duration from Tank
     private static final int DEFAULT_THREAD_SLEEP_DURATION = 600;
     /**
      * The approximate number of milliseconds between logging the leaderboard.
