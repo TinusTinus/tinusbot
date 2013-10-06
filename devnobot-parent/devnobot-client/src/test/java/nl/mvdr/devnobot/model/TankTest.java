@@ -64,7 +64,7 @@ public class TankTest {
      * @param name name
      * @return tank
      */
-    private Tank createNamedTank(String name) {
+    static Tank createNamedTank(String name) {
         return new Tank(0, 1, 2, 3, Orientation.NORTH, 4, 5, name, 6);
     }
 }

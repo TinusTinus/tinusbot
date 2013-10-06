@@ -95,4 +95,14 @@ public class Tank extends GameObject {
     public boolean isProbablyADummy() {
         return this.player != null && this.player.toLowerCase().startsWith(DummyBot.DEFAULT_NAME.toLowerCase());
     }
+    
+    /**
+     * Determines whether this tank belongs to the player with the given name.
+     * 
+     * @param playerName player name
+     * @return whether this tank belongs to the player
+     */
+    public boolean belongsToPlayer(String playerName) {
+        return player.equals(playerName);
+    }
 }
