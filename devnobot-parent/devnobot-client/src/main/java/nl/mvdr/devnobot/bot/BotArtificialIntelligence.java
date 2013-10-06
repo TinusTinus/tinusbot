@@ -126,7 +126,7 @@ abstract class BotArtificialIntelligence implements Runnable {
         while (!success) {
             try {
                 log.info("Connecting for player {}, color: {}, id: {}", name, color, id);
-                api.createPlayer(name, convertColorToString(), id);
+                api.createPlayer(name, color, id);
                 success = true;
             } catch (Exception e) {
                 log.error("Failed to connect.", e);
@@ -135,15 +135,6 @@ abstract class BotArtificialIntelligence implements Runnable {
         }
     }
     
-    /**
-     * Return the colour as a hex String.
-     * 
-     * @return String representation of the color as accepted by the client API
-     */
-    private String convertColorToString() {
-        return "#" + Integer.toHexString((color.getRGB() & 0xffffff) | 0x1000000).substring(1);
-    }
-
     /**
      * The main game loop.
      * 

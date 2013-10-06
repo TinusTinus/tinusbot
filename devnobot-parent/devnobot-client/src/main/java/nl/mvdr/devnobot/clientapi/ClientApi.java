@@ -1,5 +1,6 @@
 package nl.mvdr.devnobot.clientapi;
 
+import java.awt.Color;
 import java.util.Collection;
 
 import nl.mvdr.devnobot.model.Action;
@@ -26,13 +27,13 @@ public interface ClientApi {
      * 
      * @param name
      *            name
-     * @param webColor
-     *            color
+     * @param color
+     *            tank color
      * @param id
      *            unique Id of the player, to prevent others from accidentally stealing your bot
      * @return whether creation was succesful
      */
-    boolean createPlayer(String name, String webColor, String id);
+    boolean createPlayer(String name, Color color, String id);
 
     /**
      * Retrieves a list of players, including their kill/death ratios.
