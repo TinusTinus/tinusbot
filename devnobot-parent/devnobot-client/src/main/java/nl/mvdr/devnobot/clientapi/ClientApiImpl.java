@@ -54,6 +54,9 @@ public class ClientApiImpl implements ClientApi {
     @Override
     public Collection<Wall> readLevel() {
         // Call REST service
+        if (log.isDebugEnabled()) {
+            log.debug("Making a REST call to read the level");
+        }
         ResteasyClient resteasyClient = new ResteasyClientBuilder().build();
         ResteasyWebTarget resteasyWebTarget = resteasyClient.target(this.baseURL + "/devnobot/rest/level");
         Response response = resteasyWebTarget.request().get();
@@ -80,6 +83,10 @@ public class ClientApiImpl implements ClientApi {
     /** {@inheritDoc} */
     @Override
     public boolean createPlayer(String name, String webColor, String id) {
+        if (log.isDebugEnabled()) {
+            log.debug("Making a REST call to create a player with name = {}, webColor = {}, id = {}", 
+                    name, webColor, id);
+        }
         GamePlayer player = new GamePlayer();
         player.setColor(webColor);
         player.setName(name);
@@ -99,6 +106,9 @@ public class ClientApiImpl implements ClientApi {
     @Override
     public Collection<Player> readPlayers() {
         // Call REST service
+        if (log.isDebugEnabled()) {
+            log.debug("Making a REST call to read players");
+        }
         ResteasyClient resteasyClient = new ResteasyClientBuilder().build();
         ResteasyWebTarget resteasyWebTarget = resteasyClient.target(this.baseURL + "/devnobot/rest/players");
         Response response = resteasyWebTarget.request().get();
@@ -125,7 +135,9 @@ public class ClientApiImpl implements ClientApi {
     /** {@inheritDoc} */
     @Override
     public boolean addAction(final Action action, final String playerId) {
-        log.info("Making a REST call to add action " + action + " to player " + playerId);
+        if (log.isDebugEnabled()) {
+            log.debug("Making a REST call to add action " + action + " to player " + playerId);
+        }
         ResteasyClient resteasyClient = new ResteasyClientBuilder().build();
         ResteasyWebTarget resteasyWebTarget = resteasyClient.target(this.baseURL + "/devnobot/rest/player/" + playerId);
         Response response = resteasyWebTarget.request().put(Entity.entity(action.toCGIAction(), MediaType.APPLICATION_JSON));
@@ -139,6 +151,9 @@ public class ClientApiImpl implements ClientApi {
     @Override
     public GameState readWorldStatus() {
         // Call REST service
+        if (log.isDebugEnabled()) {
+            log.debug("Making a REST call to read the world status");
+        }
         ResteasyClient resteasyClient = new ResteasyClientBuilder().build();
         ResteasyWebTarget resteasyWebTarget = resteasyClient.target(this.baseURL + "/devnobot/rest/world");
         Response response = resteasyWebTarget.request().get();
@@ -164,6 +179,9 @@ public class ClientApiImpl implements ClientApi {
     /** {@inheritDoc} */
     @Override
     public boolean suicide(String playerId) {
+        if (log.isDebugEnabled()) {
+            log.debug("Making a REST call to suicide tank with player id " + playerId);
+        }
         ResteasyClient resteasyClient = new ResteasyClientBuilder().build();
         ResteasyWebTarget resteasyWebTarget = resteasyClient.target(this.baseURL + "/devnobot/rest/player/" + playerId);
         Response response = resteasyWebTarget.request().delete();

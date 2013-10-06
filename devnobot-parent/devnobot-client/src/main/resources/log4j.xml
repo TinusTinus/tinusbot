@@ -12,8 +12,8 @@
     <logger name="nl.mvdr">
         <level value="debug" />
     </logger>
-    <logger name="com.cgi.devnobot">
-        <level value="debug" />
+    <logger name="nl.mvdr.devnobot.clientapi">
+        <level value="info" />
     </logger>
 
     <!-- root -->

@@ -180,6 +180,7 @@ abstract class BotArtificialIntelligence implements Runnable {
      */
     private boolean perform(String id, Action action) {
         boolean result;
+        log.info("Performing action: " + action);
         if (action == Action.SUICIDE) {
             result = api.suicide(id);
         } else if (action != null) {
