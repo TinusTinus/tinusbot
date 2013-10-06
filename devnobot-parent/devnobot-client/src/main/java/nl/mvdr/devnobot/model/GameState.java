@@ -144,15 +144,20 @@ public class GameState {
      * 
      * @param tank
      *            tank which would fire
-     * @param objects
-     *            collection of game objects that a bullet would collide with, that is, walls and tanks (since bullets
-     *            pass through each other); this collection should not include the value of the tank parameter
+     * @param walls
+     *            walls / obstacles in the level
      * @return game object which would be hit, or null if there is none
      */
-    private GameObject wouldHit(Tank tank, Collection<GameObject> objects) {
+    public GameObject wouldHit(Tank tank, Collection<Wall> walls) {
+        // Build a collection of objects that the bullet cannot pass through. That is, all enemy tanks and walls.
+        Collection<Tank> enemies = retrieveEnemies(tank.getPlayer());
+        Collection<GameObject> objects = new ArrayList<>(tanks.size() - 1 + walls.size());
+        objects.addAll(enemies);
+        objects.addAll(walls);
+        
         // In the sample code the playing field is surrounded by walls, but we won't make the assumption that that will
         // be the case in every level and risk getting stuck in an infinite loop.
-        // Since we don't know the size of the screen, compute the minimum and maximum coordinates of the given objects.
+        // Since we don't know the size of the screen, compute the minimum and maximum coordinates of the objects.
         int minX = tank.getX();
         int maxX = tank.getX() + tank.getWidth();
         int minY = tank.getY();
@@ -194,11 +199,7 @@ public class GameState {
      */
     public GameObject wouldHit(String playerName, Collection<Wall> walls) {
         Tank tank = retrieveTankForPlayerName(playerName);
-        Collection<Tank> enemies = retrieveEnemies(playerName);
-        Collection<GameObject> objects = new ArrayList<>(tanks.size() - 1 + walls.size());
-        objects.addAll(enemies);
-        objects.addAll(walls);
-        return wouldHit(tank, objects);
+        return wouldHit(tank, walls);
     }
     
     /**
