@@ -21,6 +21,26 @@ import nl.mvdr.devnobot.model.Wall;
  * @author Martijn van de Rijdt
  */
 public class Tinusbot extends BotArtificialIntelligence {
+    /** Indicates whether this bot should suicide when another, non-dummy,  bot is aiming at it. */
+    private final boolean suicideToEvade;
+    
+    /**
+     * Constructor.
+     * 
+     * @param clientApi
+     *            client API for making server calls
+     * @param name
+     *            bot name
+     * @param color
+     *            tank color
+     * @param suicideToEvade
+     *            whether this bot should suicide when another, non-dummy, bot is aiming at it
+     */
+    public Tinusbot(ClientApi clientApi, String name, Color color, boolean suicideToEvade) {
+        super(clientApi, name, color);
+        this.suicideToEvade = suicideToEvade;
+    }
+    
     /**
      * Constructor.
      * 
@@ -32,7 +52,7 @@ public class Tinusbot extends BotArtificialIntelligence {
      *            tank color
      */
     public Tinusbot(ClientApi clientApi, String name, Color color) {
-        super(clientApi, name, color);
+        this(clientApi, name, color, true);
     }
 
     /**
@@ -42,7 +62,7 @@ public class Tinusbot extends BotArtificialIntelligence {
      *            client API for making server calls
      */
     public Tinusbot(ClientApi clientApi) {
-        this(clientApi, "Tinusbot 3000", Color.ORANGE);
+        this(clientApi, "Tinusbot 3000", Color.ORANGE, true);
     }
 
     /** {@inheritDoc} */
@@ -59,7 +79,7 @@ public class Tinusbot extends BotArtificialIntelligence {
                 // Even if they fire back and we die, it still nets us a point (2 for the kill minus 1 for the death).
                 // TODO prevent firing multiple bullets at far-away enemies?
                 result = Action.FIRE;
-            } else if (nonDummyEnemyHasAShot(obstacles, state, ownTank, enemies)) {
+            } else if (nonDummyEnemyHasAShot(obstacles, state, ownTank, enemies) && suicideToEvade) {
                 // EVASIVE MANEUVERS!
                 // Our tank is most likely too slow to get out of the way.
                 // Suicide to prevent the enemy from getting the kill.

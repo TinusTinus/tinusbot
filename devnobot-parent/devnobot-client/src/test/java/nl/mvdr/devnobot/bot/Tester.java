@@ -33,10 +33,15 @@ public class Tester {
         for (int i = 0; i < NUM_DUMMIES; i++) {
             bots.add(new DummyBot(api, DummyBot.DEFAULT_NAME + i, COLOURS[i]));
         }
-        bots.add(new InteractiveBot(api));
-        bots.add(new RotatingTurret(api));
-        bots.add(new BraindeadBot(api));
-        bots.add(new Tinusbot(api));
+//        bots.add(new InteractiveBot(api));
+//        bots.add(new RotatingTurret(api));
+//        bots.add(new BraindeadBot(api));
+//        bots.add(new Tinusbot(api));
+        
+        bots.add(new Tinusbot(api, "Tinusbot - with suicide 0", Color.ORANGE, true));
+        bots.add(new Tinusbot(api, "Tinusbot - with suicide 1", Color.ORANGE, true));
+        bots.add(new Tinusbot(api, "Tinusbot - no suicide 0", Color.BLACK, false));
+        bots.add(new Tinusbot(api, "Tinusbot - no suicide 1", Color.BLACK, false));
 
         for (BotArtificialIntelligence bot : bots) {
             new Thread(bot, bot.getName()).start();
