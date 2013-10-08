@@ -125,17 +125,17 @@ public class Tinusbot extends BotArtificialIntelligence {
 
         TankPosition startPosition = new TankPosition(ownTank);
 
-        // map from reachable tank positions (directly or indirectly) to the first action on the path to get there
-        Map<TankPosition, Action> reachablePositions = new HashMap<>();
-        reachablePositions.put(startPosition, null);
+        // map from visited reachable tank positions to the first action on a shortest path to get there
+        Map<TankPosition, Action> visited = new HashMap<>();
+        visited.put(startPosition, null);
 
-        Map<Action, TankPosition> directlyReachablePositions = startPosition.computeReachablePositions();
-        // TODO filter from directlyReachablePosition the positions where we can be shot by a non-dummy enemy
+        Map<Action, TankPosition> neighbours = startPosition.computeReachablePositions();
+        // TODO filter from neighbours the positions where we can be shot by a non-dummy enemy
         Collection<TankPosition> positions = new HashSet<>();
-        for (Entry<Action, TankPosition> entry : directlyReachablePositions.entrySet()) {
+        for (Entry<Action, TankPosition> entry : neighbours.entrySet()) {
             if (!entry.getValue().getTank().overlaps(obstacles)
                     && !entry.getValue().getTank().overlaps(enemies)) {
-                reachablePositions.put(entry.getValue(), entry.getKey());
+                visited.put(entry.getValue(), entry.getKey());
                 positions.add(entry.getValue());
             }
         }
@@ -145,18 +145,17 @@ public class Tinusbot extends BotArtificialIntelligence {
             Iterator<TankPosition> positionIterator = positions.iterator();
             while (result == null && positionIterator.hasNext()) {
                 TankPosition position = positionIterator.next();
-                Action firstAction = reachablePositions.get(position);
-                directlyReachablePositions = position.computeReachablePositions();
-                Iterator<TankPosition> directlyReachablePositionIterator = directlyReachablePositions.values()
-                        .iterator();
+                Action firstAction = visited.get(position);
+                neighbours = position.computeReachablePositions();
+                Iterator<TankPosition> directlyReachablePositionIterator = neighbours.values().iterator();
                 while (result == null && directlyReachablePositionIterator.hasNext()) {
                     TankPosition directlyReachablePosition = directlyReachablePositionIterator.next();
-                    if (!reachablePositions.containsKey(directlyReachablePosition)
+                    if (!visited.containsKey(directlyReachablePosition)
                             && !directlyReachablePosition.getTank().overlaps(obstacles)) {
                         if (state.wouldHitEnemy(directlyReachablePosition.getTank(), enemies, obstacles)) {
                             result = firstAction;
                         }
-                        reachablePositions.put(directlyReachablePosition, firstAction);
+                        visited.put(directlyReachablePosition, firstAction);
                         newPositions.add(directlyReachablePosition);
                     }
                 }
