@@ -106,7 +106,8 @@ public class Tinusbot extends BotArtificialIntelligence {
     }
 
     /**
-     * Determines the first move of a shortest path to a firing position.
+     * Determines the first move of a shortest path to a firing position. Uses a variation of Dijkstra's shortest path
+     * algorithm.
      * 
      * @param obstacles
      *            walls
