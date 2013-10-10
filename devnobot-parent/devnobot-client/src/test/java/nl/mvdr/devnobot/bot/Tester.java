@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cgi.devnobot.client.Ibiq;
+
 import nl.mvdr.devnobot.clientapi.ClientApi;
 import nl.mvdr.devnobot.clientapi.ClientApiImpl;
 
@@ -29,22 +31,23 @@ public class Tester {
         String serverBaseURL = System.getProperty("devnobot.server.baseURL", "http://localhost:7080");
         ClientApi api = new ClientApiImpl(serverBaseURL);
 
-        List<BotArtificialIntelligence> bots = new ArrayList<>();
+        List<Runnable> bots = new ArrayList<>();
         for (int i = 0; i < NUM_DUMMIES; i++) {
             bots.add(new DummyBot(api, DummyBot.DEFAULT_NAME + i, COLOURS[i]));
         }
-//        bots.add(new InteractiveBot(api));
-//        bots.add(new RotatingTurret(api));
-//        bots.add(new BraindeadBot(api));
-//        bots.add(new Tinusbot(api));
+        bots.add(new InteractiveBot(api));
+        bots.add(new RotatingTurret(api));
+        bots.add(new Ibiq(serverBaseURL));
+        bots.add(new Tinusbot(api));
         
-        bots.add(new Tinusbot(api, "Tinusbot - with suicide 0", Color.ORANGE, true));
-        bots.add(new Tinusbot(api, "Tinusbot - with suicide 1", Color.ORANGE, true));
-        bots.add(new Tinusbot(api, "Tinusbot - no suicide 0", Color.BLACK, false));
-        bots.add(new Tinusbot(api, "Tinusbot - no suicide 1", Color.BLACK, false));
-
-        for (BotArtificialIntelligence bot : bots) {
-            new Thread(bot, bot.getName()).start();
+        for (Runnable bot : bots) {
+        	String name;
+        	if (bot instanceof BotArtificialIntelligence) {
+        		name = ((BotArtificialIntelligence)bot).getName();
+        	} else {
+        		name = bot.getClass().getSimpleName();
+        	}
+            new Thread(bot, name).start();
         }
     }
 }
