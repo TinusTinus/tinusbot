@@ -187,20 +187,6 @@ public class GameState {
     }
 
     /**
-     * Determines which, if any, game object the given tank would hit if it fired right now.
-     * 
-     * @param tank
-     *            tank which would fire
-     * @param walls
-     *            walls / obstacles in the level
-     * @return game object which would be hit, or null if there is none
-     */
-    public GameObject wouldHit(Tank tank, Collection<Wall> walls) {
-        Collection<Tank> enemies = retrieveEnemies(tank.getPlayer());
-        return wouldHit(tank, enemies, walls);
-    }
-
-    /**
      * Determines which, if any, game object the given player's tank would hit if it fired right now.
      * 
      * @param playerName
@@ -214,7 +200,8 @@ public class GameState {
      */
     public GameObject wouldHit(String playerName, Collection<Wall> walls) {
         Tank tank = retrieveTankForPlayerName(playerName);
-        return wouldHit(tank, walls);
+        Collection<Tank> enemies = retrieveEnemies(tank.getPlayer());
+        return wouldHit(tank, enemies, walls);
     }
 
     /**
