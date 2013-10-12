@@ -90,7 +90,7 @@ public class Tinusbot extends BotArtificialIntelligence {
         } else {
             // There are no enemies in the level (yet).
             // TODO move towards the center of the map?
-            result = null;
+            result = Action.FIRE;
         }
         return result;
     }
