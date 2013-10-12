@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import lombok.extern.slf4j.Slf4j;
 import nl.mvdr.devnobot.clientapi.ClientApi;
 import nl.mvdr.devnobot.model.Action;
 import nl.mvdr.devnobot.model.GameState;
@@ -20,6 +21,7 @@ import nl.mvdr.devnobot.model.Wall;
  * 
  * @author Martijn van de Rijdt
  */
+@Slf4j
 public class Tinusbot extends BotArtificialIntelligence {
     /** Indicates whether this bot should suicide when another, non-dummy,  bot is aiming at it. */
     private final boolean suicideToEvade;
@@ -78,19 +80,23 @@ public class Tinusbot extends BotArtificialIntelligence {
                 // FIRE!
                 // Even if they fire back and we die, it still nets us a point (2 for the kill minus 1 for the death).
                 result = Action.FIRE;
+                log.info("Firing at an enemy.");
             } else if (suicideToEvade && nonDummyEnemyHasAShot(obstacles, state, ownTank, enemies)) {
                 // EVASIVE MANEUVERS!
                 // Our tank is most likely too slow to get out of the way.
                 // Suicide to prevent the enemy from getting the kill.
                 result = Action.SUICIDE;
+                log.info("Suiciding to evade enemy fire.");
             } else {
                 // Move toward a position where we can fire.
                 result = computeActionToMoveIntoFiringPosition(obstacles, state, ownTank, enemies);
+                log.info("Moving toward firing position: " + result);
             }
         } else {
             // There are no enemies in the level (yet). But they should be here soon.
             // Fire in case someone spawns close by.
             result = Action.FIRE;
+            log.info("Nobody's here (yet?). Firing blindly.");
         }
         return result;
     }
