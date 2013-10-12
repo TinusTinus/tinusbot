@@ -2,7 +2,6 @@ package nl.mvdr.devnobot.bot;
 
 import java.awt.Color;
 import java.util.Collection;
-import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -159,11 +158,10 @@ public class Tinusbot extends BotArtificialIntelligence {
         visited.put(startPosition, null);
 
         Map<Action, TankPosition> neighbours = startPosition.computeReachablePositions();
-        neighbours = filterDangerousPositions(neighbours, obstacles, state, enemies);
         Collection<TankPosition> positions = new HashSet<>();
         for (Entry<Action, TankPosition> entry : neighbours.entrySet()) {
-            if (!entry.getValue().getTank().overlaps(obstacles)
-                    && !entry.getValue().getTank().overlaps(enemies)) {
+            if (!nonDummyEnemyHasAShot(obstacles, state, entry.getValue().getTank(), enemies)
+                    && !entry.getValue().getTank().overlaps(obstacles) && !entry.getValue().getTank().overlaps(enemies)) {
                 visited.put(entry.getValue(), entry.getKey());
                 positions.add(entry.getValue());
             }
@@ -198,31 +196,6 @@ public class Tinusbot extends BotArtificialIntelligence {
             result = Action.SUICIDE;
         }
 
-        return result;
-    }
-    
-    /**
-     * Returns a copy of the input, without those positions where an enemy can shoot our own tank. Useful to prevent
-     * driving straight into an enemy's line of fire.
-     * 
-     * @param positions
-     *            positions to be filtered
-     * @param obstacles
-     *            obstacles / walls
-     * @param state
-     *            game state
-     * @param enemies
-     *            enemies
-     * @return filtered copy of positions
-     */
-    Map<Action, TankPosition> filterDangerousPositions(Map<Action, TankPosition> positions, Collection<Wall> obstacles, 
-            GameState state, Collection<Tank> enemies) {
-        Map<Action, TankPosition> result = new EnumMap<>(Action.class);
-        for (Entry<Action, TankPosition> entry: positions.entrySet()) {
-            if (!nonDummyEnemyHasAShot(obstacles, state, entry.getValue().getTank(), enemies)) {
-                result.put(entry.getKey(), entry.getValue());
-            }
-        }
         return result;
     }
 }
