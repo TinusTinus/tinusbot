@@ -77,13 +77,11 @@ public class Tinusbot extends BotArtificialIntelligence {
             if (state.wouldHitEnemy(ownTank, enemies, obstacles)) {
                 // FIRE!
                 // Even if they fire back and we die, it still nets us a point (2 for the kill minus 1 for the death).
-                // TODO prevent firing multiple bullets at far-away enemies?
                 result = Action.FIRE;
-            } else if (nonDummyEnemyHasAShot(obstacles, state, ownTank, enemies) && suicideToEvade) {
+            } else if (suicideToEvade && nonDummyEnemyHasAShot(obstacles, state, ownTank, enemies)) {
                 // EVASIVE MANEUVERS!
                 // Our tank is most likely too slow to get out of the way.
                 // Suicide to prevent the enemy from getting the kill.
-                // TODO test if this actually helps!
                 result = Action.SUICIDE;
             } else {
                 // Move toward a position where we can fire.
