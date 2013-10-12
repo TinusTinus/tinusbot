@@ -118,7 +118,10 @@ public class Tinusbot extends BotArtificialIntelligence {
         Iterator<Tank> enemyIterator = enemies.iterator();
         while (!result && enemyIterator.hasNext()) {
             Tank enemy = enemyIterator.next();
-            result = !enemy.isProbablyADummy() && state.wouldHit(enemy.getPlayer(), obstacles) == ownTank;
+            Collection<Tank> enemiesOfEnemy = new HashSet<>(enemies);
+            enemiesOfEnemy.remove(enemy);
+            enemiesOfEnemy.add(ownTank);
+            result = !enemy.isProbablyADummy() && state.wouldHit(enemy, enemiesOfEnemy, obstacles) == ownTank;
         }
         return result;
     }
