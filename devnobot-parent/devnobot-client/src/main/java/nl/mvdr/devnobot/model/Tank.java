@@ -115,7 +115,7 @@ public class Tank extends GameObject {
     public Bullet computeBulletSpawnLocation() {
         int bulletWidth = Bullet.getBulletWidth();
         int bulletHeight = Bullet.getBulletHeight();
-        int x = getX() + getWidth() / 2 - bulletWidth / 2;
+        int x = getX() + getWidth() / 2 - bulletWidth / 2 - 1; // -1 determined by experimenting
         int y = getY() + getHeight() / 2 - bulletHeight / 2;
         return new Bullet(x, y, bulletWidth, bulletHeight);
     }
