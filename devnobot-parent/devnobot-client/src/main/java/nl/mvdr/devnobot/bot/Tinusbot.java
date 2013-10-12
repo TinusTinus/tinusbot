@@ -52,7 +52,7 @@ public class Tinusbot extends BotArtificialIntelligence {
      *            tank color
      */
     public Tinusbot(ClientApi clientApi, String name, Color color) {
-        this(clientApi, name, color, true);
+        this(clientApi, name, color, false);
     }
 
     /**
@@ -62,7 +62,7 @@ public class Tinusbot extends BotArtificialIntelligence {
      *            client API for making server calls
      */
     public Tinusbot(ClientApi clientApi) {
-        this(clientApi, "Tinusbot 3000", Color.ORANGE, true);
+        this(clientApi, "Tinusbot 3000", Color.ORANGE, false);
     }
 
     /** {@inheritDoc} */
@@ -88,8 +88,8 @@ public class Tinusbot extends BotArtificialIntelligence {
                 result = computeActionToMoveIntoFiringPosition(obstacles, state, ownTank, enemies);
             }
         } else {
-            // There are no enemies in the level (yet).
-            // TODO move towards the center of the map?
+            // There are no enemies in the level (yet). But they should be here soon.
+            // Fire in case someone spawns close by.
             result = Action.FIRE;
         }
         return result;
