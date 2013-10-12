@@ -161,7 +161,8 @@ public class Tinusbot extends BotArtificialIntelligence {
         Collection<TankPosition> positions = new HashSet<>();
         for (Entry<Action, TankPosition> entry : neighbours.entrySet()) {
             if (!nonDummyEnemyHasAShot(obstacles, state, entry.getValue().getTank(), enemies)
-                    && !entry.getValue().getTank().overlaps(obstacles) && !entry.getValue().getTank().overlaps(enemies)) {
+                    && (!(entry.getKey() == Action.FORWARD || entry.getKey() == Action.BACKWARD) || (!entry.getValue()
+                            .getTank().overlaps(obstacles) && !entry.getValue().getTank().overlaps(enemies)))) {
                 visited.put(entry.getValue(), entry.getKey());
                 positions.add(entry.getValue());
             }
@@ -174,16 +175,18 @@ public class Tinusbot extends BotArtificialIntelligence {
                 TankPosition position = positionIterator.next();
                 Action firstAction = visited.get(position);
                 neighbours = position.computeReachablePositions();
-                Iterator<TankPosition> directlyReachablePositionIterator = neighbours.values().iterator();
+                Iterator<Entry<Action, TankPosition>> directlyReachablePositionIterator = neighbours.entrySet().iterator();
                 while (result == null && directlyReachablePositionIterator.hasNext()) {
-                    TankPosition directlyReachablePosition = directlyReachablePositionIterator.next();
-                    if (!visited.containsKey(directlyReachablePosition)
-                            && !directlyReachablePosition.getTank().overlaps(obstacles)) {
-                        if (state.wouldHitEnemy(directlyReachablePosition.getTank(), enemies, obstacles)) {
+                    Entry<Action, TankPosition> directlyReachablePosition = directlyReachablePositionIterator.next();
+                    if (!visited.containsKey(directlyReachablePosition.getValue())
+                            && (!(directlyReachablePosition.getKey() == Action.FORWARD || directlyReachablePosition
+                                    .getKey() == Action.BACKWARD) || !directlyReachablePosition.getValue().getTank()
+                                    .overlaps(obstacles))) {
+                        if (state.wouldHitEnemy(directlyReachablePosition.getValue().getTank(), enemies, obstacles)) {
                             result = firstAction;
                         }
-                        visited.put(directlyReachablePosition, firstAction);
-                        newPositions.add(directlyReachablePosition);
+                        visited.put(directlyReachablePosition.getValue(), firstAction);
+                        newPositions.add(directlyReachablePosition.getValue());
                     }
                 }
             }
