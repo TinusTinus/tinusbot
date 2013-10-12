@@ -35,9 +35,11 @@ public class Tester {
         for (int i = 0; i < NUM_DUMMIES; i++) {
             bots.add(new DummyBot(api, DummyBot.DEFAULT_NAME + i, COLOURS[i]));
         }
-        bots.add(new InteractiveBot(api));
-        bots.add(new RotatingTurret(api));
-        bots.add(new Ibiq(serverBaseURL));
+        
+        bots.add(new Ibiq(serverBaseURL, "Ibiq0"));
+        bots.add(new Ibiq(serverBaseURL, "Ibiq1"));
+        bots.add(new Ibiq(serverBaseURL, "Ibiq2"));
+        
         bots.add(new Tinusbot(api));
         
         for (Runnable bot : bots) {
