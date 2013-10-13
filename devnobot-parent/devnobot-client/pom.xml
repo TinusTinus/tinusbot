@@ -69,7 +69,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.cgi.devnobot.client.Tester</mainClass>
+							<mainClass>nl.mvdr.devnobot.launcher.Launcher</mainClass>
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
 							<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
 						</manifest>
