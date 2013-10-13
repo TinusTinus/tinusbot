@@ -2,6 +2,7 @@ package nl.mvdr.devnobot.launcher;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import nl.mvdr.devnobot.bot.Tinusbot;
 import nl.mvdr.devnobot.clientapi.ClientApi;
 import nl.mvdr.devnobot.clientapi.ClientApiImpl;
@@ -12,7 +13,13 @@ import nl.mvdr.devnobot.clientapi.ClientApiImpl;
  * @author Martijn van de Rijdt
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@Slf4j
 public class Launcher {
+    /** Name of the system property containing the server base URL. */
+    public static final String BASE_URL_SYSTEM_PROPERTY = "devnobot.server.baseURL";
+    /** Default value for base URL. */
+    public static final String DEFAULT_BASE_URL = "http://localhost:7080";
+
     /**
      * Main method.
      * 
@@ -27,7 +34,11 @@ public class Launcher {
      *            command-line parameters; these are ignored
      */
     public static void main(String[] args) {
-        String serverBaseURL = System.getProperty("devnobot.server.baseURL", "http://localhost:7080");
+        log.info("Determining Devnobot server base URL. "
+                + "Default is \"{}\". Set system property \"{}\" to override this default.", DEFAULT_BASE_URL,
+                BASE_URL_SYSTEM_PROPERTY);
+        String serverBaseURL = System.getProperty(BASE_URL_SYSTEM_PROPERTY, DEFAULT_BASE_URL);
+        log.info("Base URL: " + serverBaseURL);
         ClientApi api = new ClientApiImpl(serverBaseURL);
         Tinusbot bot = new Tinusbot(api);
         bot.run();

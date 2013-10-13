@@ -8,6 +8,7 @@ import com.cgi.devnobot.client.Ibiq;
 
 import nl.mvdr.devnobot.clientapi.ClientApi;
 import nl.mvdr.devnobot.clientapi.ClientApiImpl;
+import nl.mvdr.devnobot.launcher.Launcher;
 
 /**
  * Main class. Spawns a bunch of bots.
@@ -28,7 +29,7 @@ public class Tester {
      *            commandline parameters; unused
      */
     public static void main(final String[] args) {
-        String serverBaseURL = System.getProperty("devnobot.server.baseURL", "http://localhost:7080");
+        String serverBaseURL = System.getProperty(Launcher.BASE_URL_SYSTEM_PROPERTY, Launcher.DEFAULT_BASE_URL);
         ClientApi api = new ClientApiImpl(serverBaseURL);
 
         List<Runnable> bots = new ArrayList<>();
