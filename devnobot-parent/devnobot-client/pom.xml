@@ -8,9 +8,9 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>devnobot</artifactId>
+	<artifactId>tinusbot</artifactId>
 	<packaging>jar</packaging>
-	<name>Devnobot client</name>
+	<name>Tinusbot</name>
 	<description>My entry for the "Battle your way to JavaOne 2014" Devnobot programming contest</description>
 
 	<properties>
