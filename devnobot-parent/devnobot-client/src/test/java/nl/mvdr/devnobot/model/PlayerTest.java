@@ -84,6 +84,7 @@ public class PlayerTest {
         players.add(new Player("Wim", 3, 2, "color"));
         players.add(new Player("Herp", 2, 0, "color"));
         players.add(new Player("Derp", 6, 8, "color"));
+        
         Player.logLeaderboard(players);
     }
     
@@ -93,6 +94,7 @@ public class PlayerTest {
         Collection<Player> players = new HashSet<>();
         players.add(new Player("Player with a really long name", 6, 2, "color"));
         players.add(new Player("Many kills/deaths", 33276973, 73283729, "color"));
+        
         Player.logLeaderboard(players);
     }
 }
