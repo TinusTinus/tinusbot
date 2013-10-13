@@ -41,6 +41,7 @@ public class Launcher {
         log.info("Base URL: " + serverBaseURL);
         ClientApi api = new ClientApiImpl(serverBaseURL);
         Tinusbot bot = new Tinusbot(api);
+        log.info("Starting bot!");
         bot.run();
     }
 }
