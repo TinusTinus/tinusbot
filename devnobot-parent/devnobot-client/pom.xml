@@ -10,8 +10,8 @@
 
 	<artifactId>devnobot</artifactId>
 	<packaging>jar</packaging>
-	<name>Devnobot dummy client</name>
-	<description>The Devnobot dummy client as provided by CGI.</description>
+	<name>Devnobot client</name>
+	<description>My entry for the "Battle your way to JavaOne 2014" Devnobot programming contest</description>
 
 	<properties>
 		<!-- Version numbers. Please keep these sorted in alphabetical order. -->
