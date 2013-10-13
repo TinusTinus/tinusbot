@@ -35,8 +35,8 @@ public class Launcher {
      */
     public static void main(String[] args) {
         log.info("Determining Devnobot server base URL. "
-                + "Default is \"{}\". Set system property \"{}\" to override this default.", DEFAULT_BASE_URL,
-                BASE_URL_SYSTEM_PROPERTY);
+                + "Default is \"{}\". Set system property \"{}\" to override this default.",
+                DEFAULT_BASE_URL, BASE_URL_SYSTEM_PROPERTY);
         String serverBaseURL = System.getProperty(BASE_URL_SYSTEM_PROPERTY, DEFAULT_BASE_URL);
         log.info("Base URL: " + serverBaseURL);
         ClientApi api = new ClientApiImpl(serverBaseURL);
