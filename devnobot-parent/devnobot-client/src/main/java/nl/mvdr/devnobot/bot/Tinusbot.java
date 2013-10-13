@@ -37,6 +37,25 @@ public class Tinusbot extends BotArtificialIntelligence {
      *            tank color
      * @param suicideToEvade
      *            whether this bot should suicide when another, non-dummy, bot is aiming at it
+     * @param sleepDuration
+     *            sleep duration between executions of the main game loop in milliseconds
+     */
+    public Tinusbot(ClientApi clientApi, String name, Color color, boolean suicideToEvade, int sleepDuration) {
+        super(clientApi, name, color, sleepDuration);
+        this.suicideToEvade = suicideToEvade;
+    }
+    
+    /**
+     * Constructor.
+     * 
+     * @param clientApi
+     *            client API for making server calls
+     * @param name
+     *            bot name
+     * @param color
+     *            tank color
+     * @param suicideToEvade
+     *            whether this bot should suicide when another, non-dummy, bot is aiming at it
      */
     public Tinusbot(ClientApi clientApi, String name, Color color, boolean suicideToEvade) {
         super(clientApi, name, color);

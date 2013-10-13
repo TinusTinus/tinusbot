@@ -35,8 +35,7 @@ import nl.mvdr.devnobot.model.Wall;
 @RequiredArgsConstructor
 abstract class BotArtificialIntelligence implements Runnable {
     /** Default value for sleep duration. */
-    // TODO have this depend on the action duration from Tank
-    private static final int DEFAULT_THREAD_SLEEP_DURATION = 600;
+    private static final int DEFAULT_THREAD_SLEEP_DURATION = 550;
     /**
      * The approximate number of milliseconds between logging the leaderboard.
      * 
@@ -52,12 +51,15 @@ abstract class BotArtificialIntelligence implements Runnable {
     private final ClientApi api;
     /** Player name. */
     @NonNull
-    @Getter(value = AccessLevel.PACKAGE)
+    @Getter(AccessLevel.PACKAGE)
     private final String name;
     /** Tank colour. */
     @NonNull
     private final Color color;
-    /** Sleep duration between executions of the main game loop in milliseconds. */
+    /**
+     * Sleep duration between executions of the main game loop in milliseconds. Always accessed through its getter so
+     * subclasses can override it dynamically.
+     */
     private final int threadSleepDuration;
 
     /**
