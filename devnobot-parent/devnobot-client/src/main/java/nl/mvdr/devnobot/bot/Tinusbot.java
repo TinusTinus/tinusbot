@@ -80,23 +80,23 @@ public class Tinusbot extends BotArtificialIntelligence {
                 // FIRE!
                 // Even if they fire back and we die, it still nets us a point (2 for the kill minus 1 for the death).
                 result = Action.FIRE;
-                log.info("Firing at an enemy.");
+                log.debug("Firing at an enemy.");
             } else if (suicideToEvade && nonDummyEnemyHasAShot(obstacles, state, ownTank, enemies)) {
                 // EVASIVE MANEUVERS!
                 // Our tank is most likely too slow to get out of the way.
                 // Suicide to prevent the enemy from getting the kill.
                 result = Action.SUICIDE;
-                log.info("Suiciding to evade enemy fire.");
+                log.debug("Suiciding to evade enemy fire.");
             } else {
                 // Move toward a position where we can fire.
                 result = computeActionToMoveIntoFiringPosition(obstacles, state, ownTank, enemies);
-                log.info("Moving toward firing position: " + result);
+                log.debug("Moving toward firing position: " + result);
             }
         } else {
             // There are no enemies in the level (yet). But they should be here soon.
             // Fire in case someone spawns close by.
             result = Action.FIRE;
-            log.info("Nobody's here (yet?). Firing blindly.");
+            log.debug("Nobody's here (yet?). Firing blindly.");
         }
         return result;
     }
