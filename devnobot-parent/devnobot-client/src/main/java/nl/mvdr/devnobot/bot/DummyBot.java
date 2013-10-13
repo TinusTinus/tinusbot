@@ -12,6 +12,8 @@ import nl.mvdr.devnobot.model.Wall;
 /**
  * Dummy bot that just takes random actions.
  * 
+ * Functionally equal to the example dummy bot provided by CGI.
+ * 
  * @author Martijn van de Rijdt
  */
 public class DummyBot extends BotArtificialIntelligence {
