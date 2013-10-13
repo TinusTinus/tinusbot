@@ -48,11 +48,11 @@ public abstract class GameObject {
      */
     public boolean overlaps(GameObject other) {
         // horizontal overlap
-        boolean result = this.getX() < other.getX() + other.getWidth();
-        result = result && other.getX() < this.getX() + this.getWidth();
+        boolean result = this.getX() < other.computeMaxX();
+        result = result && other.getX() < this.computeMaxX();
         // vertical overlap
-        result = result && this.getY() < other.getY() + other.getHeight();
-        result = result && other.getY() < this.getY() + this.getHeight();
+        result = result && this.getY() < other.computeMaxY();
+        result = result && other.getY() < this.computeMaxY();
         return result;
     }
     
@@ -70,5 +70,15 @@ public abstract class GameObject {
             result = overlaps(other);
         }
         return result;
+    }
+    
+    /** @return x coordinate of the right border */
+    public int computeMaxX() {
+        return getX() + getWidth();
+    }
+    
+    /** @return y coordinate of the bottom border */
+    public int computeMaxY() {
+        return getY() + getHeight();
     }
 }

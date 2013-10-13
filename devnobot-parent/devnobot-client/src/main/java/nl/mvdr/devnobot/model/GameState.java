@@ -156,25 +156,17 @@ public class GameState {
         objects.addAll(enemies);
         objects.addAll(walls);
 
-        // In the sample code the playing field is surrounded by walls, but we won't make the assumption that that will
-        // be the case in every level and risk getting stuck in an infinite loop.
-        // Since we don't know the size of the screen, compute the minimum and maximum coordinates of the objects.
-        int minX = tank.getX();
-        int maxX = tank.getX() + tank.getWidth();
-        int minY = tank.getY();
-        int maxY = tank.getY() + tank.getHeight();
-        for (GameObject object : objects) {
-            minX = Math.min(minX, object.getX());
-            maxX = Math.max(maxX, object.getX() + object.getWidth());
-            minY = Math.min(minY, object.getY());
-            maxY = Math.max(maxY, object.getY() + object.getHeight());
-        }
+        // TODO pass in boundary as a parameter
+        Collection<Tank> temptanks = new ArrayList<>(enemies);
+        temptanks.add(tank);
+        LevelBoundary boundary = LevelBoundary.buildLevelBoundary(walls, temptanks);
 
         // Follow the trajectory of the bullet until it hits an object or goes flying out of bounds.
         GameObject result = null;
         Bullet bullet = tank.computeBulletSpawnLocation();
-        while (result == null && minX < bullet.getX() + bullet.getWidth() && bullet.getX() < maxX
-                && minY < bullet.getY() + bullet.getWidth() && bullet.getY() < maxY) {
+        while (result == null 
+                && boundary.getX() < bullet.getX() + bullet.getWidth() && bullet.getX() < boundary.computeMaxX()
+                && boundary.getY() < bullet.getY() + bullet.getWidth() && bullet.getY() < boundary.computeMaxY()) {
             for (GameObject object : objects) {
                 if (bullet.overlaps(object)) {
                     result = object;

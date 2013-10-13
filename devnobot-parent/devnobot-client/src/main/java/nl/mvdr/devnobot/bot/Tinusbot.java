@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import nl.mvdr.devnobot.clientapi.ClientApi;
 import nl.mvdr.devnobot.model.Action;
 import nl.mvdr.devnobot.model.GameState;
+import nl.mvdr.devnobot.model.LevelBoundary;
 import nl.mvdr.devnobot.model.Tank;
 import nl.mvdr.devnobot.model.TankPosition;
 import nl.mvdr.devnobot.model.Wall;
@@ -93,6 +94,7 @@ public class Tinusbot extends BotArtificialIntelligence {
 
         Tank ownTank = state.retrieveTankForPlayerName(getName());
         Collection<Tank> enemies = state.retrieveEnemies(getName());
+        LevelBoundary boundary = LevelBoundary.buildLevelBoundary(obstacles, state.getTanks());
 
         if (!enemies.isEmpty()) {
             if (state.wouldHitEnemy(ownTank, enemies, obstacles)) {
@@ -108,7 +110,7 @@ public class Tinusbot extends BotArtificialIntelligence {
                 log.debug("Suiciding to evade enemy fire.");
             } else {
                 // Move toward a position where we can fire.
-                result = computeActionToMoveIntoFiringPosition(obstacles, state, ownTank, enemies);
+                result = computeActionToMoveIntoFiringPosition(obstacles, state, ownTank, enemies, boundary);
                 log.debug("Moving toward firing position: " + result);
             }
         } else {
@@ -163,10 +165,12 @@ public class Tinusbot extends BotArtificialIntelligence {
      *            own tank
      * @param enemies
      *            all enemy tanks
+     * @param boundary
+     *            bounds of the level
      * @return action
      */
     private Action computeActionToMoveIntoFiringPosition(Collection<Wall> obstacles, GameState state, Tank ownTank,
-            Collection<Tank> enemies) {
+            Collection<Tank> enemies, LevelBoundary boundary) {
 
         Action result = null;
 
@@ -179,7 +183,8 @@ public class Tinusbot extends BotArtificialIntelligence {
         Map<Action, TankPosition> neighbours = startPosition.computeReachablePositions();
         Collection<TankPosition> positions = new HashSet<>();
         for (Entry<Action, TankPosition> entry : neighbours.entrySet()) {
-            if (!nonDummyEnemyHasAShot(obstacles, state, entry.getValue().getTank(), enemies)
+            if (entry.getValue().getTank().overlaps(boundary)
+                    && !nonDummyEnemyHasAShot(obstacles, state, entry.getValue().getTank(), enemies)
                     && (!(entry.getKey() == Action.FORWARD || entry.getKey() == Action.BACKWARD) || (!entry.getValue()
                             .getTank().overlaps(obstacles) && !entry.getValue().getTank().overlaps(enemies)))) {
                 visited.put(entry.getValue(), entry.getKey());
@@ -197,7 +202,8 @@ public class Tinusbot extends BotArtificialIntelligence {
                 Iterator<Entry<Action, TankPosition>> directlyReachablePositionIterator = neighbours.entrySet().iterator();
                 while (result == null && directlyReachablePositionIterator.hasNext()) {
                     Entry<Action, TankPosition> directlyReachablePosition = directlyReachablePositionIterator.next();
-                    if (!visited.containsKey(directlyReachablePosition.getValue())
+                    if (directlyReachablePosition.getValue().getTank().overlaps(boundary)
+                            && !visited.containsKey(directlyReachablePosition.getValue())
                             && (!(directlyReachablePosition.getKey() == Action.FORWARD || directlyReachablePosition
                                     .getKey() == Action.BACKWARD) || !directlyReachablePosition.getValue().getTank()
                                     .overlaps(obstacles))) {
