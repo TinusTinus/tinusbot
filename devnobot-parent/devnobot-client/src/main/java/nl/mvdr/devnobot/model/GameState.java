@@ -148,18 +148,16 @@ public class GameState {
      *            tank's enemies
      * @param walls
      *            walls / obstacles in the level
+     * @param boundary
+     *            level boundary
      * @return game object which would be hit, or null if there is none
      */
-    public GameObject wouldHit(Tank tank, Collection<Tank> enemies, Collection<Wall> walls) {
+    public GameObject wouldHit(Tank tank, Collection<Tank> enemies, Collection<Wall> walls, 
+            LevelBoundary boundary) {
         // Build a collection of objects that the bullet cannot pass through. That is, all enemy tanks and walls.
         Collection<GameObject> objects = new ArrayList<>(tanks.size() - 1 + walls.size());
         objects.addAll(enemies);
         objects.addAll(walls);
-
-        // TODO pass in boundary as a parameter
-        Collection<Tank> temptanks = new ArrayList<>(enemies);
-        temptanks.add(tank);
-        LevelBoundary boundary = LevelBoundary.buildLevelBoundary(walls, temptanks);
 
         // Follow the trajectory of the bullet until it hits an object or goes flying out of bounds.
         GameObject result = null;
@@ -193,9 +191,27 @@ public class GameState {
     public GameObject wouldHit(String playerName, Collection<Wall> walls) {
         Tank tank = retrieveTankForPlayerName(playerName);
         Collection<Tank> enemies = retrieveEnemies(tank.getPlayer());
-        return wouldHit(tank, enemies, walls);
+        LevelBoundary boundary = LevelBoundary.buildLevelBoundary(walls, tanks);
+        return wouldHit(tank, enemies, walls, boundary);
     }
 
+    /**
+     * Determines whether the given tank would hit an enemy if it fired right now.
+     * 
+     * @param tank
+     *            tank
+     * @param walls
+     *            walls / obstacles in the level
+     * @param boundary
+     *            level boundary
+     * @return game object which would be hit, or null if there is none
+     * @throws IllegalArgumentException
+     *             if there is no matching tank for the given player name
+     */
+    public boolean wouldHitEnemy(Tank tank, Collection<Tank> enemies, Collection<Wall> walls, LevelBoundary boundary) {
+        return wouldHit(tank, enemies, walls, boundary) instanceof Tank;
+    }
+    
     /**
      * Determines whether the given tank would hit an enemy if it fired right now.
      * 
@@ -208,6 +224,6 @@ public class GameState {
      *             if there is no matching tank for the given player name
      */
     public boolean wouldHitEnemy(Tank tank, Collection<Tank> enemies, Collection<Wall> walls) {
-        return wouldHit(tank, enemies, walls) instanceof Tank;
+        return wouldHit(tank, enemies, walls, LevelBoundary.buildLevelBoundary(walls, tanks)) instanceof Tank;
     }
 }

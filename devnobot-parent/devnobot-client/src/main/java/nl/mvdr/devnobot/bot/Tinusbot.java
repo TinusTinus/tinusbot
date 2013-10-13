@@ -97,12 +97,12 @@ public class Tinusbot extends BotArtificialIntelligence {
         LevelBoundary boundary = LevelBoundary.buildLevelBoundary(obstacles, state.getTanks());
 
         if (!enemies.isEmpty()) {
-            if (state.wouldHitEnemy(ownTank, enemies, obstacles)) {
+            if (state.wouldHitEnemy(ownTank, enemies, obstacles, boundary)) {
                 // FIRE!
                 // Even if they fire back and we die, it still nets us a point (2 for the kill minus 1 for the death).
                 result = Action.FIRE;
                 log.debug("Firing at an enemy.");
-            } else if (suicideToEvade && nonDummyEnemyHasAShot(obstacles, state, ownTank, enemies)) {
+            } else if (suicideToEvade && nonDummyEnemyHasAShot(obstacles, state, ownTank, enemies, boundary)) {
                 // EVASIVE MANEUVERS!
                 // Our tank is most likely too slow to get out of the way.
                 // Suicide to prevent the enemy from getting the kill.
@@ -137,10 +137,12 @@ public class Tinusbot extends BotArtificialIntelligence {
      *            own tank
      * @param enemies
      *            all enemy tanks
+     * @param boundary
+     *            bounds of the level
      * @return whether a bot is aiming at us
      */
     private boolean nonDummyEnemyHasAShot(Collection<Wall> obstacles, GameState state, Tank ownTank,
-            Collection<Tank> enemies) {
+            Collection<Tank> enemies, LevelBoundary boundary) {
         boolean result = false;
         Iterator<Tank> enemyIterator = enemies.iterator();
         while (!result && enemyIterator.hasNext()) {
@@ -148,7 +150,7 @@ public class Tinusbot extends BotArtificialIntelligence {
             Collection<Tank> enemiesOfEnemy = new HashSet<>(enemies);
             enemiesOfEnemy.remove(enemy);
             enemiesOfEnemy.add(ownTank);
-            result = !enemy.isProbablyADummy() && state.wouldHit(enemy, enemiesOfEnemy, obstacles) == ownTank;
+            result = !enemy.isProbablyADummy() && state.wouldHit(enemy, enemiesOfEnemy, obstacles, boundary) == ownTank;
         }
         return result;
     }
@@ -184,7 +186,7 @@ public class Tinusbot extends BotArtificialIntelligence {
         Collection<TankPosition> positions = new HashSet<>();
         for (Entry<Action, TankPosition> entry : neighbours.entrySet()) {
             if (entry.getValue().getTank().overlaps(boundary)
-                    && !nonDummyEnemyHasAShot(obstacles, state, entry.getValue().getTank(), enemies)
+                    && !nonDummyEnemyHasAShot(obstacles, state, entry.getValue().getTank(), enemies, boundary)
                     && (!(entry.getKey() == Action.FORWARD || entry.getKey() == Action.BACKWARD) || (!entry.getValue()
                             .getTank().overlaps(obstacles) && !entry.getValue().getTank().overlaps(enemies)))) {
                 visited.put(entry.getValue(), entry.getKey());
@@ -207,7 +209,8 @@ public class Tinusbot extends BotArtificialIntelligence {
                             && (!(directlyReachablePosition.getKey() == Action.FORWARD || directlyReachablePosition
                                     .getKey() == Action.BACKWARD) || !directlyReachablePosition.getValue().getTank()
                                     .overlaps(obstacles))) {
-                        if (state.wouldHitEnemy(directlyReachablePosition.getValue().getTank(), enemies, obstacles)) {
+                        if (state.wouldHitEnemy(directlyReachablePosition.getValue().getTank(), enemies, obstacles,
+                                boundary)) {
                             result = firstAction;
                         }
                         visited.put(directlyReachablePosition.getValue(), firstAction);
