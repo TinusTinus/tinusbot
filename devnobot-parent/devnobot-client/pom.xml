@@ -97,5 +97,15 @@
 				</executions>
 			</plugin>
 		</plugins>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<!-- Include sources in final jar, as requested. -->
+				<directory>src/main/java</directory>
+			</resource>
+		</resources>
 	</build>
 </project>
