@@ -38,7 +38,7 @@ public class Tank extends GameObject {
      */
     public Tank(GameBot gameBot) {
         super(gameBot);
-        this.lastKnownOrientation = Orientation.fromCGIOrientation(gameBot.getLastKnownOrientation());
+        this.lastKnownOrientation = Orientation.fromAPIOrientation(gameBot.getLastKnownOrientation());
         this.actionDuration = gameBot.getActionDurationInMs();
         this.distancePerStep = gameBot.getDistancePerStep();
         this.player = gameBot.getPlayer();
@@ -86,9 +86,9 @@ public class Tank extends GameObject {
      * example code, they can be recognised based on their player names. So this method returns true if and only if the
      * dummy's name starts with "Dummy" (case-insensitive).
      * 
-     * Of course other players are free to name their bots something that starts with "Dummy" and CGI is free to name
-     * their dummy bots something else on the day of the competition. Therefore the result of this method is not 100%
-     * reliable. Hence the "probably" in the method name.
+     * Of course other players are free to name their bots something that starts with "Dummy" and the contest organisers
+     * are free to name their dummy bots something else on the day of the competition. Therefore the result of this
+     * method is not 100% reliable. Hence the "probably" in the method name.
      * 
      * @return whether this tank is likely a dummy
      */

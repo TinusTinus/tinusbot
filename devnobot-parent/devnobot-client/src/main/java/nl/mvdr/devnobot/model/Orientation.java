@@ -36,7 +36,7 @@ public enum Orientation {
      *            CGI orientation
      * @return orientation
      */
-    public static Orientation fromCGIOrientation(com.cgi.devnobot.api.Orientation orientation) {
+    public static Orientation fromAPIOrientation(com.cgi.devnobot.api.Orientation orientation) {
         Orientation result;
         if (orientation == com.cgi.devnobot.api.Orientation.UP) {
             result = NORTH;

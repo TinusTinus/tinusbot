@@ -137,7 +137,7 @@ public class ClientApiImpl implements ClientApi {
         }
         ResteasyClient resteasyClient = new ResteasyClientBuilder().build();
         ResteasyWebTarget resteasyWebTarget = resteasyClient.target(this.baseURL + "/devnobot/rest/player/" + playerId);
-        Response response = resteasyWebTarget.request().put(Entity.entity(action.toCGIAction(), MediaType.APPLICATION_JSON));
+        Response response = resteasyWebTarget.request().put(Entity.entity(action.toAPIAction(), MediaType.APPLICATION_JSON));
         boolean result = (response.getStatus() == HttpStatus.SC_NO_CONTENT);
         response.close();
         resteasyClient.close();

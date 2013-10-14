@@ -31,14 +31,14 @@ public enum Action {
     /**
      * Returns the corresponding {@link com.cgi.devnobot.api.Action}.
      * 
-     * Not a valid operation for the SUICIDEvalue, since there is no corresponding {@link com.cgi.devnobot.api.Action}.
+     * Not a valid operation for the SUICIDE value, since there is no corresponding {@link com.cgi.devnobot.api.Action}.
      * 
      * @return corresponding {@link com.cgi.devnobot.api.Action} value.
      * 
      * @throws UnsupportedOperationException
      *             if invoked on SUICIDE
      */
-    public com.cgi.devnobot.api.Action toCGIAction() {
+    public com.cgi.devnobot.api.Action toAPIAction() {
         com.cgi.devnobot.api.Action result;
         if (this == FORWARD) {
             result = com.cgi.devnobot.api.Action.FORWARD;
@@ -53,7 +53,7 @@ public enum Action {
         } else if (this == SUICIDE) {
             throw new UnsupportedOperationException("No corresponding com.cgi.devnobot.api.Action for SUICIDE");
         } else {
-            throw new IllegalArgumentException("Unexpected Action: " + this);
+            throw new UnsupportedOperationException("Unexpected Action: " + this);
         }
         return result;
     }
