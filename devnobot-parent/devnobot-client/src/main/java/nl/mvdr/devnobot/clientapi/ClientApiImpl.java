@@ -71,7 +71,7 @@ public class ClientApiImpl implements ClientApi {
     public boolean createPlayer(String name, Color color, String id) {
         if (log.isDebugEnabled()) {
             log.debug("Making a REST call to create a player with name = {}, webColor = {}, id = {}", 
-                    name, color, id);
+                    new Object[] { name, color, id });
         }
         GamePlayer player = new GamePlayer();
         player.setColor(toHexString(color));

@@ -21,8 +21,7 @@
 		<maven-compiler-plugin.version>2.5.1</maven-compiler-plugin.version>
 		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
 		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
-		<resteasy.version>3.0.4.Final</resteasy.version>
-		<slf4j.version>1.7.5</slf4j.version>
+		<resteasy.version>3.0.3.Final</resteasy.version>
 	</properties>
 
 	<!-- Dependency management. Please do not specify version numbers here; 
@@ -46,12 +45,6 @@
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-client</artifactId>
 				<version>${resteasy.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-simple</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.jboss.resteasy</groupId>
@@ -67,13 +60,6 @@
 				<scope>provided</scope>
 				<!-- Note: Lombok is only needed at compile time. There is no need to 
 					provide it on the classpath at runtime. -->
-			</dependency>
-
-			<!-- Logging -->
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
-				<version>${slf4j.version}</version>
 			</dependency>
 
 			<!-- Testing -->
