@@ -10,6 +10,11 @@ import nl.mvdr.devnobot.model.Wall;
 
 import com.cgi.devnobot.api.World;
 
+/**
+ * API for communicating to the game server.
+ * 
+ * @author Martijn van de Rijdt
+ */
 public interface ClientApi {
 
     /**
