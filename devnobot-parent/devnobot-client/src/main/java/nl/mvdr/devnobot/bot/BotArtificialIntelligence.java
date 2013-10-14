@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.util.Collection;
 import java.util.UUID;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +35,7 @@ abstract class BotArtificialIntelligence implements Runnable {
     private final ClientApi api;
     /** Player name. */
     @NonNull
-    @Getter(AccessLevel.PACKAGE)
+    @Getter
     private final String name;
     /** Tank colour. */
     @NonNull
