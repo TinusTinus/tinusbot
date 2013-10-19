@@ -7,6 +7,7 @@ import java.util.Random;
 import nl.mvdr.devnobot.clientapi.ClientApi;
 import nl.mvdr.devnobot.model.Action;
 import nl.mvdr.devnobot.model.GameState;
+import nl.mvdr.devnobot.model.Leaderboard;
 import nl.mvdr.devnobot.model.Wall;
 
 /**
@@ -58,7 +59,7 @@ public class DummyBot extends BotArtificialIntelligence {
 
     /** {@inheritDoc} */
     @Override
-    protected Action determineNextAction(Collection<Wall> walls, GameState state) {
+    protected Action determineNextAction(Collection<Wall> walls, GameState state, Leaderboard leaderboard) {
         return ACTIONS[randomGenerator.nextInt(ACTIONS.length)];
     }
 }

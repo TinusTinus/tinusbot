@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import nl.mvdr.devnobot.clientapi.ClientApi;
 import nl.mvdr.devnobot.model.Action;
 import nl.mvdr.devnobot.model.GameState;
+import nl.mvdr.devnobot.model.Leaderboard;
 import nl.mvdr.devnobot.model.LevelBoundary;
 import nl.mvdr.devnobot.model.Tank;
 import nl.mvdr.devnobot.model.TankPosition;
@@ -94,7 +95,7 @@ public class Tinusbot extends BotArtificialIntelligence {
 
     /** {@inheritDoc} */
     @Override
-    protected Action determineNextAction(Collection<Wall> obstacles, GameState state) {
+    protected Action determineNextAction(Collection<Wall> obstacles, GameState state, Leaderboard leaderboard) {
         Action result;
 
         Tank ownTank = state.retrieveTankForPlayerName(getName());
@@ -109,7 +110,8 @@ public class Tinusbot extends BotArtificialIntelligence {
                 log.debug("Firing at an enemy.");
             } else {
                 // Move toward a position where we can fire.
-                result = computeActionToMoveIntoFiringPosition(obstacles, state, ownTank, enemies, boundary);
+                result = computeActionToMoveIntoFiringPosition(obstacles, state, ownTank, enemies, boundary,
+                        leaderboard);
                 log.debug("Moving toward firing position: " + result);
             }
         } else {
@@ -138,10 +140,12 @@ public class Tinusbot extends BotArtificialIntelligence {
      *            all enemy tanks
      * @param boundary
      *            bounds of the level
+     * @param leaderboard
+     *            current leaderboard; may be null
      * @return whether a bot is aiming at us
      */
     private boolean dangerousEnemyHasAShot(Collection<Wall> obstacles, GameState state, Tank ownTank,
-            Collection<Tank> enemies, LevelBoundary boundary) {
+            Collection<Tank> enemies, LevelBoundary boundary, Leaderboard leaderboard) {
         boolean result = false;
         Iterator<Tank> enemyIterator = enemies.iterator();
         while (!result && enemyIterator.hasNext()) {
@@ -149,7 +153,8 @@ public class Tinusbot extends BotArtificialIntelligence {
             Collection<Tank> enemiesOfEnemy = new HashSet<>(enemies);
             enemiesOfEnemy.remove(enemy);
             enemiesOfEnemy.add(ownTank);
-            result = isAThreat(enemy) && state.wouldHit(enemy, enemiesOfEnemy, obstacles, boundary) == ownTank;
+            result = isAThreat(enemy, ownTank, leaderboard)
+                    && state.wouldHit(enemy, enemiesOfEnemy, obstacles, boundary) == ownTank;
         }
         return result;
     }
@@ -157,12 +162,31 @@ public class Tinusbot extends BotArtificialIntelligence {
     /**
      * Determines whether the tank is a threat, that is, whether it is a serious contender to win the current game.
      * 
-     * @param tank tank
+     * @param tank
+     *            enemy tank whose threat is to be assessed
+     * @param ownTank
+     *            our own tank
+     * @param leaderboard
+     *            current leaderboard; may be null
      * @return whether the tank is a threat
      */
-    private boolean isAThreat(@SuppressWarnings("unused") Tank tank) {
-        // TODO implement based on current leaderboards ranking
-        return false;
+    private boolean isAThreat(Tank tank, Tank ownTank, Leaderboard leaderboard) {
+        boolean result;
+        
+        if (leaderboard != null) {
+            Integer ownPosition = leaderboard.retrievePosition(ownTank.getPlayer());
+            Integer enemyPosition = leaderboard.retrievePosition(tank.getPlayer());
+            result = ownPosition != null && enemyPosition != null
+                    && enemyPosition.intValue() < ownPosition.intValue() + 2;
+        } else {
+            // no leaderboards yet; default to false
+            result = false;
+        }
+        
+        // TODO remove logging
+        log.info("Enemy tank is a threat: " + tank.getPlayer());
+        
+        return result;
     }
 
     /**
@@ -179,10 +203,12 @@ public class Tinusbot extends BotArtificialIntelligence {
      *            all enemy tanks
      * @param boundary
      *            bounds of the level
+     * @param leaderboard
+     *            current leaderboard; may be null
      * @return action
      */
     private Action computeActionToMoveIntoFiringPosition(Collection<Wall> obstacles, GameState state, Tank ownTank,
-            Collection<Tank> enemies, LevelBoundary boundary) {
+            Collection<Tank> enemies, LevelBoundary boundary, Leaderboard leaderboard) {
 
         Action result = null;
 
@@ -196,9 +222,9 @@ public class Tinusbot extends BotArtificialIntelligence {
         Collection<TankPosition> positions = new HashSet<>();
         for (Entry<Action, TankPosition> entry : neighbours.entrySet()) {
             if (entry.getValue().getTank().overlaps(boundary)
-                    && !dangerousEnemyHasAShot(obstacles, state, entry.getValue().getTank(), enemies, boundary)
-                    && (!(entry.getKey() == Action.FORWARD || entry.getKey() == Action.BACKWARD) || (!entry.getValue()
-                            .getTank().overlaps(obstacles) && !entry.getValue().getTank().overlaps(enemies)))) {
+                && !dangerousEnemyHasAShot(obstacles, state, entry.getValue().getTank(), enemies, boundary, leaderboard)
+                && (!(entry.getKey() == Action.FORWARD || entry.getKey() == Action.BACKWARD) || (!entry.getValue()
+                        .getTank().overlaps(obstacles) && !entry.getValue().getTank().overlaps(enemies)))) {
                 visited.put(entry.getValue(), entry.getKey());
                 positions.add(entry.getValue());
             }

@@ -26,7 +26,7 @@ abstract class BotArtificialIntelligence implements Runnable {
      * 
      * The bot periodically logs the leaderboards but not in every iteration of the game loop.
      */
-    private static final int LEADERBOARD_INTERVAL = 5000;
+    private static final int LEADERBOARD_INTERVAL = 1000;
 
     /** Maximum number of failed actions in a row. */
     private static final int MAX_FAILED_ACTIONS = 10;
@@ -157,7 +157,7 @@ abstract class BotArtificialIntelligence implements Runnable {
                     // Determine what to do!
                     Action action;
                     if (state.retrieveTankForPlayerName(name).getQueueLength() < 1) {
-                        action = determineNextAction(walls, state);
+                        action = determineNextAction(walls, state, leaderboard);
                     } else {
                         // Already enqueued actions, no point in determining a new one.
                         // Do nothing.
@@ -289,9 +289,11 @@ abstract class BotArtificialIntelligence implements Runnable {
      *            obstacles
      * @param state
      *            game state
+     * @param leaderboard
+     *            current leaderboard; may be null
      * @return action to be taken, or null for no action at all
      */
-    protected abstract Action determineNextAction(Collection<Wall> obstacles, GameState state);
+    protected abstract Action determineNextAction(Collection<Wall> obstacles, GameState state, Leaderboard leaderboard);
 
     /** {@inheritDoc} */
     @Override

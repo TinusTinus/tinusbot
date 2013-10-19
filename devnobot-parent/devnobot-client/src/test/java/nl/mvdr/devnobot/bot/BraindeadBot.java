@@ -6,6 +6,7 @@ import java.util.Collection;
 import nl.mvdr.devnobot.clientapi.ClientApi;
 import nl.mvdr.devnobot.model.Action;
 import nl.mvdr.devnobot.model.GameState;
+import nl.mvdr.devnobot.model.Leaderboard;
 import nl.mvdr.devnobot.model.Wall;
 
 /**
@@ -40,7 +41,7 @@ public class BraindeadBot extends BotArtificialIntelligence {
 
     /** {@inheritDoc} */
     @Override
-    protected Action determineNextAction(Collection<Wall> obstacles, GameState state) {
+    protected Action determineNextAction(Collection<Wall> obstacles, GameState state, Leaderboard leaderboard) {
         return null;
     }
 }
