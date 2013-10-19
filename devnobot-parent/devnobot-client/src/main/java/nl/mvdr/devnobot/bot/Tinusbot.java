@@ -24,9 +24,6 @@ import nl.mvdr.devnobot.model.Wall;
  */
 @Slf4j
 public class Tinusbot extends BotArtificialIntelligence {
-    /** Indicates whether this bot should suicide when another, non-dummy,  bot is aiming at it. */
-    private final boolean suicideToEvade;
-
     /**
      * Returns the version number from the jar manifest file.
      * 
@@ -64,31 +61,11 @@ public class Tinusbot extends BotArtificialIntelligence {
      *            bot name
      * @param color
      *            tank color
-     * @param suicideToEvade
-     *            whether this bot should suicide when another, non-dummy, bot is aiming at it
      * @param sleepDuration
      *            sleep duration between executions of the main game loop in milliseconds
      */
-    public Tinusbot(ClientApi clientApi, String name, Color color, boolean suicideToEvade, int sleepDuration) {
+    public Tinusbot(ClientApi clientApi, String name, Color color, int sleepDuration) {
         super(clientApi, name, color, sleepDuration);
-        this.suicideToEvade = suicideToEvade;
-    }
-    
-    /**
-     * Constructor.
-     * 
-     * @param clientApi
-     *            client API for making server calls
-     * @param name
-     *            bot name
-     * @param color
-     *            tank color
-     * @param suicideToEvade
-     *            whether this bot should suicide when another, non-dummy, bot is aiming at it
-     */
-    public Tinusbot(ClientApi clientApi, String name, Color color, boolean suicideToEvade) {
-        super(clientApi, name, color);
-        this.suicideToEvade = suicideToEvade;
     }
     
     /**
@@ -102,9 +79,9 @@ public class Tinusbot extends BotArtificialIntelligence {
      *            tank color
      */
     public Tinusbot(ClientApi clientApi, String name, Color color) {
-        this(clientApi, name, color, false);
+        super(clientApi, name, color);
     }
-
+    
     /**
      * Constructor.
      * 
@@ -112,7 +89,7 @@ public class Tinusbot extends BotArtificialIntelligence {
      *            client API for making server calls
      */
     public Tinusbot(ClientApi clientApi) {
-        this(clientApi, retrieveDefaultName(), Color.ORANGE, false);
+        this(clientApi, retrieveDefaultName(), Color.ORANGE);
     }
 
     /** {@inheritDoc} */
@@ -130,12 +107,6 @@ public class Tinusbot extends BotArtificialIntelligence {
                 // Even if they fire back and we die, it still nets us a point (2 for the kill minus 1 for the death).
                 result = Action.FIRE;
                 log.debug("Firing at an enemy.");
-            } else if (suicideToEvade && nonDummyEnemyHasAShot(obstacles, state, ownTank, enemies, boundary)) {
-                // EVASIVE MANEUVERS!
-                // Our tank is most likely too slow to get out of the way.
-                // Suicide to prevent the enemy from getting the kill.
-                result = Action.SUICIDE;
-                log.debug("Suiciding to evade enemy fire.");
             } else {
                 // Move toward a position where we can fire.
                 result = computeActionToMoveIntoFiringPosition(obstacles, state, ownTank, enemies, boundary);
