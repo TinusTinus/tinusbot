@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -159,5 +160,26 @@ public class Leaderboard {
      */
     private static String padLeft(int i, int n) {
         return String.format("%1$" + n + "s", Integer.valueOf(i));
+    }
+    
+    /**
+     * Given a player name, returns the player's position, or null if the player name does not occur on the leaderboard.
+     * 
+     * @param playerName player name; may not be null
+     * @return player's position, or null if unavailable
+     */
+    public Integer retrievePosition(String playerName) {
+        Integer result = null;
+        Iterator<Integer> positionsIterator = retrievePositions().iterator();
+        while (result == null && positionsIterator.hasNext()) {
+            Integer position = positionsIterator.next();
+            Iterator<Player> playerIterator = this.playersByPosition.get(position).iterator();
+            while (result == null && playerIterator.hasNext()) {
+                if (playerName.equals(playerIterator.next().getName())) {
+                    result = position;
+                }
+            }
+        }
+        return result;
     }
 }
