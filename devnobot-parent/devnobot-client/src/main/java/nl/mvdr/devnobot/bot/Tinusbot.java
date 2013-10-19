@@ -62,22 +62,6 @@ public class Tinusbot extends BotArtificialIntelligence {
      *            bot name
      * @param color
      *            tank color
-     * @param sleepDuration
-     *            sleep duration between executions of the main game loop in milliseconds
-     */
-    public Tinusbot(ClientApi clientApi, String name, Color color, int sleepDuration) {
-        super(clientApi, name, color, sleepDuration);
-    }
-    
-    /**
-     * Constructor.
-     * 
-     * @param clientApi
-     *            client API for making server calls
-     * @param name
-     *            bot name
-     * @param color
-     *            tank color
      */
     public Tinusbot(ClientApi clientApi, String name, Color color) {
         super(clientApi, name, color);
