@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import nl.mvdr.devnobot.clientapi.ClientApi;
 import nl.mvdr.devnobot.model.Action;
 import nl.mvdr.devnobot.model.GameState;
+import nl.mvdr.devnobot.model.Leaderboard;
 import nl.mvdr.devnobot.model.Player;
 import nl.mvdr.devnobot.model.Wall;
 
@@ -242,8 +243,10 @@ abstract class BotArtificialIntelligence implements Runnable {
     private long logLeaderboard() {
         long result;
         try {
-            Player.logLeaderboard(api.readPlayers());
+            Collection<Player> players = api.readPlayers();
             result = System.currentTimeMillis();
+            Leaderboard leaderboard = new Leaderboard(result, players);
+            log.info(leaderboard.toString());
         } catch (Exception e) {
             // Whatever, logging the leaderboard is not very important.
             log.info("Logging the leaderboard failed.", e);
