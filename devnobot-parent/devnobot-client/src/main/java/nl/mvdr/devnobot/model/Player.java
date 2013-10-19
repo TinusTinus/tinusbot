@@ -72,7 +72,9 @@ public class Player {
      * 
      * @param players
      *            players
+     * @deprecated use {@link Leaderboard}
      */
+    @Deprecated
     public static void logLeaderboard(Collection<Player> players) {
         if (players.isEmpty()) {
             log.info("No players!");

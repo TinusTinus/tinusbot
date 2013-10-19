@@ -1,0 +1,86 @@
+package nl.mvdr.devnobot.model;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+
+import lombok.extern.slf4j.Slf4j;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * Test class for {@link Leaderboard}.
+ * 
+ * @author Martijn van de Rijdt
+ */
+@Slf4j
+public class LeaderboardTest {
+    /** Tests the constructor and toString method in case of an empty collection of players. */
+    @Test
+    public void testConstructorEmptyCollection() {
+        long time = System.currentTimeMillis();
+        
+        Leaderboard leaderboard = new Leaderboard(time, Collections.<Player>emptyList());
+        
+        log.info(leaderboard.toString());
+        Assert.assertEquals(time, leaderboard.getCreationTime());
+    }
+
+    /** Tests the constructor and toString method with a bunch of players. */
+    @Test
+    public void testLogLeaderboard() {
+        Player jan = new Player("Jan", 38, 0, "color");    // score:   76
+        Player piet = new Player("Piet", 0, 324, "color"); // score: -324
+        Player ton = new Player("Ton", 10, 8, "color");    // score:   12
+        Player kees = new Player("Kees", 20, 50, "color"); // score:  -10
+        Player aad = new Player("Aad", 3, 2, "color");     // score:    4
+        Player wim = new Player("Wim", 3, 2, "color");     // score:    4
+        Player herp = new Player("Herp", 2, 0, "color");   // score:    4
+        Player derp = new Player("Derp", 6, 8, "color");   // score:    4
+        Collection<Player> players = Arrays.asList(jan, piet, ton, kees, aad, wim, herp, derp);
+
+        Leaderboard leaderboard = new Leaderboard(System.currentTimeMillis(), players);
+
+        log.info(leaderboard.toString());
+        players = leaderboard.retrievePlayers(1);
+        Assert.assertEquals(1, players.size());
+        Assert.assertTrue(players.contains(jan));
+        players = leaderboard.retrievePlayers(2);
+        Assert.assertEquals(1, players.size());
+        Assert.assertTrue(players.contains(ton));
+        players = leaderboard.retrievePlayers(3);
+        Assert.assertEquals(4, players.size());
+        Assert.assertTrue(players.contains(aad));
+        Assert.assertTrue(players.contains(wim));
+        Assert.assertTrue(players.contains(herp));
+        Assert.assertTrue(players.contains(derp));
+        players = leaderboard.retrievePlayers(4);
+        Assert.assertTrue(players.isEmpty());
+        players = leaderboard.retrievePlayers(5);
+        Assert.assertTrue(players.isEmpty());
+        players = leaderboard.retrievePlayers(6);
+        Assert.assertTrue(players.isEmpty());
+        players = leaderboard.retrievePlayers(7);
+        Assert.assertEquals(1, players.size());
+        Assert.assertTrue(players.contains(kees));
+        players = leaderboard.retrievePlayers(8);
+        Assert.assertEquals(1, players.size());
+        Assert.assertTrue(players.contains(piet));
+        players = leaderboard.retrievePlayers(9);
+        Assert.assertTrue(players.isEmpty());
+    }
+
+    /** Tests the constructor and toString method with players with long names or large kill / death values. */
+    @Test
+    public void testLogLeaderboardLongStrings() {
+        Collection<Player> players = new HashSet<>();
+        players.add(new Player("Player with a really long name", 6, 2, "color"));
+        players.add(new Player("Many kills/deaths", 33276973, 73283729, "color"));
+
+        Leaderboard leaderboard = new Leaderboard(System.currentTimeMillis(), players);
+        
+        log.info(leaderboard.toString());
+    }
+}
