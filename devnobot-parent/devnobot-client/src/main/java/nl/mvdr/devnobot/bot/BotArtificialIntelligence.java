@@ -237,7 +237,7 @@ abstract class BotArtificialIntelligence implements Runnable {
     /**
      * Logs the leaderboard. Any exceptions are caught and logged.
      * 
-     * @return when the leaderboard was logged; a timestamp far in the past if logging failed.
+     * @return when the leaderboard was logged; a timestamp far in the past if logging failed
      */
     private long logLeaderboard() {
         long result;
