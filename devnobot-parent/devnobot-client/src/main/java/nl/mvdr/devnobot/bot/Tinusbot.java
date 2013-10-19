@@ -122,11 +122,11 @@ public class Tinusbot extends BotArtificialIntelligence {
     }
 
     /**
-     * Determines whether a non-dummy enemy is aiming at our tank.
+     * Determines whether a dangerous enemy is aiming at our tank.
      * 
-     * If a dummy is aiming at our tank it doesn't really matter. There's only a 1 in 5 chance that it will actually
-     * fire. Even if it does, it doesn't matter that it gets the kill, since they're not a serious contender. The only
-     * downside is the death which only costs one point.
+     * If a dummy, or other low-ranked enemy, is aiming at our tank it doesn't really matter. There's only a 1 in 5
+     * chance that a dummy will actually fire. Even if it does, it doesn't matter that it gets the kill, since they're
+     * not a serious contender. The only downside is the death which only costs one point.
      * 
      * @param obstacles
      *            walls
@@ -140,7 +140,7 @@ public class Tinusbot extends BotArtificialIntelligence {
      *            bounds of the level
      * @return whether a bot is aiming at us
      */
-    private boolean nonDummyEnemyHasAShot(Collection<Wall> obstacles, GameState state, Tank ownTank,
+    private boolean dangerousEnemyHasAShot(Collection<Wall> obstacles, GameState state, Tank ownTank,
             Collection<Tank> enemies, LevelBoundary boundary) {
         boolean result = false;
         Iterator<Tank> enemyIterator = enemies.iterator();
@@ -149,9 +149,20 @@ public class Tinusbot extends BotArtificialIntelligence {
             Collection<Tank> enemiesOfEnemy = new HashSet<>(enemies);
             enemiesOfEnemy.remove(enemy);
             enemiesOfEnemy.add(ownTank);
-            result = !enemy.isProbablyADummy() && state.wouldHit(enemy, enemiesOfEnemy, obstacles, boundary) == ownTank;
+            result = isAThreat(enemy) && state.wouldHit(enemy, enemiesOfEnemy, obstacles, boundary) == ownTank;
         }
         return result;
+    }
+
+    /**
+     * Determines whether the tank is a threat, that is, whether it is a serious contender to win the current game.
+     * 
+     * @param tank tank
+     * @return whether the tank is a threat
+     */
+    private boolean isAThreat(@SuppressWarnings("unused") Tank tank) {
+        // TODO implement based on current leaderboards ranking
+        return false;
     }
 
     /**
@@ -185,7 +196,7 @@ public class Tinusbot extends BotArtificialIntelligence {
         Collection<TankPosition> positions = new HashSet<>();
         for (Entry<Action, TankPosition> entry : neighbours.entrySet()) {
             if (entry.getValue().getTank().overlaps(boundary)
-                    && !nonDummyEnemyHasAShot(obstacles, state, entry.getValue().getTank(), enemies, boundary)
+                    && !dangerousEnemyHasAShot(obstacles, state, entry.getValue().getTank(), enemies, boundary)
                     && (!(entry.getKey() == Action.FORWARD || entry.getKey() == Action.BACKWARD) || (!entry.getValue()
                             .getTank().overlaps(obstacles) && !entry.getValue().getTank().overlaps(enemies)))) {
                 visited.put(entry.getValue(), entry.getKey());

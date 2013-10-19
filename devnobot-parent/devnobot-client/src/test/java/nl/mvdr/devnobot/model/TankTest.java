@@ -26,38 +26,6 @@ public class TankTest {
         Assert.assertNotEquals("", string);
     }
     
-    /** Tests {@link Tank#isProbablyADummy()}. */
-    @Test
-    public void testNotADummy() {
-        Tank tank = createNamedTank("name");
-        
-        Assert.assertFalse(tank.isProbablyADummy());
-    }
-
-    /** Tests {@link Tank#isProbablyADummy()}. */
-    @Test
-    public void testDummy() {
-        Tank tank = createNamedTank("Dummy");
-        
-        Assert.assertTrue(tank.isProbablyADummy());
-    }
-    
-    /** Tests {@link Tank#isProbablyADummy()}. */
-    @Test
-    public void testNumberedDummy() {
-        Tank tank = createNamedTank("Dummy2");
-        
-        Assert.assertTrue(tank.isProbablyADummy());
-    }
-    
-    /** Tests {@link Tank#isProbablyADummy()}. */
-    @Test
-    public void testDummyCaseSensitive() {
-        Tank tank = createNamedTank("dummy0");
-        
-        Assert.assertTrue(tank.isProbablyADummy());
-    }
-    
     /**
      * Creates a tank with the given name and dummy values for all other fields. 
      * 
