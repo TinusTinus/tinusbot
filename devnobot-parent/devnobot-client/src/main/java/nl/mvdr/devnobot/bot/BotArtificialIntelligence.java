@@ -69,7 +69,6 @@ abstract class BotArtificialIntelligence implements Runnable {
         Collection<Wall> walls = readLevel();
         String id = generateId();
         connect(id);
-        logLeaderboard();
         gameLoop(walls, id);
     }
 
@@ -131,7 +130,7 @@ abstract class BotArtificialIntelligence implements Runnable {
      *            current player's id
      */
     private void gameLoop(Collection<Wall> walls, String id) {
-        long leaderboardTimestamp = 0L;
+        Leaderboard leaderboard = createLeaderboard(null);
         // number of failed actions in a row
         int failedActionCount = 0;
         while (true) {
@@ -180,7 +179,7 @@ abstract class BotArtificialIntelligence implements Runnable {
                     nextTimestamp = System.currentTimeMillis();
                 }
 
-                leaderboardTimestamp = logLeaderboard(leaderboardTimestamp, nextTimestamp);
+                leaderboard = refreshLeaderboard(leaderboard, nextTimestamp);
             } catch (Exception e) {
                 failedActionCount++;
                 // Log the exception, but don't crash the thread; try to keep going.
@@ -211,45 +210,48 @@ abstract class BotArtificialIntelligence implements Runnable {
     }
 
     /**
-     * Optionally logs the leaderboard.
+     * Optionally creates a new leaderboard and logs it.
      * 
-     * There is no need to log the leaderboard every single iteration of the game loop. This method only does so if
-     * there is time to, and if it has been a while since the last time the leaderboard has been logged.
+     * There is no need to refresh the leaderboard every single iteration of the game loop, since the server doesn't
+     * update it more than once pre second. This method only does so if there is time to, and if it has been a while
+     * since the last time the leaderboard has been refreshed.
      * 
-     * @param leaderboardTimestamp
-     *            last time the leaderboard was logged
+     * @param previousLeaderboard
+     *            previous leaderboard; may be null
      * @param nextTimestamp
      *            when the next action is supposed to be taken in the game; if this is too soon, logging the leaderboard
      *            is skipped
      * @return last time the leaderboard was logged; updated if necessary
      */
-    private long logLeaderboard(long leaderboardTimestamp, long nextTimestamp) {
-        long result;
+    private Leaderboard refreshLeaderboard(Leaderboard previousLeaderboard, long nextTimestamp) {
+        Leaderboard result;
         long now = System.currentTimeMillis();
-        if (now < nextTimestamp && leaderboardTimestamp + LEADERBOARD_INTERVAL < now) {
-            result = logLeaderboard();
+        if (now < nextTimestamp
+                && (previousLeaderboard == null || previousLeaderboard.getCreationTime() + LEADERBOARD_INTERVAL < now)) {
+            result = createLeaderboard(previousLeaderboard);
         } else {
-            result = leaderboardTimestamp;
+            result = previousLeaderboard;
         }
         return result;
     }
 
     /**
-     * Logs the leaderboard. Any exceptions are caught and logged.
+     * Creates and logs the leaderboard. Any exceptions are caught and logged.
      * 
-     * @return when the leaderboard was logged; a timestamp far in the past if logging failed
+     * @param previousLeaderboard previous version of the leaderboard; null if there is none
+     * @return new leaderboard, or the value of previousLeaderboard if anything went wrong
      */
-    private long logLeaderboard() {
-        long result;
+    private Leaderboard createLeaderboard(Leaderboard previousLeaderboard) {
+        Leaderboard result;
         try {
             Collection<Player> players = api.readPlayers();
-            result = System.currentTimeMillis();
-            Leaderboard leaderboard = new Leaderboard(result, players);
-            log.info(leaderboard.toString());
+            long now = System.currentTimeMillis();
+            result = new Leaderboard(now, players);
+            log.info(result.toString());
         } catch (Exception e) {
             // Whatever, logging the leaderboard is not very important.
-            log.info("Logging the leaderboard failed.", e);
-            result = 0L;
+            log.info("Creating and logging the leaderboard failed.", e);
+            result = previousLeaderboard;
         }
         return result;
     }
