@@ -26,6 +26,34 @@ import nl.mvdr.devnobot.model.Wall;
 public class Tinusbot extends BotArtificialIntelligence {
     /** Indicates whether this bot should suicide when another, non-dummy,  bot is aiming at it. */
     private final boolean suicideToEvade;
+
+    /**
+     * Returns the version number from the jar manifest file.
+     * 
+     * @return version number, or null if it cannot be determined
+     */
+    private static String retrieveVersion() {
+        String result;
+        Package p = Tinusbot.class.getPackage();
+        if (p != null) {
+            result = p.getImplementationVersion();
+        } else {
+            result = null;
+        }
+        return result;
+    }
+    
+    /** @return default name for the Tinusbot */
+    private static String retrieveDefaultName() {
+        String result = "Tinusbot";
+        
+        String version = retrieveVersion();
+        if (version != null) {
+            result = result + " " + version;
+        }
+        
+        return result;
+    }
     
     /**
      * Constructor.
@@ -84,7 +112,7 @@ public class Tinusbot extends BotArtificialIntelligence {
      *            client API for making server calls
      */
     public Tinusbot(ClientApi clientApi) {
-        this(clientApi, "Tinusbot 3000", Color.ORANGE, false);
+        this(clientApi, retrieveDefaultName(), Color.ORANGE, false);
     }
 
     /** {@inheritDoc} */
