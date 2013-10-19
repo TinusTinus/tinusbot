@@ -114,8 +114,7 @@ abstract class BotArtificialIntelligence implements Runnable {
         while (!success) {
             try {
                 log.info("Connecting for player {}, color: {}, id: {}", new Object[] { name, color, id });
-                api.createPlayer(name, color, id);
-                success = true;
+                success = api.createPlayer(name, color, id);
             } catch (Exception e) {
                 log.error("Failed to connect.", e);
                 sleep(threadSleepDuration);
