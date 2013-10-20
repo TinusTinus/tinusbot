@@ -91,18 +91,15 @@ public class Tinusbot extends BotArtificialIntelligence {
                 // FIRE!
                 // Even if they fire back and we die, it still nets us a point (2 for the kill minus 1 for the death).
                 result = Action.FIRE;
-                log.debug("Firing at an enemy.");
             } else {
                 // Move toward a position where we can fire.
                 result = computeActionToMoveIntoFiringPosition(obstacles, state, ownTank, enemies, boundary,
                         leaderboard);
-                log.debug("Moving toward firing position: " + result);
             }
         } else {
             // There are no enemies in the level (yet). But they should be here soon.
             // Fire in case someone spawns close by.
             result = Action.FIRE;
-            log.debug("Nobody's here (yet?). Firing blindly.");
         }
         return result;
     }
@@ -166,9 +163,6 @@ public class Tinusbot extends BotArtificialIntelligence {
             // no leaderboards yet; default to false
             result = false;
         }
-        
-        // TODO remove logging
-        log.info("Enemy tank is a threat: " + tank.getPlayer());
         
         return result;
     }
