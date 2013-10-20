@@ -46,6 +46,9 @@ abstract class BotArtificialIntelligence implements Runnable {
      * subclasses can override it dynamically.
      */
     private final int threadSleepDuration;
+    
+    /** Timestamp when the bot started running. */
+    private long startTime;
 
     /**
      * Constructor.
@@ -64,11 +67,14 @@ abstract class BotArtificialIntelligence implements Runnable {
     /** {@inheritDoc} */
     @Override
     public void run() {
+        startTime = System.currentTimeMillis();
         // First we read the level contents to get a view of the positions of the walls on this map.
         // Maps are static, so we only read this once, at startup.
         Collection<Wall> walls = readLevel();
+        // Connect to the server and create our bot.
         String id = generateId();
         connect(id);
+        // Start the actual processing.
         gameLoop(walls, id);
     }
 
@@ -247,6 +253,7 @@ abstract class BotArtificialIntelligence implements Runnable {
             Collection<Player> players = api.readPlayers();
             long now = System.currentTimeMillis();
             result = new Leaderboard(now, players);
+            logTimePassed(); 
             log.info(result.toString());
         } catch (Exception e) {
             // Whatever, logging the leaderboard is not very important.
@@ -254,6 +261,15 @@ abstract class BotArtificialIntelligence implements Runnable {
             result = previousLeaderboard;
         }
         return result;
+    }
+    
+    /** Logs the amount of time that has passed since the bot was started. */
+    private void logTimePassed() {
+        long millisecondsPassed = System.currentTimeMillis() - this.startTime;
+        long secondsPassed = millisecondsPassed / 1000;
+        long minutesPassed = secondsPassed / 60;
+        long remainder = secondsPassed % 60;
+        log.info("Time passed: {} minutes {} seconds", "" + minutesPassed, "" + remainder);
     }
 
     /**
