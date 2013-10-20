@@ -46,7 +46,7 @@ abstract class BotArtificialIntelligence implements Runnable {
      * subclasses can override it dynamically.
      */
     private final int threadSleepDuration;
-    
+
     /** Timestamp when the bot started running. */
     private long startTime;
 
@@ -85,7 +85,7 @@ abstract class BotArtificialIntelligence implements Runnable {
      */
     private Collection<Wall> readLevel() {
         Collection<Wall> result = null;
-        
+
         while (result == null) {
             try {
                 log.info("Reading level");
@@ -95,7 +95,7 @@ abstract class BotArtificialIntelligence implements Runnable {
                 sleep(threadSleepDuration);
             }
         }
-        
+
         return result;
     }
 
@@ -126,7 +126,7 @@ abstract class BotArtificialIntelligence implements Runnable {
             }
         }
     }
-    
+
     /**
      * The main game loop.
      * 
@@ -244,7 +244,8 @@ abstract class BotArtificialIntelligence implements Runnable {
     /**
      * Creates and logs the leaderboard. Any exceptions are caught and logged.
      * 
-     * @param previousLeaderboard previous version of the leaderboard; null if there is none
+     * @param previousLeaderboard
+     *            previous version of the leaderboard; null if there is none
      * @return new leaderboard, or the value of previousLeaderboard if anything went wrong
      */
     private Leaderboard createLeaderboard(Leaderboard previousLeaderboard) {
@@ -253,7 +254,7 @@ abstract class BotArtificialIntelligence implements Runnable {
             Collection<Player> players = api.readPlayers();
             long now = System.currentTimeMillis();
             result = new Leaderboard(now, players);
-            logTimePassed(); 
+            logTimePassed();
             log.info(result.toString());
         } catch (Exception e) {
             // Whatever, logging the leaderboard is not very important.
@@ -262,7 +263,7 @@ abstract class BotArtificialIntelligence implements Runnable {
         }
         return result;
     }
-    
+
     /** Logs the amount of time that has passed since the bot was started. */
     private void logTimePassed() {
         long millisecondsPassed = System.currentTimeMillis() - this.startTime;

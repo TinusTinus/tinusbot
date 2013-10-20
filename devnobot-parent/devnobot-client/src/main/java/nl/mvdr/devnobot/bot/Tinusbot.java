@@ -38,19 +38,19 @@ public class Tinusbot extends BotArtificialIntelligence {
         }
         return result;
     }
-    
+
     /** @return default name for the Tinusbot */
     private static String retrieveDefaultName() {
         String result = "Tinusbot";
-        
+
         String version = retrieveVersion();
         if (version != null) {
             result = result + " " + version;
         }
-        
+
         return result;
     }
-    
+
     /**
      * Constructor.
      * 
@@ -64,7 +64,7 @@ public class Tinusbot extends BotArtificialIntelligence {
     public Tinusbot(ClientApi clientApi, String name, Color color) {
         super(clientApi, name, color);
     }
-    
+
     /**
      * Constructor.
      * 
@@ -151,7 +151,7 @@ public class Tinusbot extends BotArtificialIntelligence {
      */
     private boolean isAThreat(Tank tank, Tank ownTank, Leaderboard leaderboard) {
         boolean result;
-        
+
         if (leaderboard != null) {
             Integer ownPosition = leaderboard.retrievePosition(ownTank.getPlayer());
             Integer enemyPosition = leaderboard.retrievePosition(tank.getPlayer());
@@ -161,7 +161,7 @@ public class Tinusbot extends BotArtificialIntelligence {
             // no leaderboards yet; default to false
             result = false;
         }
-        
+
         return result;
     }
 
@@ -198,9 +198,10 @@ public class Tinusbot extends BotArtificialIntelligence {
         Collection<TankPosition> positions = new HashSet<>();
         for (Entry<Action, TankPosition> entry : neighbours.entrySet()) {
             if (entry.getValue().getTank().overlaps(boundary)
-                && !dangerousEnemyHasAShot(obstacles, state, entry.getValue().getTank(), enemies, boundary, leaderboard)
-                && (!(entry.getKey() == Action.FORWARD || entry.getKey() == Action.BACKWARD) || (!entry.getValue()
-                        .getTank().overlaps(obstacles) && !entry.getValue().getTank().overlaps(enemies)))) {
+                    && !dangerousEnemyHasAShot(obstacles, state, entry.getValue().getTank(), enemies, boundary,
+                            leaderboard)
+                    && (!(entry.getKey() == Action.FORWARD || entry.getKey() == Action.BACKWARD) || (!entry.getValue()
+                            .getTank().overlaps(obstacles) && !entry.getValue().getTank().overlaps(enemies)))) {
                 visited.put(entry.getValue(), entry.getKey());
                 positions.add(entry.getValue());
             }
@@ -213,7 +214,8 @@ public class Tinusbot extends BotArtificialIntelligence {
                 TankPosition position = positionIterator.next();
                 Action firstAction = visited.get(position);
                 neighbours = position.computeReachablePositions();
-                Iterator<Entry<Action, TankPosition>> directlyReachablePositionIterator = neighbours.entrySet().iterator();
+                Iterator<Entry<Action, TankPosition>> directlyReachablePositionIterator = neighbours.entrySet()
+                        .iterator();
                 while (result == null && directlyReachablePositionIterator.hasNext()) {
                     Entry<Action, TankPosition> directlyReachablePosition = directlyReachablePositionIterator.next();
                     if (directlyReachablePosition.getValue().getTank().overlaps(boundary)
