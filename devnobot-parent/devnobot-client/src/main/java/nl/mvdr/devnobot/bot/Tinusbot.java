@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import lombok.extern.slf4j.Slf4j;
 import nl.mvdr.devnobot.clientapi.ClientApi;
 import nl.mvdr.devnobot.model.Action;
 import nl.mvdr.devnobot.model.GameState;
@@ -23,7 +22,6 @@ import nl.mvdr.devnobot.model.Wall;
  * 
  * @author Martijn van de Rijdt
  */
-@Slf4j
 public class Tinusbot extends BotArtificialIntelligence {
     /**
      * Returns the version number from the jar manifest file.
