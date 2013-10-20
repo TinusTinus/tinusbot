@@ -34,6 +34,18 @@ public class Launcher {
      *            command-line parameters; these are ignored
      */
     public static void main(String[] args) {
+        launch();
+    }
+
+    /**
+     * Starts a single instance of {@link Tinusbot} on the main thread.
+     * 
+     * The bot will connect to a server specified using the system property "devnobot.server.baseURL", or to
+     * http://localhost:7080 if the system property is not specified.
+     * 
+     * The bot does not terminate on its own, its thread must be killed externally.
+     */
+    public static void launch() {
         log.info("Determining Devnobot server base URL. "
                 + "Default is \"{}\". Set system property \"{}\" to override this default.",
                 DEFAULT_BASE_URL, BASE_URL_SYSTEM_PROPERTY);
