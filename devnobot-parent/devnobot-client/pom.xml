@@ -41,6 +41,12 @@
 			<artifactId>resteasy-jettison-provider</artifactId>
 		</dependency>
 
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+		</dependency>
+
 		<!-- Compile-time assistance -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>

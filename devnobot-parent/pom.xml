@@ -22,6 +22,7 @@
 		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
 		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
 		<resteasy.version>3.0.3.Final</resteasy.version>
+		<slf4j.version>1.5.8</slf4j.version>
 	</properties>
 
 	<!-- Dependency management. Please do not specify version numbers here; 
@@ -45,11 +46,24 @@
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-client</artifactId>
 				<version>${resteasy.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-simple</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-jettison-provider</artifactId>
 				<version>${resteasy.version}</version>
+			</dependency>
+
+			<!-- Logging -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-simple</artifactId>
+				<version>${slf4j.version}</version>
 			</dependency>
 
 			<!-- Compile-time assistance -->
