@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>nl.mvdr.devnobot</groupId>
 		<artifactId>devnobot-parent</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<version>1.0</version>
 	</parent>
 
 	<artifactId>tinusbot</artifactId>
