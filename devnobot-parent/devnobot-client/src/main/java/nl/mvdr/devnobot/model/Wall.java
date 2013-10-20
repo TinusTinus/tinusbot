@@ -20,14 +20,18 @@ public class Wall extends GameObject {
     public Wall(GameObstacle obstacle) {
         super(obstacle);
     }
-    
+
     /**
      * Constructor. Intended for use in unit tests.
      * 
-     * @param x x coordinate
-     * @param y y coordinate
-     * @param width width
-     * @param height height
+     * @param x
+     *            x coordinate
+     * @param y
+     *            y coordinate
+     * @param width
+     *            width
+     * @param height
+     *            height
      */
     Wall(int x, int y, int width, int height) {
         super(x, y, width, height);
