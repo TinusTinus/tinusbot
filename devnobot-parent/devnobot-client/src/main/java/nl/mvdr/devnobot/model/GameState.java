@@ -126,7 +126,7 @@ public class GameState {
             }
 
             if (result.size() < expectedNumberOfEnemies) {
-                log.warn("Expected {} tanks but found {}. Possible duplicate player names. Actual enemies: {}",
+                log.warn("Expected {} enemy tank(s) but found {}. Possible duplicate player names. Actual enemies: {}",
                         new Object[] { "" + expectedNumberOfEnemies, "" + result.size(), result });
             } else if (expectedNumberOfEnemies < result.size()) {
                 log.warn("Expected {} enemy tank(s) but found {}. Possibly the given player name does not own a tank. "
