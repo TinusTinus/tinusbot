@@ -11,6 +11,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.mvdr.devnobot.model.Action;
@@ -34,6 +35,7 @@ import com.google.gson.reflect.TypeToken;
 @RequiredArgsConstructor
 public class ClientApiImpl implements ClientApi {
     /** Base URL. */
+    @NonNull
     private final String baseURL;
 
     /** {@inheritDoc} */
