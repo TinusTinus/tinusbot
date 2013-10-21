@@ -39,9 +39,9 @@ abstract class BotArtificialIntelligence implements Runnable {
     @NonNull
     @Getter
     private final String name;
-    /** Tank colour. */
+    /** Tank colour as a hex string. */
     @NonNull
-    private final Color color;
+    private final String color;
     /**
      * Sleep duration between executions of the main game loop in milliseconds. Always accessed through its getter so
      * subclasses can override it dynamically.
@@ -51,6 +51,46 @@ abstract class BotArtificialIntelligence implements Runnable {
     /** Timestamp when the bot started running. */
     private long startTime;
 
+    
+    /**
+     * Return the colour as a hex String.
+     * 
+     * @param color color to be converted
+     * 
+     * @return String representation of the color as accepted by the client API
+     */
+    private static String toHexString(Color color) {
+        return "#" + Integer.toHexString((color.getRGB() & 0xffffff) | 0x1000000).substring(1);
+    }
+    
+    /**
+     * Constructor.
+     * 
+     * @param clientApi
+     *            client API, used to make backend calls
+     * @param name
+     *            player name
+     * @param color
+     *            tank colour as a hex string
+     */
+    private BotArtificialIntelligence(ClientApi clientApi, String name, String color) {
+        this(clientApi, name, color, DEFAULT_THREAD_SLEEP_DURATION);
+    }
+    
+    /**
+     * Constructor.
+     * 
+     * @param clientApi
+     *            client API, used to make backend calls
+     * @param name
+     *            player name
+     * @param color
+     *            tank colour as a hex string
+     */
+    public BotArtificialIntelligence(ClientApi clientApi, String name, Color color, int threadSleepDuration) {
+        this(clientApi, name, toHexString(color), threadSleepDuration);
+    }
+    
     /**
      * Constructor.
      * 
@@ -62,7 +102,7 @@ abstract class BotArtificialIntelligence implements Runnable {
      *            tank colour
      */
     public BotArtificialIntelligence(ClientApi clientApi, String name, Color color) {
-        this(clientApi, name, color, DEFAULT_THREAD_SLEEP_DURATION);
+        this(clientApi, name, toHexString(color), DEFAULT_THREAD_SLEEP_DURATION);
     }
 
     /**
@@ -76,7 +116,7 @@ abstract class BotArtificialIntelligence implements Runnable {
      *            tank color
      */
     public BotArtificialIntelligence(String host, String name, Color color) {
-        this(new ClientApiImpl(host), name, color);
+        this(new ClientApiImpl(host), name, toHexString(color));
     }
 
     /**
@@ -90,7 +130,7 @@ abstract class BotArtificialIntelligence implements Runnable {
      *            tank color
      */
     public BotArtificialIntelligence(String host, String name, String color) {
-        this(host, name, Color.decode(color));
+        this(new ClientApiImpl(host), name, color);
     }
 
     /** {@inheritDoc} */

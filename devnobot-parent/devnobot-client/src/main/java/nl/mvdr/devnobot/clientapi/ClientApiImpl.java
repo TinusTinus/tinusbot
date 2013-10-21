@@ -1,6 +1,5 @@
 package nl.mvdr.devnobot.clientapi;
 
-import java.awt.Color;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -70,13 +69,13 @@ public class ClientApiImpl implements ClientApi {
 
     /** {@inheritDoc} */
     @Override
-    public boolean createPlayer(String name, Color color, String id) {
+    public boolean createPlayer(String name, String color, String id) {
         if (log.isDebugEnabled()) {
             log.debug("Making a REST call to create a player with name = {}, color = {}, id = {}", 
                     new Object[] { name, color, id });
         }
         GamePlayer player = new GamePlayer();
-        player.setColor(toHexString(color));
+        player.setColor(color);
         player.setName(name);
         player.setId(id);
 
@@ -88,17 +87,6 @@ public class ClientApiImpl implements ClientApi {
         resteasyClient.close();
 
         return result;
-    }
-    
-    /**
-     * Return the colour as a hex String.
-     * 
-     * @param color color to be converted
-     * 
-     * @return String representation of the color as accepted by the client API
-     */
-    private String toHexString(Color color) {
-        return "#" + Integer.toHexString((color.getRGB() & 0xffffff) | 0x1000000).substring(1);
     }
 
     /** {@inheritDoc} */
