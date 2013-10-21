@@ -9,6 +9,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.mvdr.devnobot.clientapi.ClientApi;
+import nl.mvdr.devnobot.clientapi.ClientApiImpl;
 import nl.mvdr.devnobot.model.Action;
 import nl.mvdr.devnobot.model.GameState;
 import nl.mvdr.devnobot.model.Leaderboard;
@@ -62,6 +63,34 @@ abstract class BotArtificialIntelligence implements Runnable {
      */
     public BotArtificialIntelligence(ClientApi clientApi, String name, Color color) {
         this(clientApi, name, color, DEFAULT_THREAD_SLEEP_DURATION);
+    }
+
+    /**
+     * Constructor.
+     * 
+     * @param host
+     *            host name / base URL for the game server
+     * @param name
+     *            player name
+     * @param color
+     *            tank color
+     */
+    public BotArtificialIntelligence(String host, String name, Color color) {
+        this(new ClientApiImpl(host), name, color);
+    }
+
+    /**
+     * Constructor.
+     * 
+     * @param host
+     *            host name / base URL for the game server
+     * @param name
+     *            player name
+     * @param color
+     *            tank color
+     */
+    public BotArtificialIntelligence(String host, String name, String color) {
+        this(host, name, Color.decode(color));
     }
 
     /** {@inheritDoc} */

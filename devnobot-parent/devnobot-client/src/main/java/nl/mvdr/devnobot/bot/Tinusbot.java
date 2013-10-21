@@ -40,7 +40,7 @@ public class Tinusbot extends BotArtificialIntelligence {
     }
 
     /** @return default name for the Tinusbot */
-    private static String retrieveDefaultName() {
+    public static String retrieveDefaultName() {
         String result = "Tinusbot";
 
         String version = retrieveVersion();
@@ -74,7 +74,35 @@ public class Tinusbot extends BotArtificialIntelligence {
     public Tinusbot(ClientApi clientApi) {
         this(clientApi, retrieveDefaultName(), Color.ORANGE);
     }
+    
+    /**
+     * Constructor.
+     * 
+     * @param host
+     *            host name / base URL for the game server
+     * @param name
+     *            player name
+     * @param color
+     *            tank color
+     */
+    public Tinusbot(String host, String name, Color color) {
+        super(host, name, color);
+    }
 
+    /**
+     * Constructor.
+     * 
+     * @param host
+     *            host name / base URL for the game server
+     * @param name
+     *            player name
+     * @param color
+     *            tank color
+     */
+    public Tinusbot(String host, String name, String color) {
+        super(host, name, color);
+    }
+    
     /** {@inheritDoc} */
     @Override
     protected Action determineNextAction(Collection<Wall> obstacles, GameState state, Leaderboard leaderboard) {

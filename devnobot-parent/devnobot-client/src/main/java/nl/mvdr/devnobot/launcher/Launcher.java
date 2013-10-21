@@ -4,8 +4,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.mvdr.devnobot.bot.Tinusbot;
-import nl.mvdr.devnobot.clientapi.ClientApi;
-import nl.mvdr.devnobot.clientapi.ClientApiImpl;
 
 /**
  * Main launcher for the application.
@@ -51,8 +49,7 @@ public class Launcher {
                 DEFAULT_BASE_URL, BASE_URL_SYSTEM_PROPERTY);
         String serverBaseURL = System.getProperty(BASE_URL_SYSTEM_PROPERTY, DEFAULT_BASE_URL);
         log.info("Base URL: " + serverBaseURL);
-        ClientApi api = new ClientApiImpl(serverBaseURL);
-        Tinusbot bot = new Tinusbot(api);
+        Tinusbot bot = new Tinusbot(serverBaseURL, Tinusbot.retrieveDefaultName(), "#FFC800");
         log.info("Starting bot {} on its own thread!", bot.getName());
         new Thread(bot, bot.getName()).start();
     }
