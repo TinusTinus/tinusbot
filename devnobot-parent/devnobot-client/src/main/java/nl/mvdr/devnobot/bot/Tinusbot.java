@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import lombok.extern.slf4j.Slf4j;
 import nl.mvdr.devnobot.clientapi.ClientApi;
 import nl.mvdr.devnobot.model.Action;
 import nl.mvdr.devnobot.model.GameState;
@@ -22,6 +23,7 @@ import nl.mvdr.devnobot.model.Wall;
  * 
  * @author Martijn van de Rijdt
  */
+@Slf4j
 public class Tinusbot extends BotArtificialIntelligence {
     /**
      * Returns the version number from the jar manifest file.
@@ -50,6 +52,16 @@ public class Tinusbot extends BotArtificialIntelligence {
 
         return result;
     }
+    
+    /** Logs the version number. */
+    private static void logVersion() {
+        String version = retrieveVersion();
+        if (version != null) {
+            log.info("Tinusbot version " + version);
+        } else {
+            log.warn("Version information unavailable.");
+        }
+    }
 
     /**
      * Constructor.
@@ -63,6 +75,7 @@ public class Tinusbot extends BotArtificialIntelligence {
      */
     public Tinusbot(ClientApi clientApi, String name, Color color) {
         super(clientApi, name, color);
+        logVersion();
     }
 
     /**
@@ -87,6 +100,7 @@ public class Tinusbot extends BotArtificialIntelligence {
      */
     public Tinusbot(String host, String name, Color color) {
         super(host, name, color);
+        logVersion();
     }
 
     /**
@@ -101,6 +115,7 @@ public class Tinusbot extends BotArtificialIntelligence {
      */
     public Tinusbot(String host, String name, String color) {
         super(host, name, color);
+        logVersion();
     }
     
     /** {@inheritDoc} */
