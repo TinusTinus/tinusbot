@@ -2,24 +2,90 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>nl.mvdr.devnobot</groupId>
-		<artifactId>devnobot-parent</artifactId>
-		<version>1.2-SNAPSHOT</version>
-	</parent>
-
+    <groupId>nl.mvdr.devnobot</groupId>
 	<artifactId>tinusbot</artifactId>
+    <version>1.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Tinusbot</name>
-	<description>My entry for the "Battle your way to JavaOne 2014" Devnobot programming contest</description>
+	<description>My entry for the "Battle your way to JavaOne 2014" Devnobot programming contest.</description>
 
 	<properties>
 		<!-- Version numbers. Please keep these sorted in alphabetical order. -->
+		<devnobot-client.version>1.0.2-SNAPSHOT</devnobot-client.version>
+		<gson.version>2.2.4</gson.version>
 		<java.version>1.7</java.version>
+		<junit.version>4.11</junit.version>
+		<lombok.version>0.12.0</lombok.version>
+		<maven-compiler-plugin.version>2.5.1</maven-compiler-plugin.version>
+		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
+		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
+		<resteasy.version>3.0.3.Final</resteasy.version>
+		<slf4j.version>1.5.8</slf4j.version>
 	</properties>
 
+	<!-- Dependency management. Please do not specify version numbers here; 
+		refer to the properties instead! -->
+	<dependencyManagement>
+		<dependencies>
+			<!-- Client API -->
+			<dependency>
+				<groupId>com.cgi.devnobot</groupId>
+				<artifactId>devnobot-api</artifactId>
+				<version>${devnobot-client.version}</version>
+			</dependency>
+
+			<!-- Server-client communication -->
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>${gson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-client</artifactId>
+				<version>${resteasy.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-simple</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-jettison-provider</artifactId>
+				<version>${resteasy.version}</version>
+			</dependency>
+
+			<!-- Logging -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-simple</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+
+			<!-- Compile-time assistance -->
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>${lombok.version}</version>
+				<scope>provided</scope>
+				<!-- Note: Lombok is only needed at compile time. There is no need to 
+					provide it on the classpath at runtime. -->
+			</dependency>
+
+			<!-- Testing -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<!-- Dependencies. Please do not specify version numbers here; refer to 
-		dependency management in the parent pom instead! -->
+		dependency management instead! -->
 	<dependencies>
 		<!-- Client API -->
 		<dependency>
@@ -62,6 +128,26 @@
 	</dependencies>
 
 	<build>
+       <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven-jar-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+	
 		<plugins>
 			<!-- generate a jar with a manifest and main class -->
 			<plugin>
