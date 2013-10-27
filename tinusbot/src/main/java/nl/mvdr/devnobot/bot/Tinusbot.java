@@ -145,7 +145,7 @@ public class Tinusbot extends BotArtificialIntelligence {
             }
         } else {
             // There are no enemies in the level (yet). But they should be here soon.
-            // Act like a rotating turret until then, we might get a lucky hit when enemies spawn.
+            // Act like a rotating turret until then, we might get some lucky hits when enemies spawn.
             if (previousAction == Action.FIRE) {
                 result = Action.TURN_RIGHT;
             } else {
