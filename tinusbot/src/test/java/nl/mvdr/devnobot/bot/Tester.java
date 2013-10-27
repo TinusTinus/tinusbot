@@ -9,6 +9,8 @@ import com.cgi.devnobot.client.Ibiq;
 import nl.mvdr.devnobot.clientapi.ClientApi;
 import nl.mvdr.devnobot.clientapi.ClientApiImpl;
 import nl.mvdr.devnobot.launcher.Launcher;
+import nl.mvdr.devnobot.model.Leaderboard;
+import nl.mvdr.devnobot.model.Tank;
 
 /**
  * Main class. Spawns a bunch of bots.
@@ -39,9 +41,28 @@ public class Tester {
         
         bots.add(new Ibiq(serverBaseURL, "Ibiq0"));
         bots.add(new Ibiq(serverBaseURL, "Ibiq1"));
-        bots.add(new Ibiq(serverBaseURL, "Ibiq2"));
+//        bots.add(new Ibiq(serverBaseURL, "Ibiq2"));
         
         bots.add(new Tinusbot(api));
+        bots.add(new Tinusbot(api, "Tinusbot - experimental threat assessment", Color.RED) {
+            /** {@inheritDoc} */
+            @Override
+            protected boolean isAThreat(Tank tank, Tank ownTank, Leaderboard leaderboard) {
+                boolean result;
+
+                if (leaderboard != null) {
+                    Integer enemyPosition = leaderboard.retrievePosition(tank.getPlayer());
+                    result = enemyPosition != null
+                            && enemyPosition.intValue() < 4;
+                } else {
+                    // no leaderboards yet; default to false
+                    result = false;
+                }
+
+                return result;
+            }
+            
+        });
         
         for (Runnable bot : bots) {
         	String name;

@@ -205,7 +205,8 @@ public class Tinusbot extends BotArtificialIntelligence {
      *            current leaderboard; may be null
      * @return whether the tank is a threat
      */
-    private boolean isAThreat(Tank tank, Tank ownTank, Leaderboard leaderboard) {
+    // TODO make private again
+    protected boolean isAThreat(Tank tank, Tank ownTank, Leaderboard leaderboard) {
         boolean result;
 
         if (leaderboard != null) {
