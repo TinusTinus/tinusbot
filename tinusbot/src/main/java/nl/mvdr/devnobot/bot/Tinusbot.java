@@ -188,7 +188,7 @@ public class Tinusbot extends BotArtificialIntelligence {
             Collection<Tank> enemiesOfEnemy = new HashSet<>(enemies);
             enemiesOfEnemy.remove(enemy);
             enemiesOfEnemy.add(ownTank);
-            result = isAThreat(enemy, ownTank, leaderboard)
+            result = isAThreat(enemy, leaderboard)
                     && state.wouldHit(enemy, enemiesOfEnemy, obstacles, boundary) == ownTank;
         }
         return result;
@@ -199,21 +199,19 @@ public class Tinusbot extends BotArtificialIntelligence {
      * 
      * @param tank
      *            enemy tank whose threat is to be assessed
-     * @param ownTank
-     *            our own tank
      * @param leaderboard
      *            current leaderboard; may be null
      * @return whether the tank is a threat
      */
     // TODO make private again
-    protected boolean isAThreat(Tank tank, Tank ownTank, Leaderboard leaderboard) {
+    private boolean isAThreat(Tank tank, Leaderboard leaderboard) {
         boolean result;
 
         if (leaderboard != null) {
-            Integer ownPosition = leaderboard.retrievePosition(ownTank.getPlayer());
+            // consider players in positions 1 and 2 a threat
             Integer enemyPosition = leaderboard.retrievePosition(tank.getPlayer());
-            result = ownPosition != null && enemyPosition != null
-                    && enemyPosition.intValue() < ownPosition.intValue() + 2;
+            result = enemyPosition != null
+                    && enemyPosition.intValue() < 3;
         } else {
             // no leaderboards yet; default to false
             result = false;
