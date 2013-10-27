@@ -39,9 +39,9 @@ public class Tester {
         
         bots.add(new Ibiq(serverBaseURL, "Ibiq0"));
         bots.add(new Ibiq(serverBaseURL, "Ibiq1"));
+        bots.add(new Ibiq(serverBaseURL, "Ibiq2"));
         
         bots.add(new Tinusbot(api));
-        bots.add(new Tinusbot(api, "Tinusbot - fire once", false));
         
         for (Runnable bot : bots) {
         	String name;

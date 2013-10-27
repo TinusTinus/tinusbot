@@ -25,9 +25,6 @@ import nl.mvdr.devnobot.model.Wall;
  */
 @Slf4j
 public class Tinusbot extends BotArtificialIntelligence {
-    /** Whether this bot is allowed to fire two turns in a row. */
-    private final boolean allowedToFireTwiceInARow;
-    
     /** Action taken during the previous turn. Null at the start. */
     private Action previousAction;
     
@@ -81,7 +78,6 @@ public class Tinusbot extends BotArtificialIntelligence {
      */
     public Tinusbot(ClientApi clientApi, String name, Color color) {
         super(clientApi, name, color);
-        this.allowedToFireTwiceInARow = true;
         this.previousAction = null;
         logVersion();
     }
@@ -99,22 +95,6 @@ public class Tinusbot extends BotArtificialIntelligence {
     /**
      * Constructor.
      * 
-     * @param clientApi
-     *            client API for making server calls
-     * @param allowedToFireTwiceInARow
-     *            whether the bot is allowed to take the FIRE action two turns in a row
-     * 
-     */
-    public Tinusbot(ClientApi clientApi, String name, boolean allowedToFireTwiceInARow) {
-        super(clientApi, name, Color.RED);
-        this.allowedToFireTwiceInARow = allowedToFireTwiceInARow;
-        this.previousAction = null;
-        logVersion();
-    }
-    
-    /**
-     * Constructor.
-     * 
      * @param host
      *            host name / base URL for the game server
      * @param name
@@ -124,7 +104,6 @@ public class Tinusbot extends BotArtificialIntelligence {
      */
     public Tinusbot(String host, String name, Color color) {
         super(host, name, color);
-        this.allowedToFireTwiceInARow = true;
         this.previousAction = null;
         logVersion();
     }
@@ -141,7 +120,6 @@ public class Tinusbot extends BotArtificialIntelligence {
      */
     public Tinusbot(String host, String name, String color) {
         super(host, name, color);
-        this.allowedToFireTwiceInARow = true;
         this.previousAction = null;
         logVersion();
     }
@@ -156,8 +134,7 @@ public class Tinusbot extends BotArtificialIntelligence {
         LevelBoundary boundary = LevelBoundary.buildLevelBoundary(obstacles, state.getTanks());
 
         if (!enemies.isEmpty()) {
-            if (state.wouldHitEnemy(ownTank, enemies, obstacles, boundary)
-                    && (allowedToFireTwiceInARow || previousAction != Action.FIRE)) {
+            if (state.wouldHitEnemy(ownTank, enemies, obstacles, boundary) && previousAction != Action.FIRE) {
                 // FIRE!
                 // Even if they fire back and we die, it still nets us a point (2 for the kill minus 1 for the death).
                 result = Action.FIRE;
