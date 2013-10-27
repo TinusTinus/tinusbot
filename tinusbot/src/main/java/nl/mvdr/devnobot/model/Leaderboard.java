@@ -114,7 +114,7 @@ public class Leaderboard {
 
             // Table header
             result.append("Current leaderboard:\n");
-            result.append(String.format("%s %s %S %s %s\n",
+            result.append(String.format("%s %s %s %s %s\n",
                     padRight(" ", maxPositionLength),
                     padRight(NAME_HEADER, maxNameLength),
                     padRight(SCORE_HEADER, maxScoreLength),
@@ -124,7 +124,7 @@ public class Leaderboard {
             for (Integer position : positions) {
                 Collection<Player> players = playersByPosition.get(position);
                 for (Player player : players) {
-                    result.append(String.format("%s %s %S %s %s\n", 
+                    result.append(String.format("%s %s %s %s %s\n", 
                             padLeft(position.intValue(), maxPositionLength),
                             padRight(player.getName(), maxNameLength),
                             padLeft(player.computeScore(), maxScoreLength),
