@@ -222,8 +222,11 @@ public class Tinusbot extends BotArtificialIntelligence {
     }
 
     /**
-     * Determines the first move of a shortest path to a firing position. Uses a variation of Dijkstra's shortest path
-     * algorithm.
+     * Determines the first move of a shortest path to a firing position.
+     * 
+     * This method uses a variation of Dijkstra's shortest path algorithm. The game state is seen as a complete,
+     * directed graph. The nodes are positions (including orientation) that our own tank can reach. The edges are the
+     * following actions that move the tank: forward, backward, turn left and turn right.
      * 
      * @param obstacles
      *            walls
