@@ -288,7 +288,7 @@ abstract class BotArtificialIntelligence implements Runnable {
      * Optionally creates a new leaderboard and logs it.
      * 
      * There is no need to refresh the leaderboard every single iteration of the game loop, since the server doesn't
-     * update it more than once pre second. This method only does so if there is time to, and if it has been a while
+     * update it more than once per second. This method only does so if there is time to, and if it has been a while
      * since the last time the leaderboard has been refreshed.
      * 
      * @param previousLeaderboard
