@@ -4,7 +4,7 @@
 
     <groupId>nl.mvdr.devnobot</groupId>
 	<artifactId>tinusbot</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
 	<packaging>jar</packaging>
 	<name>Tinusbot</name>
 	<description>My entry for the "Battle your way to JavaOne 2014" Devnobot programming contest.</description>
