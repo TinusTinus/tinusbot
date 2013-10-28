@@ -55,12 +55,13 @@ public abstract class GameObject {
         result = result && other.getY() < this.computeMaxY();
         return result;
     }
-    
+
     /**
      * Checks whether this object overlaps with any of the game objects in the given collection.
      * 
-     * @param objects objects
-     * @return true if and only if object overlaps with one or more objects in the given collection 
+     * @param objects
+     *            objects
+     * @return true if and only if object overlaps with one or more objects in the given collection
      */
     public boolean overlaps(Collection<? extends GameObject> objects) {
         boolean result = false;
@@ -71,12 +72,12 @@ public abstract class GameObject {
         }
         return result;
     }
-    
+
     /** @return x coordinate of the right border */
     public int computeMaxX() {
         return getX() + getWidth();
     }
-    
+
     /** @return y coordinate of the bottom border */
     public int computeMaxY() {
         return getY() + getHeight();

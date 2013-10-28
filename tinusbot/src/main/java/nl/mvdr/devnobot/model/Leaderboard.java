@@ -25,7 +25,7 @@ public class Leaderboard {
     private static final String KILLS_HEADER = "KILLS";
     /** Header for the deaths column of the leaderboard. */
     private static final String DEATHS_HEADER = "DEATHS";
-    
+
     /** The approximate timestamp when this leaderboard was put together. */
     @Getter
     private final long creationTime;
@@ -67,11 +67,12 @@ public class Leaderboard {
         }
         this.playersByPosition = Collections.unmodifiableMap(tempPlayersByPosition);
     }
-    
+
     /**
      * Gets a collection of all players at the given position.
      * 
-     * @param position position
+     * @param position
+     *            position
      * @return players
      */
     public Collection<Player> retrievePlayers(int position) {
@@ -81,14 +82,14 @@ public class Leaderboard {
         }
         return result;
     }
-    
+
     /** @return a list of all positions in increasing order */
     public List<Integer> retrievePositions() {
         List<Integer> positions = new ArrayList<>(playersByPosition.keySet());
         Collections.sort(positions);
         return positions;
     }
-    
+
     /** {@inheritDoc} */
     @Override
     public String toString() {
@@ -101,7 +102,7 @@ public class Leaderboard {
             int maxScoreLength = SCORE_HEADER.length();
             int maxKillsLength = KILLS_HEADER.length();
             int maxDeathsLength = DEATHS_HEADER.length();
-            for (Collection<Player> players: playersByPosition.values()) {
+            for (Collection<Player> players : playersByPosition.values()) {
                 for (Player player : players) {
                     maxNameLength = Math.max(maxNameLength, player.getName().length());
                     maxScoreLength = Math.max(maxScoreLength, ("" + player.computeScore()).length());
@@ -135,7 +136,7 @@ public class Leaderboard {
         }
         return result.toString();
     }
-    
+
     /**
      * Pads the given string on the right.
      * 
@@ -161,11 +162,12 @@ public class Leaderboard {
     private static String padLeft(int i, int n) {
         return String.format("%1$" + n + "s", Integer.valueOf(i));
     }
-    
+
     /**
      * Given a player name, returns the player's position, or null if the player name does not occur on the leaderboard.
      * 
-     * @param playerName player name; may not be null
+     * @param playerName
+     *            player name; may not be null
      * @return player's position, or null if unavailable
      */
     public Integer retrievePosition(String playerName) {

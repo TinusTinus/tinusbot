@@ -23,7 +23,7 @@ public enum Orientation {
     SOUTH(0, 1),
     /** West (left). */
     WEST(-1, 0);
-    
+
     /** Multiplier for moving forward along this direction. */
     private final int xMultiplier;
     /** Multiplier for moving forward along this direction. */

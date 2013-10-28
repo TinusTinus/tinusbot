@@ -24,7 +24,7 @@ public enum Action {
     FIRE(0),
     /** Destroys the bot, causing it to respawn in a random location. */
     SUICIDE(0);
-    
+
     /** Direction in which the tank should move when executing this action. */
     final int direction;
 

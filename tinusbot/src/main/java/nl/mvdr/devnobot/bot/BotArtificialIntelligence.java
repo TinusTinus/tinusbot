@@ -51,18 +51,18 @@ abstract class BotArtificialIntelligence implements Runnable {
     /** Timestamp when the bot started running. */
     private long startTime;
 
-    
     /**
      * Return the colour as a hex String.
      * 
-     * @param color color to be converted
+     * @param color
+     *            color to be converted
      * 
      * @return String representation of the color as accepted by the client API
      */
     private static String toHexString(Color color) {
         return "#" + Integer.toHexString((color.getRGB() & 0xffffff) | 0x1000000).substring(1);
     }
-    
+
     /**
      * Constructor.
      * 
@@ -76,7 +76,7 @@ abstract class BotArtificialIntelligence implements Runnable {
     private BotArtificialIntelligence(ClientApi clientApi, String name, String color) {
         this(clientApi, name, color, DEFAULT_THREAD_SLEEP_DURATION);
     }
-    
+
     /**
      * Constructor.
      * 
@@ -90,7 +90,7 @@ abstract class BotArtificialIntelligence implements Runnable {
     public BotArtificialIntelligence(ClientApi clientApi, String name, Color color, int threadSleepDuration) {
         this(clientApi, name, toHexString(color), threadSleepDuration);
     }
-    
+
     /**
      * Constructor.
      * 

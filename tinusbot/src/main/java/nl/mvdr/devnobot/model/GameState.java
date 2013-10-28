@@ -153,8 +153,7 @@ public class GameState {
      *            level boundary
      * @return game object which would be hit, or null if there is none
      */
-    public GameObject wouldHit(Tank tank, Collection<Tank> enemies, Collection<Wall> walls, 
-            LevelBoundary boundary) {
+    public GameObject wouldHit(Tank tank, Collection<Tank> enemies, Collection<Wall> walls, LevelBoundary boundary) {
         // Build a collection of objects that the bullet cannot pass through. That is, all enemy tanks and walls.
         Collection<GameObject> objects = new ArrayList<>(tanks.size() - 1 + walls.size());
         objects.addAll(enemies);
@@ -212,7 +211,7 @@ public class GameState {
     public boolean wouldHitEnemy(Tank tank, Collection<Tank> enemies, Collection<Wall> walls, LevelBoundary boundary) {
         return wouldHit(tank, enemies, walls, boundary) instanceof Tank;
     }
-    
+
     /**
      * Determines whether the given tank would hit an enemy if it fired right now.
      * 

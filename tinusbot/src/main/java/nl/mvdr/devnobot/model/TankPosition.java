@@ -18,12 +18,12 @@ import lombok.ToString;
 @RequiredArgsConstructor
 public class TankPosition {
     /** Movement actions. */
-    private static final Action[] ACTIONS = {Action.FORWARD, Action.BACKWARD, Action.TURN_LEFT, Action.TURN_RIGHT};
-    
+    private static final Action[] ACTIONS = { Action.FORWARD, Action.BACKWARD, Action.TURN_LEFT, Action.TURN_RIGHT };
+
     /** Tank. */
     @NonNull
     private final Tank tank;
-    
+
     /**
      * Computes a map of all reachable positions from the current position, indexed by the required action.
      * 
@@ -31,14 +31,14 @@ public class TankPosition {
      */
     public Map<Action, TankPosition> computeReachablePositions() {
         Map<Action, TankPosition> result = new EnumMap<>(Action.class);
-        
-        for (Action action: ACTIONS) {
+
+        for (Action action : ACTIONS) {
             result.put(action, new TankPosition(tank.computeNextPosition(action)));
         }
-        
+
         return result;
     }
-    
+
     /** {@inheritDoc} */
     @Override
     public int hashCode() {
@@ -55,6 +55,7 @@ public class TankPosition {
     /** {@inheritDoc} */
     @Override
     public boolean equals(Object obj) {
+        // based on Eclipse-generated equals method
         if (this == obj)
             return true;
         if (obj == null)

@@ -71,8 +71,8 @@ public class ClientApiImpl implements ClientApi {
     @Override
     public boolean createPlayer(String name, String color, String id) {
         if (log.isDebugEnabled()) {
-            log.debug("Making a REST call to create a player with name = {}, color = {}, id = {}", 
-                    new Object[] { name, color, id });
+            log.debug("Making a REST call to create a player with name = {}, color = {}, id = {}", new Object[] { name,
+                    color, id });
         }
         GamePlayer player = new GamePlayer();
         player.setColor(color);
@@ -102,17 +102,17 @@ public class ClientApiImpl implements ClientApi {
         String playersAsString = response.readEntity(String.class);
         response.close();
         resteasyClient.close();
-        
+
         // Convert from JSON to API objects
         Gson gson = new Gson();
         Type collectionType = new TypeToken<List<GamePlayer>>() {
             // anonymous inner class to create type token
         }.getType();
         List<GamePlayer> players = gson.fromJson(playersAsString, collectionType);
-        
+
         // Convert to model
         Collection<Player> result = new ArrayList<>(players.size());
-        for (GamePlayer player: players) {
+        for (GamePlayer player : players) {
             result.add(new Player(player));
         }
 
@@ -127,7 +127,8 @@ public class ClientApiImpl implements ClientApi {
         }
         ResteasyClient resteasyClient = new ResteasyClientBuilder().build();
         ResteasyWebTarget resteasyWebTarget = resteasyClient.target(this.baseURL + "/devnobot/rest/player/" + playerId);
-        Response response = resteasyWebTarget.request().put(Entity.entity(action.toAPIAction(), MediaType.APPLICATION_JSON));
+        Response response = resteasyWebTarget.request().put(
+                Entity.entity(action.toAPIAction(), MediaType.APPLICATION_JSON));
         boolean result = (response.getStatus() == HttpStatus.SC_NO_CONTENT);
         response.close();
         resteasyClient.close();
@@ -147,11 +148,11 @@ public class ClientApiImpl implements ClientApi {
         String worldStatusAsString = response.readEntity(String.class);
         response.close();
         resteasyClient.close();
-        
+
         // Convert from JSON to API object
         Gson gson = new Gson();
         World world = gson.fromJson(worldStatusAsString, World.class);
-        
+
         // Convert to data model
         GameState result;
         if (world != null) {
@@ -159,7 +160,7 @@ public class ClientApiImpl implements ClientApi {
         } else {
             result = null;
         }
-        
+
         return result;
     }
 

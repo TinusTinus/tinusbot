@@ -27,7 +27,7 @@ import nl.mvdr.devnobot.model.Wall;
 public class Tinusbot extends BotArtificialIntelligence {
     /** Action taken during the previous turn. Null at the start. */
     private Action previousAction;
-    
+
     /**
      * Returns the version number from the jar manifest file.
      * 
@@ -55,7 +55,7 @@ public class Tinusbot extends BotArtificialIntelligence {
 
         return result;
     }
-    
+
     /** Logs the version number. */
     private static void logVersion() {
         String version = retrieveVersion();
@@ -91,7 +91,7 @@ public class Tinusbot extends BotArtificialIntelligence {
     public Tinusbot(ClientApi clientApi) {
         this(clientApi, retrieveDefaultName(), Color.ORANGE);
     }
-    
+
     /**
      * Constructor.
      * 
@@ -123,7 +123,7 @@ public class Tinusbot extends BotArtificialIntelligence {
         this.previousAction = null;
         logVersion();
     }
-    
+
     /** {@inheritDoc} */
     @Override
     protected Action determineNextAction(Collection<Wall> obstacles, GameState state, Leaderboard leaderboard) {
@@ -152,9 +152,9 @@ public class Tinusbot extends BotArtificialIntelligence {
                 result = Action.FIRE;
             }
         }
-        
+
         previousAction = result;
-        
+
         return result;
     }
 

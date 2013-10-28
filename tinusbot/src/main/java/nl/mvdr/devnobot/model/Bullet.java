@@ -26,13 +26,13 @@ public class Bullet extends GameObject {
      */
     @Getter
     private static int bulletHeight = 4;
-    
+
     /** Updates the static bullet size fields based on this bullet's size. */
     private void updateBulletSize() {
         bulletWidth = getWidth();
         bulletHeight = getHeight();
     }
-    
+
     /**
      * Constructor.
      * 
@@ -43,25 +43,31 @@ public class Bullet extends GameObject {
         super(bullet);
         updateBulletSize();
     }
-    
+
     /**
      * Constructor.
      * 
-     * @param x x coordinate
-     * @param y y coordinate
-     * @param width width
-     * @param height height
+     * @param x
+     *            x coordinate
+     * @param y
+     *            y coordinate
+     * @param width
+     *            width
+     * @param height
+     *            height
      */
     Bullet(int x, int y, int width, int height) {
         super(x, y, width, height);
         updateBulletSize();
     }
-    
+
     /**
      * Computes the new location of the bullet if it were to move in the given direction by the given distance.
      * 
-     * @param distance distance to move
-     * @param direction direction in which to move
+     * @param distance
+     *            distance to move
+     * @param direction
+     *            direction in which to move
      * @return hypothetical new bullet location
      */
     public Bullet move(int distance, Orientation direction) {
@@ -69,11 +75,12 @@ public class Bullet extends GameObject {
         int deltaY = direction.getYMultiplier() * distance;
         return new Bullet(getX() + deltaX, getY() + deltaY, getWidth(), getHeight());
     }
-    
+
     /**
      * Computes the new location of the bullet if it were to move in the given direction by its own length.
      * 
-     * @param direction direction in which to move
+     * @param direction
+     *            direction in which to move
      * @return hypothetical new bullet location
      */
     public Bullet moveBulletLength(Orientation direction) {
