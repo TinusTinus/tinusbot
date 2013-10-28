@@ -209,8 +209,7 @@ public class Tinusbot extends BotArtificialIntelligence {
         if (leaderboard != null) {
             // consider players in positions 1 and 2 a threat
             Integer enemyPosition = leaderboard.retrievePosition(tank.getPlayer());
-            result = enemyPosition != null
-                    && enemyPosition.intValue() < 3;
+            result = enemyPosition != null && enemyPosition.intValue() < 3;
         } else {
             // no leaderboards yet; default to false
             result = false;
