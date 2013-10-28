@@ -75,7 +75,7 @@ public interface ClientApi {
      * 
      * Useful when you think that you are trapped somewhere.
      * 
-     * @param playerId player id
+     * @param playerId
      *            player id, as passed in via the {@link #createPlayer(String, String, String)} method call
      * @return whether your tank was suicided succesfully
      */
