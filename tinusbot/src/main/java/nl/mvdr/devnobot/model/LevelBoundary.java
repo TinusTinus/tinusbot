@@ -27,7 +27,7 @@ public class LevelBoundary extends GameObject {
      */
     public static LevelBoundary buildLevelBoundary(Collection<Wall> walls, Collection<Tank> tanks) {
         // build a single collection containing both tanks and walls
-        Collection<GameObject> objects = new ArrayList<>(tanks.size() - 1 + walls.size());
+        Collection<GameObject> objects = new ArrayList<>(tanks.size() + walls.size());
         objects.addAll(tanks);
         objects.addAll(walls);
 
