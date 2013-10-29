@@ -17,11 +17,12 @@ import nl.mvdr.devnobot.model.Wall;
 public class SuicideBomber extends BotArtificialIntelligence {
     /** Previous action. */
     private Action previousAction;
-    
+
     /**
      * Constructor.
      * 
-     * @param clientApi api
+     * @param clientApi
+     *            api
      */
     public SuicideBomber(ClientApi clientApi) {
         super(clientApi, "Suicide Bomber", Color.RED);

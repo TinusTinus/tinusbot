@@ -18,18 +18,19 @@ public class TankTest {
     @Test
     public void testToString() {
         Tank tank = createNamedTank("name");
-        
+
         String string = tank.toString();
-        
+
         log.info(string);
         Assert.assertNotNull(string);
         Assert.assertNotEquals("", string);
     }
-    
+
     /**
-     * Creates a tank with the given name and dummy values for all other fields. 
+     * Creates a tank with the given name and dummy values for all other fields.
      * 
-     * @param name name
+     * @param name
+     *            name
      * @return tank
      */
     static Tank createNamedTank(String name) {

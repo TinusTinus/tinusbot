@@ -17,9 +17,9 @@ public class BulletTest {
     @Test
     public void testToString() {
         Bullet bullet = new Bullet(0, 1, 2, 3);
-        
+
         String string = bullet.toString();
-        
+
         log.info(string);
         Assert.assertNotNull(string);
         Assert.assertNotEquals("", string);

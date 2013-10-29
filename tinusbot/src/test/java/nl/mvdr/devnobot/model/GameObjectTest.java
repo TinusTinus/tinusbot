@@ -50,7 +50,7 @@ public class GameObjectTest {
         Assert.assertFalse(object0.overlaps(object1));
         Assert.assertFalse(object1.overlaps(object0));
     }
-    
+
     /**
      * Tests {@link GameObject#overlaps(GameObject)} when one object is east of the other.
      * 
@@ -68,7 +68,7 @@ public class GameObjectTest {
         Assert.assertFalse(object0.overlaps(object1));
         Assert.assertFalse(object1.overlaps(object0));
     }
-    
+
     /**
      * Tests {@link GameObject#overlaps(GameObject)} when they do overlap in one position.
      * 

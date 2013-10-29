@@ -17,11 +17,12 @@ import nl.mvdr.devnobot.model.Wall;
 public class RotatingTurret extends BotArtificialIntelligence {
     /** Previous action. */
     private Action previousAction;
-    
+
     /**
      * Constructor.
      * 
-     * @param clientApi api
+     * @param clientApi
+     *            api
      */
     public RotatingTurret(ClientApi clientApi) {
         super(clientApi, "Rotating Turret", Color.LIGHT_GRAY);

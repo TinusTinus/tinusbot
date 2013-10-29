@@ -18,20 +18,20 @@ public class WallTest {
     @Test
     public void testToString() {
         Wall wall = new Wall(0, 1, 2, 3);
-        
+
         String string = wall.toString();
-        
+
         log.info(string);
         Assert.assertNotNull(string);
         Assert.assertNotEquals("", string);
     }
-    
+
     /** Tests whether equals can tell that walls and bullets are not the same thing. */
     @Test
     public void testEquals() {
         Wall wall = new Wall(0, 1, 2, 3);
         Bullet bullet = new Bullet(0, 1, 2, 3);
-        
+
         Assert.assertNotEquals(wall, bullet);
     }
 }

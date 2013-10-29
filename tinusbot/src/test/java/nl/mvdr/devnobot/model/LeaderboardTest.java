@@ -21,9 +21,9 @@ public class LeaderboardTest {
     @Test
     public void testConstructorEmptyCollection() {
         long time = System.currentTimeMillis();
-        
+
         Leaderboard leaderboard = new Leaderboard(time, Collections.<Player>emptyList());
-        
+
         log.info(leaderboard.toString());
         Assert.assertEquals(time, leaderboard.getCreationTime());
     }
@@ -54,10 +54,10 @@ public class LeaderboardTest {
         players.add(new Player("Many kills/deaths", 33276973, 73283729, "color"));
 
         Leaderboard leaderboard = new Leaderboard(System.currentTimeMillis(), players);
-        
+
         log.info(leaderboard.toString());
     }
-    
+
     /** Tests the constructor and toString method with a bunch of players. */
     @Test
     public void testLeaderboardRetrievePlayers() {
@@ -100,7 +100,7 @@ public class LeaderboardTest {
         players = leaderboard.retrievePlayers(9);
         Assert.assertTrue(players.isEmpty());
     }
-    
+
     /** Tests the {@link Leaderboard#retrievePosition(String)} method. */
     @Test
     public void testRetrievePosition() {
@@ -115,7 +115,7 @@ public class LeaderboardTest {
         Collection<Player> players = Arrays.asList(jan, piet, ton, kees, aad, wim, herp, derp);
 
         Leaderboard leaderboard = new Leaderboard(System.currentTimeMillis(), players);
-        
+
         Assert.assertEquals(Integer.valueOf(1), leaderboard.retrievePosition(jan.getName()));
         Assert.assertEquals(Integer.valueOf(2), leaderboard.retrievePosition(ton.getName()));
         Assert.assertEquals(Integer.valueOf(3), leaderboard.retrievePosition(aad.getName()));

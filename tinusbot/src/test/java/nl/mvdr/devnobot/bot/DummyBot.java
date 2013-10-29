@@ -22,7 +22,7 @@ public class DummyBot extends BotArtificialIntelligence {
     public static final String DEFAULT_NAME = "Dummy";
     /** Sleep duration after every execution of the main game loop in milliseconds. */
     private static final int THREAD_SLEEP_DURATION = 1000;
-    
+
     /** Random generator. */
     private final Random randomGenerator;
     /** Actions that this bot can perform. */
@@ -44,7 +44,7 @@ public class DummyBot extends BotArtificialIntelligence {
         super(api, name, color, THREAD_SLEEP_DURATION);
         this.randomGenerator = new Random();
     }
-    
+
     /**
      * Constructor.
      * 

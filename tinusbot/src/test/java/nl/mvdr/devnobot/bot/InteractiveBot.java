@@ -27,21 +27,22 @@ import nl.mvdr.devnobot.model.Wall;
 public class InteractiveBot extends BotArtificialIntelligence {
     /** Actions. */
     private final BlockingQueue<Action> actionQueue;
-    
+
     /**
      * Constructor.
      * 
-     * @param clientApi client api
+     * @param clientApi
+     *            client api
      */
     public InteractiveBot(ClientApi clientApi) {
         super(clientApi, "Interactive Bot", Color.YELLOW);
-        
+
         this.actionQueue = new LinkedBlockingQueue<>();
-        
+
         JFrame frame = new JFrame(getName());
         frame.setLayout(new FlowLayout());
         frame.setSize(new Dimension(100, 300));
-        for (Action action: Action.values()) {
+        for (Action action : Action.values()) {
             frame.add(createActionButton(action));
         }
         frame.setVisible(true);
@@ -50,7 +51,8 @@ public class InteractiveBot extends BotArtificialIntelligence {
     /**
      * Creates a button. Pressing the button places the given action in the action queue.
      * 
-     * @param action action corresponding to the button
+     * @param action
+     *            action corresponding to the button
      * @return button
      */
     private JButton createActionButton(final Action action) {
@@ -66,49 +68,50 @@ public class InteractiveBot extends BotArtificialIntelligence {
             public void setEnabled(boolean b) {
                 throw new UnsupportedOperationException();
             }
-            
+
             /** {@inheritDoc} */
             @Override
             public void removePropertyChangeListener(PropertyChangeListener listener) {
                 // do nothing
             }
-            
+
             /** {@inheritDoc} */
             @Override
             public void putValue(String key, Object value) {
                 throw new UnsupportedOperationException();
             }
-            
+
             /** {@inheritDoc} */
             @Override
             public boolean isEnabled() {
                 return true;
             }
-            
+
             /** {@inheritDoc} */
             @Override
             public Object getValue(String key) {
                 Object result;
                 if (javax.swing.Action.NAME.equals(key)) {
                     result = action.toString();
-                } else if (javax.swing.Action.SHORT_DESCRIPTION.equals(key) || javax.swing.Action.LONG_DESCRIPTION.equals(key)) {
+                } else if (javax.swing.Action.SHORT_DESCRIPTION.equals(key)
+                        || javax.swing.Action.LONG_DESCRIPTION.equals(key)) {
                     result = "Add this action to the queue: " + action.toString();
                 } else {
                     result = null;
                 }
                 return result;
             }
-            
+
             /** {@inheritDoc} */
             @Override
             public void addPropertyChangeListener(PropertyChangeListener listener) {
                 // do nothing
             }
         };
-        
+
         return new JButton(swingAction);
     }
-    
+
     /** {@inheritDoc} */
     @Override
     protected Action determineNextAction(Collection<Wall> obstacles, GameState state, Leaderboard leaderboard) {
@@ -121,7 +124,4 @@ public class InteractiveBot extends BotArtificialIntelligence {
         }
         return action;
     }
-
-    
-    
 }
