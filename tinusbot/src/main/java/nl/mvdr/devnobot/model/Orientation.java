@@ -110,6 +110,8 @@ public enum Orientation {
         } else if (action == Action.TURN_LEFT) {
             result = turnLeft();
         } else {
+            // All other actions preserve orientation.
+            // (Although it doesn't really matter, this even seems to be true for Action.SUICIDE.)
             result = this;
         }
         return result;
