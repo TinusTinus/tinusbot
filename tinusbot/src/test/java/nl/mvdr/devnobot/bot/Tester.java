@@ -7,6 +7,7 @@ import java.util.List;
 import nl.mvdr.devnobot.clientapi.ClientApi;
 import nl.mvdr.devnobot.clientapi.ClientApiImpl;
 import nl.mvdr.devnobot.launcher.Launcher;
+import nl.mvdr.devnobot.model.LeaderboardDisplay;
 
 import com.cgi.devnobot.client.Ibiq;
 
@@ -52,5 +53,7 @@ public class Tester {
             }
             new Thread(bot, name).start();
         }
+        
+        new LeaderboardDisplay(api).start();
     }
 }
