@@ -113,16 +113,20 @@ public class Tank extends GameObject {
         int newWidth;
         int newHeight;
         if (action == Action.TURN_LEFT || action == Action.TURN_RIGHT) {
+            // Swap width and height; adjust x and y appropriately.
             newX = getX() + getWidth() / 2 - getHeight() / 2;
             newY = getY() + getHeight() / 2 - getWidth() / 2;
             newWidth = getHeight();
             newHeight = getWidth();
         } else if (action == Action.FORWARD || action == Action.BACKWARD) {
+            // Compute new x and y.
             newX = getX() + distancePerStep * lastKnownOrientation.getXMultiplier() * action.getDirection();
             newY = getY() + distancePerStep * lastKnownOrientation.getYMultiplier() * action.getDirection();
+            // Width and height are unchanged.
             newWidth = getWidth();
             newHeight = getHeight();
         } else if (action == null || action == Action.FIRE) {
+            // No effect on the tank's position.
             newX = getX();
             newY = getY();
             newWidth = getWidth();
