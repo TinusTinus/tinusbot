@@ -16,6 +16,8 @@ import nl.mvdr.devnobot.clientapi.ClientApi;
 /**
  * A Runnable that opens a Swing frame and uses it to display a continuously updated leaderboard.
  * 
+ * Uses Swing, because although JavaFX is awesome, it's not really worth the classpath hassle for this.
+ * 
  * @author Martijn van de Rijdt
  */
 @Slf4j

@@ -22,6 +22,8 @@ import nl.mvdr.devnobot.model.Wall;
  * Not an artificial intelligence at all; this bot opens up a Swing user interface so the user can manually control the
  * robot.
  * 
+ * Uses Swing, because although JavaFX is awesome, it's not really worth the classpath hassle for this.
+ * 
  * @author Martijn van de Rijdt
  */
 public class InteractiveBot extends BotArtificialIntelligence {
