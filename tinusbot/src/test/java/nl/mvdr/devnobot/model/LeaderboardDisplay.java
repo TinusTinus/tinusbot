@@ -26,6 +26,8 @@ public class LeaderboardDisplay {
     private final ClientApi api;
     /** Text component that contains the leaderboard text. */
     private final JTextArea textComponent;
+    /** Timestamp when the leaderboard display started running. */
+    private final long startTime;
 
     /**
      * Constructor.
@@ -41,6 +43,8 @@ public class LeaderboardDisplay {
         this.textComponent.setEditable(false);
         
         this.api = api;
+        
+        this.startTime = System.currentTimeMillis();
 
         updateLeaderboard();
     }
@@ -64,10 +68,16 @@ public class LeaderboardDisplay {
     /** Retrieves the latest leaderboard info and updates the label. */
     private void updateLeaderboard() {
         try {
+            long millisecondsPassed = System.currentTimeMillis() - this.startTime;
+            long secondsPassed = millisecondsPassed / 1000;
+            long minutesPassed = secondsPassed / 60;
+            long remainder = secondsPassed % 60;
+            String timeString = String.format("Time passed: %s minutes %s seconds\n", "" + minutesPassed, "" + remainder);
+            
             Collection<Player> players = api.readPlayers();
             Leaderboard leaderboard = new Leaderboard(System.currentTimeMillis(), players);
-            textComponent.setText(leaderboard.toString());
-            log.info("Updated the leaderboard.");
+            
+            textComponent.setText(timeString + leaderboard.toString());
         } catch (RuntimeException exception) {
             log.warn("Unexpected exception while updating leaderboard.", exception);
         }
