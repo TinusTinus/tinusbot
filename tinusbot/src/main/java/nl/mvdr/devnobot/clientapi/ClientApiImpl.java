@@ -29,7 +29,10 @@ import com.cgi.devnobot.api.World;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-/** Implements the REST/JSON Api of the server. Based on the contest's example implementation. */
+/**
+ * Implements the REST/JSON Api of the server. Based on the contest's example implementation, but uses our custom data
+ * model.
+ */
 @Slf4j
 @RequiredArgsConstructor
 public class ClientApiImpl implements ClientApi {

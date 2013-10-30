@@ -1,5 +1,5 @@
 /** 
- * Contains Bot class and implementations.
+ * Contains bot artificial intelligence classes.
  *  
  * @author Martijn van de Rijdt
  */
