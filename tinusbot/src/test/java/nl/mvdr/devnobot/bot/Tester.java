@@ -19,8 +19,8 @@ public class Tester {
     /** Number of dummies. */
     private static final int NUM_DUMMIES = 4;
     /** Colours for dummy bots. There should be at least NUM_DUMMIES colours in here. */
-    private static final Color[] COLOURS = new Color[] { Color.MAGENTA, Color.RED, Color.BLACK, Color.ORANGE,
-            Color.DARK_GRAY, Color.CYAN, Color.ORANGE };
+    private static final Color[] COLOURS = new Color[] { Color.MAGENTA, Color.RED, Color.BLACK, Color.GREEN,
+            Color.DARK_GRAY, Color.CYAN, Color.YELLOW };
 
     /**
      * Main method.
