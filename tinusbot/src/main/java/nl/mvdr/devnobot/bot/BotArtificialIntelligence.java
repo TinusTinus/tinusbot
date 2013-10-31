@@ -296,7 +296,7 @@ abstract class BotArtificialIntelligence implements Runnable {
      * @param nextTimestamp
      *            when the next action is supposed to be taken in the game; if this is too soon, logging the leaderboard
      *            is skipped
-     * @return last time the leaderboard was logged; updated if necessary
+     * @return refreshed leaderboard, or the value of previousLeaderboard if no succesful refresh was performed
      */
     private Leaderboard refreshLeaderboard(Leaderboard previousLeaderboard, long nextTimestamp) {
         Leaderboard result;
