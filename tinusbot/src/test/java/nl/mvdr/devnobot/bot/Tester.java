@@ -34,14 +34,18 @@ public class Tester {
         ClientApi api = new ClientApiImpl(serverBaseURL);
 
         List<Runnable> bots = new ArrayList<>();
+
+        // dummies
         for (int i = 0; i < NUM_DUMMIES; i++) {
             bots.add(new DummyBot(api, DummyBot.DEFAULT_NAME + i, COLOURS[i]));
         }
 
+        // Ibiqs
         bots.add(new Ibiq(serverBaseURL, "Ibiq0"));
         bots.add(new Ibiq(serverBaseURL, "Ibiq1"));
         bots.add(new Ibiq(serverBaseURL, "Ibiq2"));
 
+        // Tinusbot
         bots.add(new Tinusbot(api));
 
         for (Runnable bot : bots) {
