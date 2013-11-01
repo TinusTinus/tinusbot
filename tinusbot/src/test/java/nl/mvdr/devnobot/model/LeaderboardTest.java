@@ -116,14 +116,14 @@ public class LeaderboardTest {
 
         Leaderboard leaderboard = new Leaderboard(System.currentTimeMillis(), players);
 
-        Assert.assertEquals(Integer.valueOf(1), leaderboard.retrievePosition(jan.getName()));
-        Assert.assertEquals(Integer.valueOf(2), leaderboard.retrievePosition(ton.getName()));
-        Assert.assertEquals(Integer.valueOf(3), leaderboard.retrievePosition(aad.getName()));
-        Assert.assertEquals(Integer.valueOf(3), leaderboard.retrievePosition(wim.getName()));
-        Assert.assertEquals(Integer.valueOf(3), leaderboard.retrievePosition(herp.getName()));
-        Assert.assertEquals(Integer.valueOf(3), leaderboard.retrievePosition(derp.getName()));
-        Assert.assertEquals(Integer.valueOf(7), leaderboard.retrievePosition(kees.getName()));
-        Assert.assertEquals(Integer.valueOf(8), leaderboard.retrievePosition(piet.getName()));
+        Assert.assertEquals(new PlayerAndPosition(jan, 1), leaderboard.retrievePosition(jan.getName()));
+        Assert.assertEquals(new PlayerAndPosition(ton, 2), leaderboard.retrievePosition(ton.getName()));
+        Assert.assertEquals(new PlayerAndPosition(aad, 3), leaderboard.retrievePosition(aad.getName()));
+        Assert.assertEquals(new PlayerAndPosition(wim, 3), leaderboard.retrievePosition(wim.getName()));
+        Assert.assertEquals(new PlayerAndPosition(herp, 3), leaderboard.retrievePosition(herp.getName()));
+        Assert.assertEquals(new PlayerAndPosition(derp, 3), leaderboard.retrievePosition(derp.getName()));
+        Assert.assertEquals(new PlayerAndPosition(kees, 7), leaderboard.retrievePosition(kees.getName()));
+        Assert.assertEquals(new PlayerAndPosition(piet, 8), leaderboard.retrievePosition(piet.getName()));
         Assert.assertNull(leaderboard.retrievePosition("sjaak"));
     }
 }
