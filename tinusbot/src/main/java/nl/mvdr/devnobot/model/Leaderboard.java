@@ -168,17 +168,18 @@ public class Leaderboard {
      * 
      * @param playerName
      *            player name; may not be null
-     * @return player's position, or null if unavailable
+     * @return player and their position, or null if unavailable
      */
-    public Integer retrievePosition(String playerName) {
-        Integer result = null;
+    public PlayerAndPosition retrievePosition(String playerName) {
+        PlayerAndPosition result = null;
         Iterator<Integer> positionsIterator = retrievePositions().iterator();
         while (result == null && positionsIterator.hasNext()) {
             Integer position = positionsIterator.next();
             Iterator<Player> playerIterator = this.playersByPosition.get(position).iterator();
             while (result == null && playerIterator.hasNext()) {
-                if (playerName.equals(playerIterator.next().getName())) {
-                    result = position;
+                Player player = playerIterator.next();
+                if (playerName.equals(player.getName())) {
+                    result = new PlayerAndPosition(player, position.intValue());
                 }
             }
         }

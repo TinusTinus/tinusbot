@@ -14,6 +14,7 @@ import nl.mvdr.devnobot.model.Action;
 import nl.mvdr.devnobot.model.GameState;
 import nl.mvdr.devnobot.model.Leaderboard;
 import nl.mvdr.devnobot.model.LevelBoundary;
+import nl.mvdr.devnobot.model.PlayerAndPosition;
 import nl.mvdr.devnobot.model.Tank;
 import nl.mvdr.devnobot.model.TankPosition;
 import nl.mvdr.devnobot.model.Wall;
@@ -207,9 +208,14 @@ public class Tinusbot extends BotArtificialIntelligence {
         boolean result;
 
         if (leaderboard != null) {
-            // consider players in positions 1 and 2 a threat
-            Integer enemyPosition = leaderboard.retrievePosition(tank.getPlayer());
-            result = enemyPosition != null && enemyPosition.intValue() < 3;
+            PlayerAndPosition playerAndPosition = leaderboard.retrievePosition(tank.getPlayer());
+            if (playerAndPosition == null) {
+                log.warn("Player does not occur on the leaderboards: " + tank.getPlayer());
+                result = false;
+            } else {
+                // consider players in positions 1 and 2, with at least one kill, a threat
+                result = playerAndPosition.getPosition() < 3 && playerAndPosition.getPlayer().getKills() != 0;
+            }
         } else {
             // no leaderboards yet; default to false
             result = false;
