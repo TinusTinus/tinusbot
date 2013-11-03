@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import lombok.extern.slf4j.Slf4j;
 import nl.mvdr.devnobot.clientapi.ClientApi;
 import nl.mvdr.devnobot.model.Action;
+import nl.mvdr.devnobot.model.GameObject;
 import nl.mvdr.devnobot.model.GameState;
 import nl.mvdr.devnobot.model.Leaderboard;
 import nl.mvdr.devnobot.model.LevelBoundary;
@@ -28,6 +29,8 @@ import nl.mvdr.devnobot.model.Wall;
 public class Tinusbot extends BotArtificialIntelligence {
     /** Action taken during the previous turn. Null at the start. */
     private Action previousAction;
+    /** Name of the tank we last fired at. Null at the start. */
+    private String previousTarget;
 
     /**
      * Returns the version number from the jar manifest file.
@@ -80,6 +83,7 @@ public class Tinusbot extends BotArtificialIntelligence {
     public Tinusbot(ClientApi clientApi, String name, Color color) {
         super(clientApi, name, color);
         this.previousAction = null;
+        this.previousTarget = null;
         logVersion();
     }
 
@@ -106,6 +110,7 @@ public class Tinusbot extends BotArtificialIntelligence {
     public Tinusbot(String host, String name, Color color) {
         super(host, name, color);
         this.previousAction = null;
+        this.previousTarget = null;
         logVersion();
     }
 
@@ -135,10 +140,13 @@ public class Tinusbot extends BotArtificialIntelligence {
         LevelBoundary boundary = LevelBoundary.buildLevelBoundary(obstacles, state.getTanks());
 
         if (!enemies.isEmpty()) {
-            if (state.wouldHitEnemy(ownTank, enemies, obstacles, boundary) && previousAction != Action.FIRE) {
+            GameObject target = state.wouldHit(ownTank, createTargets(enemies), obstacles, boundary);
+            if (target instanceof Tank) {
+                // Currently aiming at an enemy.
                 // FIRE!
                 // Even if they fire back and we die, it still nets us a point (2 for the kill minus 1 for the death).
                 result = Action.FIRE;
+                previousTarget = ((Tank) target).getPlayer();
             } else {
                 // Move toward a position where we can fire.
                 result = computeActionToMoveIntoFiringPosition(obstacles, state, ownTank, enemies, boundary,
@@ -238,7 +246,7 @@ public class Tinusbot extends BotArtificialIntelligence {
      * @param ownTank
      *            own tank
      * @param enemies
-     *            all enemy tanks
+     *            all enemy tanks that may fire on our own tank
      * @param boundary
      *            bounds of the level
      * @param leaderboard
@@ -247,6 +255,8 @@ public class Tinusbot extends BotArtificialIntelligence {
      */
     private Action computeActionToMoveIntoFiringPosition(Collection<Wall> obstacles, GameState state, Tank ownTank,
             Collection<Tank> enemies, LevelBoundary boundary, Leaderboard leaderboard) {
+        
+        Collection<Tank> targets = createTargets(enemies);
 
         Action result = null;
 
@@ -285,7 +295,7 @@ public class Tinusbot extends BotArtificialIntelligence {
                             && (!(directlyReachablePosition.getKey() == Action.FORWARD || directlyReachablePosition
                                     .getKey() == Action.BACKWARD) || !directlyReachablePosition.getValue().getTank()
                                     .overlaps(obstacles))) {
-                        if (state.wouldHitEnemy(directlyReachablePosition.getValue().getTank(), enemies, obstacles,
+                        if (state.wouldHitEnemy(directlyReachablePosition.getValue().getTank(), targets, obstacles,
                                 boundary)) {
                             result = firstAction;
                         }
@@ -304,5 +314,32 @@ public class Tinusbot extends BotArtificialIntelligence {
         }
 
         return result;
+    }
+
+    /**
+     * Constructs the collection of tanks to be considered a target.
+     * 
+     * If we fired at an enemy last turn, that enemy is not considered a valid target this turn. Chances are they will
+     * have been destroyed by our previously fired bullet soon, so our tank should start moving towards its next target.
+     * 
+     * @param enemies
+     *            enemies
+     * @return subset of enemies to be considered a target
+     */
+    private Collection<Tank> createTargets(Collection<Tank> enemies) {
+        Collection<Tank> targets = new HashSet<>(enemies);
+        if (previousAction == Action.FIRE && previousTarget != null) {
+            // do not consider the target at which we fired last turn
+            Tank previousTargetTank = null;
+            for (Tank tank: targets) {
+                if (previousTarget.equals(tank.getPlayer())) {
+                    previousTargetTank = tank;
+                }
+            }
+            if (previousTargetTank != null) {
+                targets.remove(previousTargetTank);
+            }
+        }
+        return targets;
     }
 }
