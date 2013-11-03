@@ -148,6 +148,7 @@ public class Tinusbot extends BotArtificialIntelligence {
                 // Even if they fire back and we die, it still nets us a point (2 for the kill minus 1 for the death).
                 result = Action.FIRE;
                 previousTarget = ((Tank) target).getPlayer();
+                log.info("Firing at " + previousTarget);
             } else {
                 // Move toward a position where we can fire.
                 result = computeActionToMoveIntoFiringPosition(obstacles, state, ownTank, enemies, targets, boundary,
