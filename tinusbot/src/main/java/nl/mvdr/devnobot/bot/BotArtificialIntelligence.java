@@ -42,10 +42,7 @@ abstract class BotArtificialIntelligence implements Runnable {
     /** Tank colour as a hex string. */
     @NonNull
     private final String color;
-    /**
-     * Sleep duration between executions of the main game loop in milliseconds. Always accessed through its getter so
-     * subclasses can override it dynamically.
-     */
+    /** Sleep duration between executions of the main game loop in milliseconds. */
     private final int threadSleepDuration;
 
     /** Timestamp when the bot started running. */
@@ -86,6 +83,8 @@ abstract class BotArtificialIntelligence implements Runnable {
      *            player name
      * @param color
      *            tank colour as a hex string
+     * @param threadSleepDuration
+     *            sleep duration between executions of the main game loop in milliseconds
      */
     public BotArtificialIntelligence(ClientApi clientApi, String name, Color color, int threadSleepDuration) {
         this(clientApi, name, toHexString(color), threadSleepDuration);
