@@ -328,18 +328,18 @@ public class Tinusbot extends BotArtificialIntelligence {
      * @return subset of enemies to be considered a target
      */
     private Collection<Tank> createTargets(Collection<Tank> enemies) {
-        Collection<Tank> targets = new HashSet<>(enemies);
+        Collection<Tank> targets;
         if (previousAction == Action.FIRE && previousTarget != null) {
-            // do not consider the target at which we fired last turn
-            Tank previousTargetTank = null;
-            for (Tank tank: targets) {
-                if (previousTarget.equals(tank.getPlayer())) {
-                    previousTargetTank = tank;
+            // Targets are all of our enemies except for our previous target.
+            targets = new HashSet<>(enemies.size() - 1);
+            for (Tank tank: enemies) {
+                if (!previousTarget.equals(tank.getPlayer())) {
+                    targets.add(tank);
                 }
             }
-            if (previousTargetTank != null) {
-                targets.remove(previousTargetTank);
-            }
+        } else {
+            // All enemies are a target.
+            targets = enemies;
         }
         return targets;
     }
