@@ -5,13 +5,16 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+import lombok.extern.slf4j.Slf4j;
 import nl.mvdr.devnobot.clientapi.ClientApi;
 import nl.mvdr.devnobot.model.Action;
 import nl.mvdr.devnobot.model.GameState;
@@ -26,6 +29,7 @@ import nl.mvdr.devnobot.model.Wall;
  * 
  * @author Martijn van de Rijdt
  */
+@Slf4j
 public class InteractiveBot extends BotArtificialIntelligence {
     /** Actions. */
     private final BlockingQueue<Action> actionQueue;
@@ -116,14 +120,16 @@ public class InteractiveBot extends BotArtificialIntelligence {
 
     /** {@inheritDoc} */
     @Override
-    protected Action determineNextAction(Collection<Wall> obstacles, GameState state, Leaderboard leaderboard) {
-        Action action;
+    protected List<Action> determineNextAction(Collection<Wall> obstacles, GameState state, Leaderboard leaderboard) {
+        List<Action> result = new ArrayList<>();
         try {
-            action = actionQueue.take();
+            while (!actionQueue.isEmpty()) {
+                result.add(actionQueue.take());
+            }
         } catch (InterruptedException e) {
-            // thow runtime exception so it can be handled by the game loop
-            throw new IllegalStateException("Unexpected exception", e);
+            // log and ignore
+            log.error("Unexpected exception.", e);
         }
-        return action;
+        return result;
     }
 }

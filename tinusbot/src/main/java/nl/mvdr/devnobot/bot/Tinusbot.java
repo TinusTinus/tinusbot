@@ -1,10 +1,14 @@
 package nl.mvdr.devnobot.bot;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -133,8 +137,8 @@ public class Tinusbot extends BotArtificialIntelligence {
 
     /** {@inheritDoc} */
     @Override
-    protected Action determineNextAction(Collection<Wall> obstacles, GameState state, Leaderboard leaderboard) {
-        Action result;
+    protected List<Action> determineNextAction(Collection<Wall> obstacles, GameState state, Leaderboard leaderboard) {
+        List<Action> result;
 
         Tank ownTank = state.retrieveTankForPlayerName(getName());
         Collection<Tank> enemies = state.retrieveEnemies(getName());
@@ -147,7 +151,7 @@ public class Tinusbot extends BotArtificialIntelligence {
                 // Currently aiming at an enemy.
                 // FIRE!
                 // Even if they fire back and we die, it still nets us a point (2 for the kill minus 1 for the death).
-                result = Action.FIRE;
+                result = Arrays.asList(Action.FIRE);
                 previousTarget = ((Tank) target).getPlayer();
                 log.info("Firing at " + previousTarget);
             } else {
@@ -159,13 +163,13 @@ public class Tinusbot extends BotArtificialIntelligence {
             // There are no enemies in the level (yet). But they should be here soon.
             // Act like a rotating turret until then, we might get some lucky hits when enemies spawn.
             if (previousAction == Action.FIRE) {
-                result = Action.TURN_RIGHT;
+                result = Arrays.asList(Action.TURN_RIGHT);
             } else {
-                result = Action.FIRE;
+                result = Arrays.asList(Action.FIRE);
             }
         }
 
-        previousAction = result;
+        previousAction = result.get(result.size() - 1);
 
         return result;
     }
@@ -256,18 +260,18 @@ public class Tinusbot extends BotArtificialIntelligence {
      *            bounds of the level
      * @param leaderboard
      *            current leaderboard; may be null
-     * @return action
+     * @return nonempty list of actions to be undertaken
      */
-    private Action computeActionToMoveIntoFiringPosition(Collection<Wall> obstacles, GameState state, Tank ownTank,
+    private List<Action> computeActionToMoveIntoFiringPosition(Collection<Wall> obstacles, GameState state, Tank ownTank,
             Collection<Tank> threats, Collection<Tank> targets, LevelBoundary boundary, Leaderboard leaderboard) {
         
-        Action result = null;
+        List<Action> result = new ArrayList<>(2);
 
         TankPosition startPosition = new TankPosition(ownTank);
 
-        // map from visited reachable tank positions to the first action on a shortest path to get there
-        Map<TankPosition, Action> visited = new HashMap<>();
-        visited.put(startPosition, null);
+        // map from visited reachable tank positions to a shortest path to get there
+        Map<TankPosition, List<Action>> visited = new HashMap<>();
+        visited.put(startPosition, Collections.<Action>emptyList());
 
         Map<Action, TankPosition> neighbours = startPosition.computeReachablePositions();
         Collection<TankPosition> positions = new HashSet<>();
@@ -277,32 +281,45 @@ public class Tinusbot extends BotArtificialIntelligence {
                             leaderboard)
                     && (!(entry.getKey() == Action.FORWARD || entry.getKey() == Action.BACKWARD) || (!entry.getValue()
                             .getTank().overlaps(obstacles) && !entry.getValue().getTank().overlaps(threats)))) {
-                visited.put(entry.getValue(), entry.getKey());
+                visited.put(entry.getValue(), Arrays.asList(entry.getKey()));
                 positions.add(entry.getValue());
             }
         }
 
-        while (result == null && !positions.isEmpty()) {
+        while (result.isEmpty() && !positions.isEmpty()) {
             Collection<TankPosition> newPositions = new HashSet<>();
             Iterator<TankPosition> positionIterator = positions.iterator();
-            while (result == null && positionIterator.hasNext()) {
+            while (result.isEmpty() && positionIterator.hasNext()) {
                 TankPosition position = positionIterator.next();
-                Action firstAction = visited.get(position);
+                List<Action> pathToPosition = visited.get(position);
                 neighbours = position.computeReachablePositions();
                 Iterator<Entry<Action, TankPosition>> directlyReachablePositionIterator = neighbours.entrySet()
                         .iterator();
-                while (result == null && directlyReachablePositionIterator.hasNext()) {
+                while (result.isEmpty() && directlyReachablePositionIterator.hasNext()) {
                     Entry<Action, TankPosition> directlyReachablePosition = directlyReachablePositionIterator.next();
                     if (directlyReachablePosition.getValue().getTank().overlaps(boundary)
                             && !visited.containsKey(directlyReachablePosition.getValue())
                             && (!(directlyReachablePosition.getKey() == Action.FORWARD || directlyReachablePosition
                                     .getKey() == Action.BACKWARD) || !directlyReachablePosition.getValue().getTank()
                                     .overlaps(obstacles))) {
+                        List<Action> newPath = new ArrayList<>(pathToPosition);
+                        newPath.add(directlyReachablePosition.getKey());
                         if (state.wouldHitEnemy(directlyReachablePosition.getValue().getTank(), targets, obstacles,
                                 boundary)) {
-                            result = firstAction;
+                            result.add(newPath.get(0));
+                            
+                            // add second action as well, in case
+                            // * it exists
+                            // * first action is move forward or backward
+                            // * second action is turn left or right
+                            if (1 < newPath.size()
+                                    && (newPath.get(0) == Action.BACKWARD || newPath.get(0) == Action.FORWARD)
+                                    && (newPath.get(1) == Action.TURN_LEFT || newPath.get(1) == Action.TURN_RIGHT)) {
+                                result.add(newPath.get(1));
+                            }
                         }
-                        visited.put(directlyReachablePosition.getValue(), firstAction);
+
+                        visited.put(directlyReachablePosition.getValue(), newPath);
                         newPositions.add(directlyReachablePosition.getValue());
                     }
                 }
@@ -310,10 +327,10 @@ public class Tinusbot extends BotArtificialIntelligence {
             positions = newPositions;
         }
 
-        if (result == null) {
+        if (result.isEmpty()) {
             // Unable to reach a point where we can shoot an opponent.
             // WELP
-            result = Action.SUICIDE;
+            result.add(Action.SUICIDE);
         }
 
         return result;

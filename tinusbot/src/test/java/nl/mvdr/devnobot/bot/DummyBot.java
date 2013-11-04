@@ -1,7 +1,9 @@
 package nl.mvdr.devnobot.bot;
 
 import java.awt.Color;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 
 import nl.mvdr.devnobot.clientapi.ClientApi;
@@ -59,7 +61,7 @@ public class DummyBot extends BotArtificialIntelligence {
 
     /** {@inheritDoc} */
     @Override
-    protected Action determineNextAction(Collection<Wall> walls, GameState state, Leaderboard leaderboard) {
-        return ACTIONS[randomGenerator.nextInt(ACTIONS.length)];
+    protected List<Action> determineNextAction(Collection<Wall> walls, GameState state, Leaderboard leaderboard) {
+        return Arrays.asList(ACTIONS[randomGenerator.nextInt(ACTIONS.length)]);
     }
 }

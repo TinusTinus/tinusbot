@@ -2,6 +2,8 @@ package nl.mvdr.devnobot.bot;
 
 import java.awt.Color;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import nl.mvdr.devnobot.clientapi.ClientApi;
 import nl.mvdr.devnobot.model.Action;
@@ -41,7 +43,7 @@ public class BraindeadBot extends BotArtificialIntelligence {
 
     /** {@inheritDoc} */
     @Override
-    protected Action determineNextAction(Collection<Wall> obstacles, GameState state, Leaderboard leaderboard) {
-        return null;
+    protected List<Action> determineNextAction(Collection<Wall> obstacles, GameState state, Leaderboard leaderboard) {
+        return Collections.emptyList();
     }
 }

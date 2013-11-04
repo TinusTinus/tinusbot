@@ -2,6 +2,9 @@ package nl.mvdr.devnobot.bot;
 
 import java.awt.Color;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.UUID;
 
 import lombok.Getter;
@@ -229,21 +232,21 @@ abstract class BotArtificialIntelligence implements Runnable {
                     }
 
                     // Determine what to do!
-                    Action action;
+                    List<Action> actions;
                     if (state.retrieveTankForPlayerName(name).getQueueLength() < 1) {
-                        action = determineNextAction(walls, state, leaderboard);
+                        actions = determineNextAction(walls, state, leaderboard);
                     } else {
                         // Already enqueued actions, no point in determining a new one.
                         // Do nothing.
-                        action = null;
+                        actions = Collections.emptyList();
                     }
-                    boolean success = perform(id, action);
+                    boolean success = perform(id, actions);
 
                     if (success) {
                         failedActionCount = 0;
                     } else {
                         failedActionCount++;
-                        log.warn("Action failed: {}, number of failures in a row: {}", action, "" + failedActionCount);
+                        log.warn("Actions failed: {}, number of failures in a row: {}", actions, "" + failedActionCount);
                         // retry immediately
                         nextTimestamp = System.currentTimeMillis();
                     }
@@ -342,27 +345,30 @@ abstract class BotArtificialIntelligence implements Runnable {
     }
 
     /**
-     * Performs the given action.
+     * Performs the given actions.
      * 
      * Actions are added to the action queue, except for {@link Action#SUICIDE}, which is executed immediately,
      * 
      * @param id
      *            player id
-     * @param action
-     *            action to be performed
-     * @param whether
-     *            the operation was succesful
+     * @param actions
+     *            actions to be performed
+     * @return whether all operations were executed succesfully
      */
-    private boolean perform(String id, Action action) {
-        boolean result;
-        log.info("Performing action: " + action);
-        if (action == Action.SUICIDE) {
-            result = api.suicide(id);
-        } else if (action != null) {
-            result = api.addAction(action, id);
-        } else {
-            // do nothing
-            result = true;
+    private boolean perform(String id, List<Action> actions) {
+        boolean result = true;
+        Iterator<Action> actionIterator = actions.iterator();
+        while (result && actionIterator.hasNext()) {
+            Action action = actionIterator.next();
+            log.info("Performing action: " + action);
+            if (action == Action.SUICIDE) {
+                result = api.suicide(id);
+            } else if (action != null) {
+                result = api.addAction(action, id);
+            } else {
+                // do nothing
+                result = true;
+            }
         }
         return result;
     }
@@ -376,9 +382,10 @@ abstract class BotArtificialIntelligence implements Runnable {
      *            game state
      * @param leaderboard
      *            current leaderboard; may be null
-     * @return action to be taken, or null for no action at all
+     * @return actions to be enqueued
      */
-    protected abstract Action determineNextAction(Collection<Wall> obstacles, GameState state, Leaderboard leaderboard);
+    protected abstract List<Action> determineNextAction(Collection<Wall> obstacles, GameState state,
+            Leaderboard leaderboard);
 
     /** {@inheritDoc} */
     @Override

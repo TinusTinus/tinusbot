@@ -1,7 +1,9 @@
 package nl.mvdr.devnobot.bot;
 
 import java.awt.Color;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import nl.mvdr.devnobot.clientapi.ClientApi;
 import nl.mvdr.devnobot.model.Action;
@@ -31,13 +33,12 @@ public class RotatingTurret extends BotArtificialIntelligence {
 
     /** {@inheritDoc} */
     @Override
-    protected Action determineNextAction(Collection<Wall> obstacles, GameState state, Leaderboard leaderboard) {
+    protected List<Action> determineNextAction(Collection<Wall> obstacles, GameState state, Leaderboard leaderboard) {
         if (previousAction == Action.FIRE) {
             previousAction = Action.TURN_RIGHT;
         } else {
             previousAction = Action.FIRE;
         }
-        return previousAction;
+        return Arrays.asList(previousAction);
     }
-
 }
