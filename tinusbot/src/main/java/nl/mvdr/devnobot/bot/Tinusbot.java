@@ -31,8 +31,6 @@ public class Tinusbot extends BotArtificialIntelligence {
     private Action previousAction;
     /** Name of the tank we last fired at. Null at the start. */
     private String previousTarget;
-    /** The minimum number of kills an enemy should have to be considered a threat. */
-    private final int minKills;
 
     /**
      * Returns the version number from the jar manifest file.
@@ -73,29 +71,6 @@ public class Tinusbot extends BotArtificialIntelligence {
     }
 
     /**
-     * Constructor, used to experiment with the minKills parameter.
-     * 
-     * @param clientApi
-     *            client API for making server calls
-     * @param name
-     *            bot name
-     * @param color
-     *            tank color
-     * @param minKills
-     *            minimum number of kills for an enemy tank to be considered a threat
-     * @deprecated This constructor is only intended for experiments; use another one.
-     */
-    @Deprecated // use one of the other constructors
-    // TODO remove constructor
-    Tinusbot(ClientApi clientApi, String name, Color color, int minKills) {
-        super(clientApi, name, color);
-        this.previousAction = null;
-        this.previousTarget = null;
-        this.minKills = minKills;
-        logVersion();
-    }
-    
-    /**
      * Constructor.
      * 
      * @param clientApi
@@ -106,7 +81,10 @@ public class Tinusbot extends BotArtificialIntelligence {
      *            tank color
      */
     public Tinusbot(ClientApi clientApi, String name, Color color) {
-        this(clientApi, name, color, 0);
+        super(clientApi, name, color);
+        this.previousAction = null;
+        this.previousTarget = null;
+        logVersion();
     }
 
     /**
@@ -133,7 +111,6 @@ public class Tinusbot extends BotArtificialIntelligence {
         super(host, name, color);
         this.previousAction = null;
         this.previousTarget = null;
-        this.minKills = 0;
         logVersion();
     }
 
@@ -151,7 +128,6 @@ public class Tinusbot extends BotArtificialIntelligence {
         super(host, name, color);
         this.previousAction = null;
         this.previousTarget = null;
-        this.minKills = 0;
         logVersion();
     }
 
@@ -249,7 +225,7 @@ public class Tinusbot extends BotArtificialIntelligence {
                 result = false;
             } else {
                 // consider players in positions 1 and 2, with at least one kill, a threat
-                result = playerAndPosition.getPosition() < 3 && minKills < playerAndPosition.getPlayer().getKills();
+                result = playerAndPosition.getPosition() < 3 && playerAndPosition.getPlayer().getKills() != 0;
             }
         } else {
             // no leaderboards yet; default to false
