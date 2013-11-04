@@ -308,10 +308,12 @@ public class Tinusbot extends BotArtificialIntelligence {
                                 boundary)) {
                             result.add(newPath.get(0));
                             
-                            // add second action as well, in case
-                            // * it exists
-                            // * first action is move forward or backward
-                            // * second action is turn left or right
+                            // Hack: add the second action as well, in case
+                            // * it exists,
+                            // * first action is move forward or backward, and
+                            // * second action is turn left or right.
+                            // This prevents the bot from repeatedly moving back and forth instead of just turning and
+                            // shooting.
                             if (1 < newPath.size()
                                     && (newPath.get(0) == Action.BACKWARD || newPath.get(0) == Action.FORWARD)
                                     && (newPath.get(1) == Action.TURN_LEFT || newPath.get(1) == Action.TURN_RIGHT)) {
