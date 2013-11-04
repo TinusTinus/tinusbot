@@ -21,7 +21,7 @@ public class Launcher {
     /**
      * Main method.
      * 
-     * Starts a single instance of {@link Tinusbot} on the main thread.
+     * Starts a single instance of {@link Tinusbot} on its own thread.
      * 
      * The bot will connect to a server specified using the system property "devnobot.server.baseURL", or to
      * http://localhost:7080 if the system property is not specified.
@@ -36,7 +36,7 @@ public class Launcher {
     }
 
     /**
-     * Starts a single instance of {@link Tinusbot} on the main thread.
+     * Starts a single instance of {@link Tinusbot} on its own thread.
      * 
      * The bot will connect to a server specified using the system property "devnobot.server.baseURL", or to
      * http://localhost:7080 if the system property is not specified.
