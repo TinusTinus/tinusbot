@@ -9,8 +9,6 @@ import nl.mvdr.devnobot.clientapi.ClientApiImpl;
 import nl.mvdr.devnobot.launcher.Launcher;
 import nl.mvdr.devnobot.model.LeaderboardDisplay;
 
-import com.cgi.devnobot.client.Ibiq;
-
 /**
  * Main class. Spawns a bunch of bots.
  * 
@@ -18,7 +16,7 @@ import com.cgi.devnobot.client.Ibiq;
  */
 public class Tester {
     /** Number of dummies. */
-    private static final int NUM_DUMMIES = 4;
+    private static final int NUM_DUMMIES = 7;
     /** Colours for dummy bots. There should be at least NUM_DUMMIES colours in here. */
     private static final Color[] COLOURS = new Color[] { Color.MAGENTA, Color.RED, Color.BLACK, Color.GREEN,
             Color.DARK_GRAY, Color.CYAN, Color.YELLOW };
@@ -39,11 +37,6 @@ public class Tester {
         for (int i = 0; i < NUM_DUMMIES; i++) {
             bots.add(new DummyBot(api, DummyBot.DEFAULT_NAME + i, COLOURS[i]));
         }
-
-        // Ibiqs
-        bots.add(new Ibiq(serverBaseURL, "Ibiq0"));
-        bots.add(new Ibiq(serverBaseURL, "Ibiq1"));
-        bots.add(new Ibiq(serverBaseURL, "Ibiq2"));
 
         // Tinusbot
         bots.add(new Tinusbot(api));
